@@ -1,0 +1,834 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="#" /><link rel="search" title="Search" href="search.html" />
+
+    <meta name="generator" content="sphinx-5.1.0+/0aedcc9a9, furo 2022.06.04.1"/><title>Index - rocPRIM documentation</title>
+<link rel="stylesheet" type="text/css" href="static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="static/cpp_sig.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #263238;
+  --color-code-foreground: #EEFFFF;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #263238;
+  --color-code-foreground: #EEFFFF;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">rocPRIM  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  
+  <span class="sidebar-brand-text">rocPRIM  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="operations.html">High Level view of the operations</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="devicemodule/index.html">Device-Wide Operations</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/config.html">Configuring the Kernels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/transform.html">Transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/unique.html">Unique</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/sort.html">Sort</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/merge.html">Merge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/partition.html">Partition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/run_length_encoding.html">Run Length Encode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/scan.html">Scan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/select.html">Select</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/reduce.html">Reduce</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/adjacent_difference.html">Adjacent difference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/binary_search.html">Binary Search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/histogram.html">Histogram</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="blockmodule/index.html">Block-Wide Operations</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="blockmodule/ops_classes/index.html">Operation classes</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="blockmodule/ops_classes/load.html">Load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blockmodule/ops_classes/store.html">Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blockmodule/ops_classes/adjacent_difference.html">Adjacent difference</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blockmodule/ops_classes/discontinuity.html">Discontinuity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blockmodule/ops_classes/scan.html">Scan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blockmodule/ops_classes/reduce.html">Reduce</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blockmodule/ops_classes/histogram.html">Histogram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blockmodule/ops_classes/exchange.html">Exchange</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blockmodule/ops_classes/shuffle.html">Shuffle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blockmodule/ops_classes/sort.html">Sort</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="blockmodule/data_mov_funcs.html">Data movement functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="warpmodule.html">Warp-Level Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="threadmodule.html">Thread-Level Operations (Utilities)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="iterators.html">Iterators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intrinsics.html">Intrinsics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          
+<section class="genindex-section">
+  <h1 id="index">Index</h1>
+  <div class="genindex-jumpbox"><a href="#A"><strong>A</strong></a> | <a href="#B"><strong>B</strong></a> | <a href="#C"><strong>C</strong></a> | <a href="#D"><strong>D</strong></a> | <a href="#E"><strong>E</strong></a> | <a href="#F"><strong>F</strong></a> | <a href="#G"><strong>G</strong></a> | <a href="#H"><strong>H</strong></a> | <a href="#I"><strong>I</strong></a> | <a href="#K"><strong>K</strong></a> | <a href="#L"><strong>L</strong></a> | <a href="#M"><strong>M</strong></a> | <a href="#P"><strong>P</strong></a> | <a href="#R"><strong>R</strong></a> | <a href="#S"><strong>S</strong></a> | <a href="#T"><strong>T</strong></a> | <a href="#U"><strong>U</strong></a> | <a href="#W"><strong>W</strong></a> | <a href="#Z"><strong>Z</strong></a></div>
+</section>
+<section id="A" class="genindex-section">
+  <h2>A</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="devicemodule/adjacent_difference.html#_CPPv4I0000E19adjacent_difference10hipError_tPCvRNSt6size_tEK7InputItK8OutputItKNSt6size_tEK14BinaryFunctionK11hipStream_tKb">adjacent_difference (C++ function)</a>
+</li>
+        <li><a href="devicemodule/adjacent_difference.html#_CPPv4I_j_j_17block_load_method_18block_store_method_jE26adjacent_difference_config">adjacent_difference_config (C++ struct)</a>
+</li>
+        <li><a href="devicemodule/adjacent_difference.html#_CPPv4I000E27adjacent_difference_inplace10hipError_tPCvRNSt6size_tEK7InputItKNSt6size_tEK14BinaryFunctionK11hipStream_tKb">adjacent_difference_inplace (C++ function)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="devicemodule/adjacent_difference.html#_CPPv4I0000E25adjacent_difference_right10hipError_tPCvRNSt6size_tEK7InputItK8OutputItKNSt6size_tEK14BinaryFunctionK11hipStream_tKb">adjacent_difference_right (C++ function)</a>
+</li>
+        <li><a href="devicemodule/adjacent_difference.html#_CPPv4I000E33adjacent_difference_right_inplace10hipError_tPCvRNSt6size_tEK7InputItKNSt6size_tEK14BinaryFunctionK11hipStream_tKb">adjacent_difference_right_inplace (C++ function)</a>
+</li>
+        <li><a href="iterators.html#_CPPv4I000E18arg_index_iterator">arg_index_iterator (C++ class)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="B" class="genindex-section">
+  <h2>B</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="intrinsics.html#_CPPv46balloti">ballot (C++ function)</a>
+</li>
+        <li><a href="devicemodule/binary_search.html#_CPPv4I00000E13binary_search10hipError_tPvR6size_t16HaystackIterator15NeedlesIterator14OutputIterator6size_t6size_t15CompareFunction11hipStream_tb">binary_search (C++ function)</a>
+</li>
+        <li><a href="intrinsics.html#_CPPv49bit_countj">bit_count (C++ function)</a>, <a href="intrinsics.html#_CPPv49bit_county">[1]</a>
+</li>
+        <li><a href="glossary.html#term-Block"><strong>Block</strong></a>
+</li>
+        <li><a href="blockmodule/ops_classes/adjacent_difference.html#_CPPv4I0_j_j_jE25block_adjacent_difference">block_adjacent_difference (C++ class)</a>, <a href="blockmodule/ops_classes/diff.html#_CPPv4I0_j_j_jE25block_adjacent_difference">[1]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/diff.html#_CPPv4I0_j_j_jE19block_discontinuity">block_discontinuity (C++ class)</a>, <a href="blockmodule/ops_classes/discontinuity.html#_CPPv4I0_j_j_jE19block_discontinuity">[1]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/diff.html#_CPPv4I_j00EN19block_discontinuity10flag_headsEvRA14ItemsPerThread_4Flag1TRA14ItemsPerThread_K1T6FlagOp">block_discontinuity::flag_heads (C++ function)</a>, <a href="blockmodule/ops_classes/diff.html#_CPPv4I_j00EN19block_discontinuity10flag_headsEvRA14ItemsPerThread_4Flag1TRA14ItemsPerThread_K1T6FlagOpR12storage_type">[1]</a>, <a href="blockmodule/ops_classes/diff.html#_CPPv4I_j00EN19block_discontinuity10flag_headsEvRA14ItemsPerThread_4FlagRA14ItemsPerThread_K1T6FlagOp">[2]</a>, <a href="blockmodule/ops_classes/diff.html#_CPPv4I_j00EN19block_discontinuity10flag_headsEvRA14ItemsPerThread_4FlagRA14ItemsPerThread_K1T6FlagOpR12storage_type">[3]</a>, <a href="blockmodule/ops_classes/discontinuity.html#_CPPv4I_j00EN19block_discontinuity10flag_headsEvRA14ItemsPerThread_4Flag1TRA14ItemsPerThread_K1T6FlagOp">[4]</a>, <a href="blockmodule/ops_classes/discontinuity.html#_CPPv4I_j00EN19block_discontinuity10flag_headsEvRA14ItemsPerThread_4Flag1TRA14ItemsPerThread_K1T6FlagOpR12storage_type">[5]</a>, <a href="blockmodule/ops_classes/discontinuity.html#_CPPv4I_j00EN19block_discontinuity10flag_headsEvRA14ItemsPerThread_4FlagRA14ItemsPerThread_K1T6FlagOp">[6]</a>, <a href="blockmodule/ops_classes/discontinuity.html#_CPPv4I_j00EN19block_discontinuity10flag_headsEvRA14ItemsPerThread_4FlagRA14ItemsPerThread_K1T6FlagOpR12storage_type">[7]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/diff.html#_CPPv4I_j00EN19block_discontinuity20flag_heads_and_tailsEvRA14ItemsPerThread_4Flag1TRA14ItemsPerThread_4Flag1TRA14ItemsPerThread_K1T6FlagOp">block_discontinuity::flag_heads_and_tails (C++ function)</a>, <a href="blockmodule/ops_classes/diff.html#_CPPv4I_j00EN19block_discontinuity20flag_heads_and_tailsEvRA14ItemsPerThread_4Flag1TRA14ItemsPerThread_4Flag1TRA14ItemsPerThread_K1T6FlagOpR12storage_type">[1]</a>, <a href="blockmodule/ops_classes/diff.html#_CPPv4I_j00EN19block_discontinuity20flag_heads_and_tailsEvRA14ItemsPerThread_4Flag1TRA14ItemsPerThread_4FlagRA14ItemsPerThread_K1T6FlagOp">[2]</a>, <a href="blockmodule/ops_classes/diff.html#_CPPv4I_j00EN19block_discontinuity20flag_heads_and_tailsEvRA14ItemsPerThread_4Flag1TRA14ItemsPerThread_4FlagRA14ItemsPerThread_K1T6FlagOpR12storage_type">[3]</a>, <a href="blockmodule/ops_classes/diff.html#_CPPv4I_j00EN19block_discontinuity20flag_heads_and_tailsEvRA14ItemsPerThread_4FlagRA14ItemsPerThread_4Flag1TRA14ItemsPerThread_K1T6FlagOp">[4]</a>, <a href="blockmodule/ops_classes/diff.html#_CPPv4I_j00EN19block_discontinuity20flag_heads_and_tailsEvRA14ItemsPerThread_4FlagRA14ItemsPerThread_4Flag1TRA14ItemsPerThread_K1T6FlagOpR12storage_type">[5]</a>, <a href="blockmodule/ops_classes/diff.html#_CPPv4I_j00EN19block_discontinuity20flag_heads_and_tailsEvRA14ItemsPerThread_4FlagRA14ItemsPerThread_4FlagRA14ItemsPerThread_K1T6FlagOp">[6]</a>, <a href="blockmodule/ops_classes/diff.html#_CPPv4I_j00EN19block_discontinuity20flag_heads_and_tailsEvRA14ItemsPerThread_4FlagRA14ItemsPerThread_4FlagRA14ItemsPerThread_K1T6FlagOpR12storage_type">[7]</a>, <a href="blockmodule/ops_classes/discontinuity.html#_CPPv4I_j00EN19block_discontinuity20flag_heads_and_tailsEvRA14ItemsPerThread_4Flag1TRA14ItemsPerThread_4Flag1TRA14ItemsPerThread_K1T6FlagOp">[8]</a>, <a href="blockmodule/ops_classes/discontinuity.html#_CPPv4I_j00EN19block_discontinuity20flag_heads_and_tailsEvRA14ItemsPerThread_4Flag1TRA14ItemsPerThread_4Flag1TRA14ItemsPerThread_K1T6FlagOpR12storage_type">[9]</a>, <a href="blockmodule/ops_classes/discontinuity.html#_CPPv4I_j00EN19block_discontinuity20flag_heads_and_tailsEvRA14ItemsPerThread_4Flag1TRA14ItemsPerThread_4FlagRA14ItemsPerThread_K1T6FlagOp">[10]</a>, <a href="blockmodule/ops_classes/discontinuity.html#_CPPv4I_j00EN19block_discontinuity20flag_heads_and_tailsEvRA14ItemsPerThread_4Flag1TRA14ItemsPerThread_4FlagRA14ItemsPerThread_K1T6FlagOpR12storage_type">[11]</a>, <a href="blockmodule/ops_classes/discontinuity.html#_CPPv4I_j00EN19block_discontinuity20flag_heads_and_tailsEvRA14ItemsPerThread_4FlagRA14ItemsPerThread_4Flag1TRA14ItemsPerThread_K1T6FlagOp">[12]</a>, <a href="blockmodule/ops_classes/discontinuity.html#_CPPv4I_j00EN19block_discontinuity20flag_heads_and_tailsEvRA14ItemsPerThread_4FlagRA14ItemsPerThread_4Flag1TRA14ItemsPerThread_K1T6FlagOpR12storage_type">[13]</a>, <a href="blockmodule/ops_classes/discontinuity.html#_CPPv4I_j00EN19block_discontinuity20flag_heads_and_tailsEvRA14ItemsPerThread_4FlagRA14ItemsPerThread_4FlagRA14ItemsPerThread_K1T6FlagOp">[14]</a>, <a href="blockmodule/ops_classes/discontinuity.html#_CPPv4I_j00EN19block_discontinuity20flag_heads_and_tailsEvRA14ItemsPerThread_4FlagRA14ItemsPerThread_4FlagRA14ItemsPerThread_K1T6FlagOpR12storage_type">[15]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/diff.html#_CPPv4I_j00EN19block_discontinuity10flag_tailsEvRA14ItemsPerThread_4Flag1TRA14ItemsPerThread_K1T6FlagOp">block_discontinuity::flag_tails (C++ function)</a>, <a href="blockmodule/ops_classes/diff.html#_CPPv4I_j00EN19block_discontinuity10flag_tailsEvRA14ItemsPerThread_4Flag1TRA14ItemsPerThread_K1T6FlagOpR12storage_type">[1]</a>, <a href="blockmodule/ops_classes/diff.html#_CPPv4I_j00EN19block_discontinuity10flag_tailsEvRA14ItemsPerThread_4FlagRA14ItemsPerThread_K1T6FlagOp">[2]</a>, <a href="blockmodule/ops_classes/diff.html#_CPPv4I_j00EN19block_discontinuity10flag_tailsEvRA14ItemsPerThread_4FlagRA14ItemsPerThread_K1T6FlagOpR12storage_type">[3]</a>, <a href="blockmodule/ops_classes/discontinuity.html#_CPPv4I_j00EN19block_discontinuity10flag_tailsEvRA14ItemsPerThread_4Flag1TRA14ItemsPerThread_K1T6FlagOp">[4]</a>, <a href="blockmodule/ops_classes/discontinuity.html#_CPPv4I_j00EN19block_discontinuity10flag_tailsEvRA14ItemsPerThread_4Flag1TRA14ItemsPerThread_K1T6FlagOpR12storage_type">[5]</a>, <a href="blockmodule/ops_classes/discontinuity.html#_CPPv4I_j00EN19block_discontinuity10flag_tailsEvRA14ItemsPerThread_4FlagRA14ItemsPerThread_K1T6FlagOp">[6]</a>, <a href="blockmodule/ops_classes/discontinuity.html#_CPPv4I_j00EN19block_discontinuity10flag_tailsEvRA14ItemsPerThread_4FlagRA14ItemsPerThread_K1T6FlagOpR12storage_type">[7]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/diff.html#_CPPv4N19block_discontinuity12storage_typeE">block_discontinuity::storage_type (C++ type)</a>, <a href="blockmodule/ops_classes/discontinuity.html#_CPPv4N19block_discontinuity12storage_typeE">[1]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/exchange.html#_CPPv4I0_j_j_j_jE14block_exchange">block_exchange (C++ class)</a>, <a href="blockmodule/ops_classes/rearrangement.html#_CPPv4I0_j_j_j_jE14block_exchange">[1]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/exchange.html#_CPPv4I0EN14block_exchange18blocked_to_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1U">block_exchange::blocked_to_striped (C++ function)</a>, <a href="blockmodule/ops_classes/exchange.html#_CPPv4I0EN14block_exchange18blocked_to_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1UR12storage_type">[1]</a>, <a href="blockmodule/ops_classes/rearrangement.html#_CPPv4I0EN14block_exchange18blocked_to_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1U">[2]</a>, <a href="blockmodule/ops_classes/rearrangement.html#_CPPv4I0EN14block_exchange18blocked_to_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1UR12storage_type">[3]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/exchange.html#_CPPv4I0EN14block_exchange23blocked_to_warp_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1U">block_exchange::blocked_to_warp_striped (C++ function)</a>, <a href="blockmodule/ops_classes/exchange.html#_CPPv4I0EN14block_exchange23blocked_to_warp_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1UR12storage_type">[1]</a>, <a href="blockmodule/ops_classes/rearrangement.html#_CPPv4I0EN14block_exchange23blocked_to_warp_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1U">[2]</a>, <a href="blockmodule/ops_classes/rearrangement.html#_CPPv4I0EN14block_exchange23blocked_to_warp_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1UR12storage_type">[3]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/exchange.html#_CPPv4I00EN14block_exchange18scatter_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6Offset">block_exchange::scatter_to_blocked (C++ function)</a>, <a href="blockmodule/ops_classes/exchange.html#_CPPv4I00EN14block_exchange18scatter_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetR12storage_type">[1]</a>, <a href="blockmodule/ops_classes/rearrangement.html#_CPPv4I00EN14block_exchange18scatter_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6Offset">[2]</a>, <a href="blockmodule/ops_classes/rearrangement.html#_CPPv4I00EN14block_exchange18scatter_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetR12storage_type">[3]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/exchange.html#_CPPv4I00EN14block_exchange18scatter_to_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6Offset">block_exchange::scatter_to_striped (C++ function)</a>, <a href="blockmodule/ops_classes/exchange.html#_CPPv4I00EN14block_exchange18scatter_to_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetR12storage_type">[1]</a>, <a href="blockmodule/ops_classes/rearrangement.html#_CPPv4I00EN14block_exchange18scatter_to_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6Offset">[2]</a>, <a href="blockmodule/ops_classes/rearrangement.html#_CPPv4I00EN14block_exchange18scatter_to_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetR12storage_type">[3]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/exchange.html#_CPPv4I000EN14block_exchange26scatter_to_striped_flaggedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetRA14ItemsPerThread_K9ValidFlag">block_exchange::scatter_to_striped_flagged (C++ function)</a>, <a href="blockmodule/ops_classes/exchange.html#_CPPv4I000EN14block_exchange26scatter_to_striped_flaggedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetRA14ItemsPerThread_K9ValidFlagR12storage_type">[1]</a>, <a href="blockmodule/ops_classes/rearrangement.html#_CPPv4I000EN14block_exchange26scatter_to_striped_flaggedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetRA14ItemsPerThread_K9ValidFlag">[2]</a>, <a href="blockmodule/ops_classes/rearrangement.html#_CPPv4I000EN14block_exchange26scatter_to_striped_flaggedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetRA14ItemsPerThread_K9ValidFlagR12storage_type">[3]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/exchange.html#_CPPv4I00EN14block_exchange26scatter_to_striped_guardedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6Offset">block_exchange::scatter_to_striped_guarded (C++ function)</a>, <a href="blockmodule/ops_classes/exchange.html#_CPPv4I00EN14block_exchange26scatter_to_striped_guardedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetR12storage_type">[1]</a>, <a href="blockmodule/ops_classes/rearrangement.html#_CPPv4I00EN14block_exchange26scatter_to_striped_guardedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6Offset">[2]</a>, <a href="blockmodule/ops_classes/rearrangement.html#_CPPv4I00EN14block_exchange26scatter_to_striped_guardedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetR12storage_type">[3]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/exchange.html#_CPPv4N14block_exchange12storage_typeE">block_exchange::storage_type (C++ type)</a>, <a href="blockmodule/ops_classes/rearrangement.html#_CPPv4N14block_exchange12storage_typeE">[1]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/exchange.html#_CPPv4I0EN14block_exchange18striped_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1U">block_exchange::striped_to_blocked (C++ function)</a>, <a href="blockmodule/ops_classes/exchange.html#_CPPv4I0EN14block_exchange18striped_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1UR12storage_type">[1]</a>, <a href="blockmodule/ops_classes/rearrangement.html#_CPPv4I0EN14block_exchange18striped_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1U">[2]</a>, <a href="blockmodule/ops_classes/rearrangement.html#_CPPv4I0EN14block_exchange18striped_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1UR12storage_type">[3]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/exchange.html#_CPPv4I0EN14block_exchange23warp_striped_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1U">block_exchange::warp_striped_to_blocked (C++ function)</a>, <a href="blockmodule/ops_classes/exchange.html#_CPPv4I0EN14block_exchange23warp_striped_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1UR12storage_type">[1]</a>, <a href="blockmodule/ops_classes/rearrangement.html#_CPPv4I0EN14block_exchange23warp_striped_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1U">[2]</a>, <a href="blockmodule/ops_classes/rearrangement.html#_CPPv4I0EN14block_exchange23warp_striped_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1UR12storage_type">[3]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/histogram.html#_CPPv4I0_j_j_j_25block_histogram_algorithm_j_jE15block_histogram">block_histogram (C++ class)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/histogram.html#_CPPv4I0EN15block_histogram9compositeEvRA14ItemsPerThread_1TA4Bins_7Counter">block_histogram::composite (C++ function)</a>, <a href="blockmodule/ops_classes/histogram.html#_CPPv4I0EN15block_histogram9compositeEvRA14ItemsPerThread_1TA4Bins_7CounterR12storage_type">[1]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/histogram.html#_CPPv4I0EN15block_histogram9histogramEvRA14ItemsPerThread_1TA4Bins_7Counter">block_histogram::histogram (C++ function)</a>, <a href="blockmodule/ops_classes/histogram.html#_CPPv4I0EN15block_histogram9histogramEvRA14ItemsPerThread_1TA4Bins_7CounterR12storage_type">[1]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/histogram.html#_CPPv4I0EN15block_histogram14init_histogramEvA4Bins_7Counter">block_histogram::init_histogram (C++ function)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/histogram.html#_CPPv4N15block_histogram12storage_typeE">block_histogram::storage_type (C++ type)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/histogram.html#_CPPv425block_histogram_algorithm">block_histogram_algorithm (C++ enum)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/histogram.html#_CPPv4N25block_histogram_algorithm17default_algorithmE">block_histogram_algorithm::default_algorithm (C++ enumerator)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/histogram.html#_CPPv4N25block_histogram_algorithm12using_atomicE">block_histogram_algorithm::using_atomic (C++ enumerator)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/histogram.html#_CPPv4N25block_histogram_algorithm10using_sortE">block_histogram_algorithm::using_sort (C++ enumerator)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/load.html#_CPPv4I0_j_j_17block_load_method_j_jE10block_load">block_load (C++ class)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/load.html#_CPPv4I00EN10block_load4loadEv13InputIteratorRA14ItemsPerThread_1Tj7Default">block_load::load (C++ function)</a>, <a href="blockmodule/ops_classes/load.html#_CPPv4I00EN10block_load4loadEv13InputIteratorRA14ItemsPerThread_1Tj7DefaultR12storage_type">[1]</a>, <a href="blockmodule/ops_classes/load.html#_CPPv4I0EN10block_load4loadEv13InputIteratorRA14ItemsPerThread_1T">[2]</a>, <a href="blockmodule/ops_classes/load.html#_CPPv4I0EN10block_load4loadEv13InputIteratorRA14ItemsPerThread_1TR12storage_type">[3]</a>, <a href="blockmodule/ops_classes/load.html#_CPPv4I0EN10block_load4loadEv13InputIteratorRA14ItemsPerThread_1Tj">[4]</a>, <a href="blockmodule/ops_classes/load.html#_CPPv4I0EN10block_load4loadEv13InputIteratorRA14ItemsPerThread_1TjR12storage_type">[5]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/load.html#_CPPv4N10block_load12storage_typeE">block_load::storage_type (C++ type)</a>
+</li>
+        <li><a href="blockmodule/data_mov_funcs.html#_CPPv4I00_j0E25block_load_direct_blockedvj13InputIteratorRA14ItemsPerThread_1Tj7Default">block_load_direct_blocked (C++ function)</a>, <a href="blockmodule/data_mov_funcs.html#_CPPv4I00_jE25block_load_direct_blockedvj13InputIteratorRA14ItemsPerThread_1T">[1]</a>, <a href="blockmodule/data_mov_funcs.html#_CPPv4I00_jE25block_load_direct_blockedvj13InputIteratorRA14ItemsPerThread_1Tj">[2]</a>, <a href="blockmodule/data_mov_funcs/index.html#_CPPv4I00_j0E25block_load_direct_blockedvj13InputIteratorRA14ItemsPerThread_1Tj7Default">[3]</a>, <a href="blockmodule/data_mov_funcs/index.html#_CPPv4I00_jE25block_load_direct_blockedvj13InputIteratorRA14ItemsPerThread_1T">[4]</a>, <a href="blockmodule/data_mov_funcs/index.html#_CPPv4I00_jE25block_load_direct_blockedvj13InputIteratorRA14ItemsPerThread_1Tj">[5]</a>
+</li>
+        <li><a href="blockmodule/data_mov_funcs.html#_CPPv4I00_jE36block_load_direct_blocked_vectorizedNSt9enable_ifIN6detail15is_vectorizableI1T14ItemsPerThreadE5valueEE4typeEjP1TRA14ItemsPerThread_1U">block_load_direct_blocked_vectorized (C++ function)</a>, <a href="blockmodule/data_mov_funcs/index.html#_CPPv4I00_jE36block_load_direct_blocked_vectorizedNSt9enable_ifIN6detail15is_vectorizableI1T14ItemsPerThreadE5valueEE4typeEjP1TRA14ItemsPerThread_1U">[1]</a>
+</li>
+        <li><a href="blockmodule/data_mov_funcs.html#_CPPv4I_j00_j0E25block_load_direct_stripedvj13InputIteratorRA14ItemsPerThread_1Tj7Default">block_load_direct_striped (C++ function)</a>, <a href="blockmodule/data_mov_funcs.html#_CPPv4I_j00_jE25block_load_direct_stripedvj13InputIteratorRA14ItemsPerThread_1T">[1]</a>, <a href="blockmodule/data_mov_funcs.html#_CPPv4I_j00_jE25block_load_direct_stripedvj13InputIteratorRA14ItemsPerThread_1Tj">[2]</a>, <a href="blockmodule/data_mov_funcs/index.html#_CPPv4I_j00_j0E25block_load_direct_stripedvj13InputIteratorRA14ItemsPerThread_1Tj7Default">[3]</a>, <a href="blockmodule/data_mov_funcs/index.html#_CPPv4I_j00_jE25block_load_direct_stripedvj13InputIteratorRA14ItemsPerThread_1T">[4]</a>, <a href="blockmodule/data_mov_funcs/index.html#_CPPv4I_j00_jE25block_load_direct_stripedvj13InputIteratorRA14ItemsPerThread_1Tj">[5]</a>
+</li>
+        <li><a href="blockmodule/data_mov_funcs.html#_CPPv4I_j00_j0E30block_load_direct_warp_stripedvj13InputIteratorRA14ItemsPerThread_1Tj7Default">block_load_direct_warp_striped (C++ function)</a>, <a href="blockmodule/data_mov_funcs.html#_CPPv4I_j00_jE30block_load_direct_warp_stripedvj13InputIteratorRA14ItemsPerThread_1T">[1]</a>, <a href="blockmodule/data_mov_funcs.html#_CPPv4I_j00_jE30block_load_direct_warp_stripedvj13InputIteratorRA14ItemsPerThread_1Tj">[2]</a>, <a href="blockmodule/data_mov_funcs/index.html#_CPPv4I_j00_j0E30block_load_direct_warp_stripedvj13InputIteratorRA14ItemsPerThread_1Tj7Default">[3]</a>, <a href="blockmodule/data_mov_funcs/index.html#_CPPv4I_j00_jE30block_load_direct_warp_stripedvj13InputIteratorRA14ItemsPerThread_1T">[4]</a>, <a href="blockmodule/data_mov_funcs/index.html#_CPPv4I_j00_jE30block_load_direct_warp_stripedvj13InputIteratorRA14ItemsPerThread_1Tj">[5]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/load.html#_CPPv417block_load_method">block_load_method (C++ enum)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/load.html#_CPPv4N17block_load_method17block_load_directE">block_load_method::block_load_direct (C++ enumerator)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/load.html#_CPPv4N17block_load_method18block_load_stripedE">block_load_method::block_load_striped (C++ enumerator)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/load.html#_CPPv4N17block_load_method20block_load_transposeE">block_load_method::block_load_transpose (C++ enumerator)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/load.html#_CPPv4N17block_load_method20block_load_vectorizeE">block_load_method::block_load_vectorize (C++ enumerator)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/load.html#_CPPv4N17block_load_method25block_load_warp_transposeE">block_load_method::block_load_warp_transpose (C++ enumerator)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/load.html#_CPPv4N17block_load_method14default_methodE">block_load_method::default_method (C++ enumerator)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/sort.html#_CPPv4I0_j_j0_j_jE16block_radix_sort">block_radix_sort (C++ class)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/sort.html#_CPPv4I_bEN16block_radix_sort4sortEvRA14ItemsPerThread_3KeyRA14ItemsPerThread_NSt9enable_ifI10WithValues5ValueE4typeER12storage_typejj">block_radix_sort::sort (C++ function)</a>, <a href="blockmodule/ops_classes/sort.html#_CPPv4I_bEN16block_radix_sort4sortEvRA14ItemsPerThread_3KeyRA14ItemsPerThread_NSt9enable_ifI10WithValues5ValueE4typeEjj">[1]</a>, <a href="blockmodule/ops_classes/sort.html#_CPPv4N16block_radix_sort4sortERA14ItemsPerThread_3KeyR12storage_typejj">[2]</a>, <a href="blockmodule/ops_classes/sort.html#_CPPv4N16block_radix_sort4sortERA14ItemsPerThread_3Keyjj">[3]</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="blockmodule/ops_classes/sort.html#_CPPv4I_bEN16block_radix_sort9sort_descEvRA14ItemsPerThread_3KeyRA14ItemsPerThread_NSt9enable_ifI10WithValues5ValueE4typeER12storage_typejj">block_radix_sort::sort_desc (C++ function)</a>, <a href="blockmodule/ops_classes/sort.html#_CPPv4I_bEN16block_radix_sort9sort_descEvRA14ItemsPerThread_3KeyRA14ItemsPerThread_NSt9enable_ifI10WithValues5ValueE4typeEjj">[1]</a>, <a href="blockmodule/ops_classes/sort.html#_CPPv4N16block_radix_sort9sort_descERA14ItemsPerThread_3KeyR12storage_typejj">[2]</a>, <a href="blockmodule/ops_classes/sort.html#_CPPv4N16block_radix_sort9sort_descERA14ItemsPerThread_3Keyjj">[3]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/sort.html#_CPPv4I_bEN16block_radix_sort20sort_desc_to_stripedEvRA14ItemsPerThread_3KeyRA14ItemsPerThread_NSt9enable_ifI10WithValues5ValueE4typeER12storage_typejj">block_radix_sort::sort_desc_to_striped (C++ function)</a>, <a href="blockmodule/ops_classes/sort.html#_CPPv4I_bEN16block_radix_sort20sort_desc_to_stripedEvRA14ItemsPerThread_3KeyRA14ItemsPerThread_NSt9enable_ifI10WithValues5ValueE4typeEjj">[1]</a>, <a href="blockmodule/ops_classes/sort.html#_CPPv4N16block_radix_sort20sort_desc_to_stripedERA14ItemsPerThread_3KeyR12storage_typejj">[2]</a>, <a href="blockmodule/ops_classes/sort.html#_CPPv4N16block_radix_sort20sort_desc_to_stripedERA14ItemsPerThread_3Keyjj">[3]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/sort.html#_CPPv4I_bEN16block_radix_sort15sort_to_stripedEvRA14ItemsPerThread_3KeyRA14ItemsPerThread_NSt9enable_ifI10WithValues5ValueE4typeER12storage_typejj">block_radix_sort::sort_to_striped (C++ function)</a>, <a href="blockmodule/ops_classes/sort.html#_CPPv4I_bEN16block_radix_sort15sort_to_stripedEvRA14ItemsPerThread_3KeyRA14ItemsPerThread_NSt9enable_ifI10WithValues5ValueE4typeEjj">[1]</a>, <a href="blockmodule/ops_classes/sort.html#_CPPv4N16block_radix_sort15sort_to_stripedERA14ItemsPerThread_3KeyR12storage_typejj">[2]</a>, <a href="blockmodule/ops_classes/sort.html#_CPPv4N16block_radix_sort15sort_to_stripedERA14ItemsPerThread_3Keyjj">[3]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/sort.html#_CPPv4N16block_radix_sort12storage_typeE">block_radix_sort::storage_type (C++ type)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/reduce.html#_CPPv4I0_j_22block_reduce_algorithm_j_jE12block_reduce">block_reduce (C++ class)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/reduce.html#_CPPv4I0EN12block_reduce6reduceEv1TR1T14BinaryFunction">block_reduce::reduce (C++ function)</a>, <a href="blockmodule/ops_classes/reduce.html#_CPPv4I0EN12block_reduce6reduceEv1TR1TR12storage_type14BinaryFunction">[1]</a>, <a href="blockmodule/ops_classes/reduce.html#_CPPv4I0EN12block_reduce6reduceEv1TR1Tj14BinaryFunction">[2]</a>, <a href="blockmodule/ops_classes/reduce.html#_CPPv4I0EN12block_reduce6reduceEv1TR1TjR12storage_type14BinaryFunction">[3]</a>, <a href="blockmodule/ops_classes/reduce.html#_CPPv4I_j0EN12block_reduce6reduceEvRA14ItemsPerThread_1TR1T14BinaryFunction">[4]</a>, <a href="blockmodule/ops_classes/reduce.html#_CPPv4I_j0EN12block_reduce6reduceEvRA14ItemsPerThread_1TR1TR12storage_type14BinaryFunction">[5]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/reduce.html#_CPPv4N12block_reduce12storage_typeE">block_reduce::storage_type (C++ type)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/reduce.html#_CPPv422block_reduce_algorithm">block_reduce_algorithm (C++ enum)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/reduce.html#_CPPv4N22block_reduce_algorithm17default_algorithmE">block_reduce_algorithm::default_algorithm (C++ enumerator)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/reduce.html#_CPPv4N22block_reduce_algorithm13raking_reduceE">block_reduce_algorithm::raking_reduce (C++ enumerator)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/reduce.html#_CPPv4N22block_reduce_algorithm30raking_reduce_commutative_onlyE">block_reduce_algorithm::raking_reduce_commutative_only (C++ enumerator)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/reduce.html#_CPPv4N22block_reduce_algorithm17using_warp_reduceE">block_reduce_algorithm::using_warp_reduce (C++ enumerator)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/scan.html#_CPPv4I0_j_20block_scan_algorithm_j_jE10block_scan">block_scan (C++ class)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/scan.html#_CPPv4I00EN10block_scan14exclusive_scanEv1TR1TR12storage_typeR14PrefixCallback14BinaryFunction">block_scan::exclusive_scan (C++ function)</a>, <a href="blockmodule/ops_classes/scan.html#_CPPv4I0EN10block_scan14exclusive_scanEv1TR1T1T14BinaryFunction">[1]</a>, <a href="blockmodule/ops_classes/scan.html#_CPPv4I0EN10block_scan14exclusive_scanEv1TR1T1TR12storage_type14BinaryFunction">[2]</a>, <a href="blockmodule/ops_classes/scan.html#_CPPv4I0EN10block_scan14exclusive_scanEv1TR1T1TR1T14BinaryFunction">[3]</a>, <a href="blockmodule/ops_classes/scan.html#_CPPv4I0EN10block_scan14exclusive_scanEv1TR1T1TR1TR12storage_type14BinaryFunction">[4]</a>, <a href="blockmodule/ops_classes/scan.html#_CPPv4I_j00EN10block_scan14exclusive_scanEvRA14ItemsPerThread_1TRA14ItemsPerThread_1TR12storage_typeR14PrefixCallback14BinaryFunction">[5]</a>, <a href="blockmodule/ops_classes/scan.html#_CPPv4I_j0EN10block_scan14exclusive_scanEvRA14ItemsPerThread_1TRA14ItemsPerThread_1T1T14BinaryFunction">[6]</a>, <a href="blockmodule/ops_classes/scan.html#_CPPv4I_j0EN10block_scan14exclusive_scanEvRA14ItemsPerThread_1TRA14ItemsPerThread_1T1TR12storage_type14BinaryFunction">[7]</a>, <a href="blockmodule/ops_classes/scan.html#_CPPv4I_j0EN10block_scan14exclusive_scanEvRA14ItemsPerThread_1TRA14ItemsPerThread_1T1TR1T14BinaryFunction">[8]</a>, <a href="blockmodule/ops_classes/scan.html#_CPPv4I_j0EN10block_scan14exclusive_scanEvRA14ItemsPerThread_1TRA14ItemsPerThread_1T1TR1TR12storage_type14BinaryFunction">[9]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/scan.html#_CPPv4I00EN10block_scan14inclusive_scanEv1TR1TR12storage_typeR14PrefixCallback14BinaryFunction">block_scan::inclusive_scan (C++ function)</a>, <a href="blockmodule/ops_classes/scan.html#_CPPv4I0EN10block_scan14inclusive_scanEv1TR1T14BinaryFunction">[1]</a>, <a href="blockmodule/ops_classes/scan.html#_CPPv4I0EN10block_scan14inclusive_scanEv1TR1TR12storage_type14BinaryFunction">[2]</a>, <a href="blockmodule/ops_classes/scan.html#_CPPv4I0EN10block_scan14inclusive_scanEv1TR1TR1T14BinaryFunction">[3]</a>, <a href="blockmodule/ops_classes/scan.html#_CPPv4I0EN10block_scan14inclusive_scanEv1TR1TR1TR12storage_type14BinaryFunction">[4]</a>, <a href="blockmodule/ops_classes/scan.html#_CPPv4I_j00EN10block_scan14inclusive_scanEvRA14ItemsPerThread_1TRA14ItemsPerThread_1TR12storage_typeR14PrefixCallback14BinaryFunction">[5]</a>, <a href="blockmodule/ops_classes/scan.html#_CPPv4I_j0EN10block_scan14inclusive_scanEvRA14ItemsPerThread_1TRA14ItemsPerThread_1T14BinaryFunction">[6]</a>, <a href="blockmodule/ops_classes/scan.html#_CPPv4I_j0EN10block_scan14inclusive_scanEvRA14ItemsPerThread_1TRA14ItemsPerThread_1TR12storage_type14BinaryFunction">[7]</a>, <a href="blockmodule/ops_classes/scan.html#_CPPv4I_j0EN10block_scan14inclusive_scanEvRA14ItemsPerThread_1TRA14ItemsPerThread_1TR1T14BinaryFunction">[8]</a>, <a href="blockmodule/ops_classes/scan.html#_CPPv4I_j0EN10block_scan14inclusive_scanEvRA14ItemsPerThread_1TRA14ItemsPerThread_1TR1TR12storage_type14BinaryFunction">[9]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/scan.html#_CPPv4N10block_scan12storage_typeE">block_scan::storage_type (C++ type)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/scan.html#_CPPv420block_scan_algorithm">block_scan_algorithm (C++ enum)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/scan.html#_CPPv4N20block_scan_algorithm17default_algorithmE">block_scan_algorithm::default_algorithm (C++ enumerator)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/scan.html#_CPPv4N20block_scan_algorithm16reduce_then_scanE">block_scan_algorithm::reduce_then_scan (C++ enumerator)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/scan.html#_CPPv4N20block_scan_algorithm15using_warp_scanE">block_scan_algorithm::using_warp_scan (C++ enumerator)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/rearrangement.html#_CPPv4I0_j_j_jE13block_shuffle">block_shuffle (C++ class)</a>, <a href="blockmodule/ops_classes/shuffle.html#_CPPv4I0_j_j_jE13block_shuffle">[1]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/rearrangement.html#_CPPv4I_jEN13block_shuffle4downEvRA14ItemsPerThread_1TRA14ItemsPerThread_1T">block_shuffle::down (C++ function)</a>, <a href="blockmodule/ops_classes/rearrangement.html#_CPPv4I_jEN13block_shuffle4downEvRA14ItemsPerThread_1TRA14ItemsPerThread_1TR1T">[1]</a>, <a href="blockmodule/ops_classes/shuffle.html#_CPPv4I_jEN13block_shuffle4downEvRA14ItemsPerThread_1TRA14ItemsPerThread_1T">[2]</a>, <a href="blockmodule/ops_classes/shuffle.html#_CPPv4I_jEN13block_shuffle4downEvRA14ItemsPerThread_1TRA14ItemsPerThread_1TR1T">[3]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/rearrangement.html#_CPPv4N13block_shuffle6offsetE1TR1Ti">block_shuffle::offset (C++ function)</a>, <a href="blockmodule/ops_classes/shuffle.html#_CPPv4N13block_shuffle6offsetE1TR1Ti">[1]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/rearrangement.html#_CPPv4N13block_shuffle6rotateE1TR1Tj">block_shuffle::rotate (C++ function)</a>, <a href="blockmodule/ops_classes/shuffle.html#_CPPv4N13block_shuffle6rotateE1TR1Tj">[1]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/rearrangement.html#_CPPv4N13block_shuffle12storage_typeE">block_shuffle::storage_type (C++ type)</a>, <a href="blockmodule/ops_classes/shuffle.html#_CPPv4N13block_shuffle12storage_typeE">[1]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/rearrangement.html#_CPPv4I_jEN13block_shuffle2upEvRA14ItemsPerThread_1TRA14ItemsPerThread_1T">block_shuffle::up (C++ function)</a>, <a href="blockmodule/ops_classes/rearrangement.html#_CPPv4I_jEN13block_shuffle2upEvRA14ItemsPerThread_1TRA14ItemsPerThread_1TR1T">[1]</a>, <a href="blockmodule/ops_classes/shuffle.html#_CPPv4I_jEN13block_shuffle2upEvRA14ItemsPerThread_1TRA14ItemsPerThread_1T">[2]</a>, <a href="blockmodule/ops_classes/shuffle.html#_CPPv4I_jEN13block_shuffle2upEvRA14ItemsPerThread_1TRA14ItemsPerThread_1TR1T">[3]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/sort.html#_CPPv4I0_j_j0_20block_sort_algorithm_j_jE10block_sort">block_sort (C++ class)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/sort.html#_CPPv4I0EN10block_sort4sortEvR3Key14BinaryFunction">block_sort::sort (C++ function)</a>, <a href="blockmodule/ops_classes/sort.html#_CPPv4I0EN10block_sort4sortEvR3KeyR12storage_type14BinaryFunction">[1]</a>, <a href="blockmodule/ops_classes/sort.html#_CPPv4I0EN10block_sort4sortEvR3KeyR12storage_typeKj14BinaryFunction">[2]</a>, <a href="blockmodule/ops_classes/sort.html#_CPPv4I0EN10block_sort4sortEvR3KeyR5Value14BinaryFunction">[3]</a>, <a href="blockmodule/ops_classes/sort.html#_CPPv4I0EN10block_sort4sortEvR3KeyR5ValueR12storage_type14BinaryFunction">[4]</a>, <a href="blockmodule/ops_classes/sort.html#_CPPv4I0EN10block_sort4sortEvR3KeyR5ValueR12storage_typeKj14BinaryFunction">[5]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/sort.html#_CPPv4N10block_sort12storage_typeE">block_sort::storage_type (C++ type)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/sort.html#_CPPv420block_sort_algorithm">block_sort_algorithm (C++ enum)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/sort.html#_CPPv4N20block_sort_algorithm12bitonic_sortE">block_sort_algorithm::bitonic_sort (C++ enumerator)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/sort.html#_CPPv4N20block_sort_algorithm17default_algorithmE">block_sort_algorithm::default_algorithm (C++ enumerator)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/data_mov.html#_CPPv4I0_j_j_18block_store_method_j_jE11block_store">block_store (C++ class)</a>, <a href="blockmodule/ops_classes/store.html#_CPPv4I0_j_j_18block_store_method_j_jE11block_store">[1]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/data_mov.html#_CPPv4N11block_store12storage_typeE">block_store::storage_type (C++ type)</a>, <a href="blockmodule/ops_classes/store.html#_CPPv4N11block_store12storage_typeE">[1]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/data_mov.html#_CPPv4I0EN11block_store5storeEv14OutputIteratorRA14ItemsPerThread_1T">block_store::store (C++ function)</a>, <a href="blockmodule/ops_classes/data_mov.html#_CPPv4I0EN11block_store5storeEv14OutputIteratorRA14ItemsPerThread_1TR12storage_type">[1]</a>, <a href="blockmodule/ops_classes/data_mov.html#_CPPv4I0EN11block_store5storeEv14OutputIteratorRA14ItemsPerThread_1Tj">[2]</a>, <a href="blockmodule/ops_classes/data_mov.html#_CPPv4I0EN11block_store5storeEv14OutputIteratorRA14ItemsPerThread_1TjR12storage_type">[3]</a>, <a href="blockmodule/ops_classes/store.html#_CPPv4I0EN11block_store5storeEv14OutputIteratorRA14ItemsPerThread_1T">[4]</a>, <a href="blockmodule/ops_classes/store.html#_CPPv4I0EN11block_store5storeEv14OutputIteratorRA14ItemsPerThread_1TR12storage_type">[5]</a>, <a href="blockmodule/ops_classes/store.html#_CPPv4I0EN11block_store5storeEv14OutputIteratorRA14ItemsPerThread_1Tj">[6]</a>, <a href="blockmodule/ops_classes/store.html#_CPPv4I0EN11block_store5storeEv14OutputIteratorRA14ItemsPerThread_1TjR12storage_type">[7]</a>
+</li>
+        <li><a href="blockmodule/data_mov_funcs.html#_CPPv4I00_jE26block_store_direct_blockedvj14OutputIteratorRA14ItemsPerThread_1T">block_store_direct_blocked (C++ function)</a>, <a href="blockmodule/data_mov_funcs.html#_CPPv4I00_jE26block_store_direct_blockedvj14OutputIteratorRA14ItemsPerThread_1Tj">[1]</a>, <a href="blockmodule/data_mov_funcs/index.html#_CPPv4I00_jE26block_store_direct_blockedvj14OutputIteratorRA14ItemsPerThread_1T">[2]</a>, <a href="blockmodule/data_mov_funcs/index.html#_CPPv4I00_jE26block_store_direct_blockedvj14OutputIteratorRA14ItemsPerThread_1Tj">[3]</a>
+</li>
+        <li><a href="blockmodule/data_mov_funcs.html#_CPPv4I00_jE37block_store_direct_blocked_vectorizedNSt9enable_ifIN6detail15is_vectorizableI1T14ItemsPerThreadE5valueEE4typeEjP1TRA14ItemsPerThread_1U">block_store_direct_blocked_vectorized (C++ function)</a>, <a href="blockmodule/data_mov_funcs/index.html#_CPPv4I00_jE37block_store_direct_blocked_vectorizedNSt9enable_ifIN6detail15is_vectorizableI1T14ItemsPerThreadE5valueEE4typeEjP1TRA14ItemsPerThread_1U">[1]</a>
+</li>
+        <li><a href="blockmodule/data_mov_funcs.html#_CPPv4I_j00_jE26block_store_direct_stripedvj14OutputIteratorRA14ItemsPerThread_1T">block_store_direct_striped (C++ function)</a>, <a href="blockmodule/data_mov_funcs.html#_CPPv4I_j00_jE26block_store_direct_stripedvj14OutputIteratorRA14ItemsPerThread_1Tj">[1]</a>, <a href="blockmodule/data_mov_funcs/index.html#_CPPv4I_j00_jE26block_store_direct_stripedvj14OutputIteratorRA14ItemsPerThread_1T">[2]</a>, <a href="blockmodule/data_mov_funcs/index.html#_CPPv4I_j00_jE26block_store_direct_stripedvj14OutputIteratorRA14ItemsPerThread_1Tj">[3]</a>
+</li>
+        <li><a href="blockmodule/data_mov_funcs.html#_CPPv4I_j00_jE31block_store_direct_warp_stripedvj14OutputIteratorRA14ItemsPerThread_1T">block_store_direct_warp_striped (C++ function)</a>, <a href="blockmodule/data_mov_funcs.html#_CPPv4I_j00_jE31block_store_direct_warp_stripedvj14OutputIteratorRA14ItemsPerThread_1Tj">[1]</a>, <a href="blockmodule/data_mov_funcs/index.html#_CPPv4I_j00_jE31block_store_direct_warp_stripedvj14OutputIteratorRA14ItemsPerThread_1T">[2]</a>, <a href="blockmodule/data_mov_funcs/index.html#_CPPv4I_j00_jE31block_store_direct_warp_stripedvj14OutputIteratorRA14ItemsPerThread_1Tj">[3]</a>
+</li>
+        <li><a href="blockmodule/ops_classes/store.html#_CPPv418block_store_method">block_store_method (C++ enum)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/store.html#_CPPv4N18block_store_method18block_store_directE">block_store_method::block_store_direct (C++ enumerator)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/store.html#_CPPv4N18block_store_method19block_store_stripedE">block_store_method::block_store_striped (C++ enumerator)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/store.html#_CPPv4N18block_store_method21block_store_transposeE">block_store_method::block_store_transpose (C++ enumerator)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/store.html#_CPPv4N18block_store_method21block_store_vectorizeE">block_store_method::block_store_vectorize (C++ enumerator)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/store.html#_CPPv4N18block_store_method26block_store_warp_transposeE">block_store_method::block_store_warp_transpose (C++ enumerator)</a>
+</li>
+        <li><a href="blockmodule/ops_classes/store.html#_CPPv4N18block_store_method14default_methodE">block_store_method::default_method (C++ enumerator)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="C" class="genindex-section">
+  <h2>C</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="iterators.html#_CPPv4I00E17constant_iterator">constant_iterator (C++ class)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="iterators.html#_CPPv4I00E17counting_iterator">counting_iterator (C++ class)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="D" class="genindex-section">
+  <h2>D</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="devicemodule/config.html#_CPPv414default_config">default_config (C++ struct)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="intrinsics.html#_CPPv416device_warp_sizev">device_warp_size (C++ function)</a>
+</li>
+        <li><a href="iterators.html#_CPPv416discard_iterator">discard_iterator (C++ class)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="E" class="genindex-section">
+  <h2>E</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="devicemodule/scan.html#_CPPv4I00000E14exclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorK13InitValueTypeK6size_t14BinaryFunctionK11hipStream_tb">exclusive_scan (C++ function)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="devicemodule/scan.html#_CPPv4I0000000E21exclusive_scan_by_key10hipError_tPCvR6size_tK17KeysInputIteratorK19ValuesInputIteratorK20ValuesOutputIteratorK16InitialValueTypeK6size_tK14BinaryFunctionK18KeyCompareFunctionK11hipStream_tKb">exclusive_scan_by_key (C++ function)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="F" class="genindex-section">
+  <h2>F</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="glossary.html#term-Flat-ID"><strong>Flat ID</strong></a>
+</li>
+        <li><a href="intrinsics.html#_CPPv413flat_block_idv">flat_block_id (C++ function)</a>, <a href="intrinsics.html#_CPPv4I_j_j_jE13flat_block_idNSt9enable_ifIXaaeq10BlockSizeYL1Eeq10BlockSizeZL1EEjE4typeEv">[1]</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="intrinsics.html#_CPPv415flat_block_sizev">flat_block_size (C++ function)</a>
+</li>
+        <li><a href="intrinsics.html#_CPPv420flat_block_thread_idv">flat_block_thread_id (C++ function)</a>, <a href="intrinsics.html#_CPPv4I_j_j_jE20flat_block_thread_idNSt9enable_ifIXaaeq10BlockSizeYL1Eeq10BlockSizeZL1EEjE4typeEv">[1]</a>
+</li>
+        <li><a href="intrinsics.html#_CPPv414flat_tile_sizev">flat_tile_size (C++ function)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="G" class="genindex-section">
+  <h2>G</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="intrinsics.html#_CPPv47get_bitii">get_bit (C++ function)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="H" class="genindex-section">
+  <h2>H</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="glossary.html#term-Hardware-Warp-Size"><strong>Hardware Warp Size</strong></a>
+</li>
+        <li><a href="devicemodule/histogram.html#_CPPv4I0_j_jE16histogram_config">histogram_config (C++ struct)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="devicemodule/histogram.html#_CPPv4I0000E14histogram_even10hipError_tPvR6size_t14SampleIteratorjP7Counterj5Level5Level11hipStream_tb">histogram_even (C++ function)</a>, <a href="devicemodule/histogram.html#_CPPv4I0000E14histogram_even10hipError_tPvR6size_t14SampleIteratorjj6size_tP7Counterj5Level5Level11hipStream_tb">[1]</a>
+</li>
+        <li><a href="devicemodule/histogram.html#_CPPv4I0000E15histogram_range10hipError_tPvR6size_t14SampleIteratorjP7CounterjP5Level11hipStream_tb">histogram_range (C++ function)</a>, <a href="devicemodule/histogram.html#_CPPv4I0000E15histogram_range10hipError_tPvR6size_t14SampleIteratorjj6size_tP7CounterjP5Level11hipStream_tb">[1]</a>
+</li>
+        <li><a href="intrinsics.html#_CPPv414host_warp_sizev">host_warp_size (C++ function)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="I" class="genindex-section">
+  <h2>I</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="devicemodule/scan.html#_CPPv4I0000E14inclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorK6size_t14BinaryFunctionK11hipStream_tb">inclusive_scan (C++ function)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="devicemodule/scan.html#_CPPv4I000000E21inclusive_scan_by_key10hipError_tPCvR6size_tK17KeysInputIteratorK19ValuesInputIteratorK20ValuesOutputIteratorK6size_tK14BinaryFunctionK18KeyCompareFunctionK11hipStream_tKb">inclusive_scan_by_key (C++ function)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="K" class="genindex-section">
+  <h2>K</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="devicemodule/config.html#_CPPv4I_j_j_jE13kernel_config">kernel_config (C++ struct)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="L" class="genindex-section">
+  <h2>L</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="glossary.html#term-Lane-ID"><strong>Lane ID</strong></a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="intrinsics.html#_CPPv47lane_idv">lane_id (C++ function)</a>
+</li>
+        <li><a href="glossary.html#term-Logical-Warp-Size"><strong>Logical Warp Size</strong></a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="M" class="genindex-section">
+  <h2>M</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="intrinsics.html#_CPPv416masked_bit_count14lane_mask_typej">masked_bit_count (C++ function)</a>
+</li>
+        <li><a href="devicemodule/merge.html#_CPPv4I00000000E5merge10hipError_tPvR6size_t18KeysInputIterator118KeysInputIterator218KeysOutputIterator20ValuesInputIterator120ValuesInputIterator220ValuesOutputIteratorK6size_tK6size_t14BinaryFunctionK11hipStream_tb">merge (C++ function)</a>, <a href="devicemodule/merge.html#_CPPv4I00000E5merge10hipError_tPvR6size_t14InputIterator114InputIterator214OutputIteratorK6size_tK6size_t14BinaryFunctionK11hipStream_tb">[1]</a>
+</li>
+        <li><a href="devicemodule/merge.html#_CPPv4I_j_jE12merge_config">merge_config (C++ type)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="devicemodule/sort.html#_CPPv4I000000E10merge_sort10hipError_tPvR6size_t17KeysInputIterator18KeysOutputIterator19ValuesInputIterator20ValuesOutputIteratorK6size_t14BinaryFunctionK11hipStream_tb">merge_sort (C++ function)</a>, <a href="devicemodule/sort.html#_CPPv4I0000E10merge_sort10hipError_tPvR6size_t17KeysInputIterator18KeysOutputIteratorK6size_t14BinaryFunctionK11hipStream_tb">[1]</a>
+</li>
+        <li><a href="devicemodule/sort.html#_CPPv4I_j_j_jE17merge_sort_config">merge_sort_config (C++ type)</a>
+</li>
+        <li><a href="devicemodule/histogram.html#_CPPv4I_j_j0000E20multi_histogram_even10hipError_tPvR6size_t14SampleIteratorjA14ActiveChannels_P7CounterA14ActiveChannels_jA14ActiveChannels_5LevelA14ActiveChannels_5Level11hipStream_tb">multi_histogram_even (C++ function)</a>, <a href="devicemodule/histogram.html#_CPPv4I_j_j0000E20multi_histogram_even10hipError_tPvR6size_t14SampleIteratorjj6size_tA14ActiveChannels_P7CounterA14ActiveChannels_jA14ActiveChannels_5LevelA14ActiveChannels_5Level11hipStream_tb">[1]</a>
+</li>
+        <li><a href="devicemodule/histogram.html#_CPPv4I_j_j0000E21multi_histogram_range10hipError_tPvR6size_t14SampleIteratorjA14ActiveChannels_P7CounterA14ActiveChannels_jA14ActiveChannels_P5Level11hipStream_tb">multi_histogram_range (C++ function)</a>, <a href="devicemodule/histogram.html#_CPPv4I_j_j0000E21multi_histogram_range10hipError_tPvR6size_t14SampleIteratorjj6size_tA14ActiveChannels_P7CounterA14ActiveChannels_jA14ActiveChannels_P5Level11hipStream_tb">[1]</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="P" class="genindex-section">
+  <h2>P</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="devicemodule/partition.html#_CPPv4I00000E9partition10hipError_tPvR6size_t13InputIterator14OutputIterator27SelectedCountOutputIteratorK6size_t14UnaryPredicateK11hipStream_tKb">partition (C++ function)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="devicemodule/partition.html#_CPPv4I00000000E19partition_three_way10hipError_tPvR6size_t13InputIterator19FirstOutputIterator20SecondOutputIterator24UnselectedOutputIterator27SelectedCountOutputIteratorK6size_t19FirstUnaryPredicate20SecondUnaryPredicateK11hipStream_tKb">partition_three_way (C++ function)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="R" class="genindex-section">
+  <h2>R</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="devicemodule/sort.html#_CPPv4I_j_j0000_j_bE17radix_sort_config">radix_sort_config (C++ struct)</a>
+</li>
+        <li><a href="devicemodule/sort.html#_CPPv4I000E15radix_sort_keys10hipError_tPvR6size_tR13double_bufferI3KeyE4Sizejj11hipStream_tb">radix_sort_keys (C++ function)</a>
+</li>
+        <li><a href="devicemodule/sort.html#_CPPv4I000E20radix_sort_keys_desc10hipError_tPvR6size_tR13double_bufferI3KeyE4Sizejj11hipStream_tb">radix_sort_keys_desc (C++ function)</a>
+</li>
+        <li><a href="devicemodule/sort.html#_CPPv4I0000000E16radix_sort_pairs10hipError_tPvR6size_t17KeysInputIterator18KeysOutputIterator19ValuesInputIterator20ValuesOutputIterator4Sizejj11hipStream_tb">radix_sort_pairs (C++ function)</a>
+</li>
+        <li><a href="devicemodule/sort.html#_CPPv4I0000000E21radix_sort_pairs_desc10hipError_tPvR6size_t17KeysInputIterator18KeysOutputIterator19ValuesInputIterator20ValuesOutputIterator4Sizejj11hipStream_tb">radix_sort_pairs_desc (C++ function)</a>
+</li>
+        <li><a href="devicemodule/reduce.html#_CPPv4I00000E6reduce10hipError_tPvR6size_t13InputIterator14OutputIteratorK13InitValueTypeK6size_t14BinaryFunctionK11hipStream_tb">reduce (C++ function)</a>, <a href="devicemodule/reduce.html#_CPPv4I0000E6reduce10hipError_tPvR6size_t13InputIterator14OutputIteratorK6size_t14BinaryFunctionK11hipStream_tb">[1]</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="devicemodule/reduce.html#_CPPv4I00000000E13reduce_by_key10hipError_tPvR6size_t17KeysInputIterator19ValuesInputIteratorj20UniqueOutputIterator24AggregatesOutputIterator25UniqueCountOutputIterator14BinaryFunction18KeyCompareFunction11hipStream_tb">reduce_by_key (C++ function)</a>
+</li>
+        <li><a href="devicemodule/reduce.html#_CPPv4I00E20reduce_by_key_config">reduce_by_key_config (C++ struct)</a>
+</li>
+        <li><a href="devicemodule/reduce.html#_CPPv4I_j_j_N7rocprim22block_reduce_algorithmE_jE13reduce_config">reduce_config (C++ struct)</a>
+</li>
+        <li><a href="devicemodule/run_length_encoding.html#_CPPv4I00000E17run_length_encode10hipError_tPvR6size_t13InputIteratorj20UniqueOutputIterator20CountsOutputIterator23RunsCountOutputIterator11hipStream_tb">run_length_encode (C++ function)</a>
+</li>
+        <li><a href="devicemodule/run_length_encoding.html#_CPPv4I00E24run_length_encode_config">run_length_encode_config (C++ struct)</a>
+</li>
+        <li><a href="devicemodule/run_length_encoding.html#_CPPv4I00000E34run_length_encode_non_trivial_runs10hipError_tPvR6size_t13InputIteratorj21OffsetsOutputIterator20CountsOutputIterator23RunsCountOutputIterator11hipStream_tb">run_length_encode_non_trivial_runs (C++ function)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="S" class="genindex-section">
+  <h2>S</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="devicemodule/scan.html#_CPPv4I_j_j_b_N7rocprim17block_load_methodE_N7rocprim18block_store_methodE_N7rocprim20block_scan_algorithmE_jE18scan_by_key_config">scan_by_key_config (C++ struct)</a>
+</li>
+        <li><a href="devicemodule/scan.html#_CPPv4I_j_j_b_N7rocprim17block_load_methodE_N7rocprim18block_store_methodE_N7rocprim20block_scan_algorithmE_jE11scan_config">scan_config (C++ struct)</a>
+</li>
+        <li><a href="devicemodule/scan.html#_CPPv4I000000E24segmented_exclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorj14OffsetIterator14OffsetIteratorK13InitValueType14BinaryFunction11hipStream_tb">segmented_exclusive_scan (C++ function)</a>
+</li>
+        <li><a href="devicemodule/scan.html#_CPPv4I00000E24segmented_inclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorj14OffsetIterator14OffsetIterator14BinaryFunction11hipStream_tb">segmented_inclusive_scan (C++ function)</a>
+</li>
+        <li><a href="devicemodule/sort.html#_CPPv4I00000E25segmented_radix_sort_keys10hipError_tPvR6size_t17KeysInputIterator18KeysOutputIteratorjj14OffsetIterator14OffsetIteratorjj11hipStream_tb">segmented_radix_sort_keys (C++ function)</a>
+</li>
+        <li><a href="devicemodule/sort.html#_CPPv4I00000E30segmented_radix_sort_keys_desc10hipError_tPvR6size_t17KeysInputIterator18KeysOutputIteratorjj14OffsetIterator14OffsetIteratorjj11hipStream_tb">segmented_radix_sort_keys_desc (C++ function)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="devicemodule/sort.html#_CPPv4I0000000E26segmented_radix_sort_pairs10hipError_tPvR6size_t17KeysInputIterator18KeysOutputIterator19ValuesInputIterator20ValuesOutputIteratorjj14OffsetIterator14OffsetIteratorjj11hipStream_tb">segmented_radix_sort_pairs (C++ function)</a>
+</li>
+        <li><a href="devicemodule/sort.html#_CPPv4I0000000E31segmented_radix_sort_pairs_desc10hipError_tPvR6size_t17KeysInputIterator18KeysOutputIterator19ValuesInputIterator20ValuesOutputIteratorjj14OffsetIterator14OffsetIteratorjj11hipStream_tb">segmented_radix_sort_pairs_desc (C++ function)</a>
+</li>
+        <li><a href="devicemodule/reduce.html#_CPPv4I000000E16segmented_reduce10hipError_tPvR6size_t13InputIterator14OutputIteratorj14OffsetIterator14OffsetIterator14BinaryFunction13InitValueType11hipStream_tb">segmented_reduce (C++ function)</a>
+</li>
+        <li><a href="devicemodule/select.html#_CPPv4I00000E6select10hipError_tPvR6size_t13InputIterator12FlagIterator14OutputIterator27SelectedCountOutputIteratorK6size_tK11hipStream_tKb">select (C++ function)</a>, <a href="devicemodule/select.html#_CPPv4I00000E6select10hipError_tPvR6size_t13InputIterator14OutputIterator27SelectedCountOutputIteratorK6size_t14UnaryPredicateK11hipStream_tKb">[1]</a>
+</li>
+        <li><a href="devicemodule/select.html#_CPPv4I_j_j_N7rocprim17block_load_methodE_N7rocprim17block_load_methodE_N7rocprim17block_load_methodE_N7rocprim20block_scan_algorithmE_jE13select_config">select_config (C++ struct)</a>
+</li>
+        <li><a href="intrinsics.html#_CPPv411syncthreadsv">syncthreads (C++ function)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="T" class="genindex-section">
+  <h2>T</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="iterators.html#_CPPv4I00E22texture_cache_iterator">texture_cache_iterator (C++ class)</a>
+</li>
+        <li><a href="threadmodule.html#_CPPv4I_i00E21thread_scan_exclusive1T1T1TP1TP1T6ScanOp8Int2TypeI6LENGTHE">thread_scan_exclusive (C++ function)</a>, <a href="threadmodule.html#_CPPv4I_i00E21thread_scan_exclusive1TP1TP1T6ScanOp1Tb">[1]</a>, <a href="threadmodule.html#_CPPv4I_i00E21thread_scan_exclusive1TRA6LENGTH_1TRA6LENGTH_1T6ScanOp1Tb">[2]</a>
+</li>
+        <li><a href="threadmodule.html#_CPPv4I_i00E21thread_scan_inclusive1T1TP1TP1T6ScanOp8Int2TypeI6LENGTHE">thread_scan_inclusive (C++ function)</a>, <a href="threadmodule.html#_CPPv4I_i00E21thread_scan_inclusive1TP1TP1T6ScanOp">[1]</a>, <a href="threadmodule.html#_CPPv4I_i00E21thread_scan_inclusive1TP1TP1T6ScanOp1Tb">[2]</a>, <a href="threadmodule.html#_CPPv4I_i00E21thread_scan_inclusive1TRA6LENGTH_1TRA6LENGTH_1T6ScanOp">[3]</a>, <a href="threadmodule.html#_CPPv4I_i00E21thread_scan_inclusive1TRA6LENGTH_1TRA6LENGTH_1T6ScanOp1Tb">[4]</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="glossary.html#term-Tile"><strong>Tile</strong></a>
+</li>
+        <li><a href="devicemodule/transform.html#_CPPv4I00000E9transform10hipError_t14InputIterator114InputIterator214OutputIteratorK6size_t14BinaryFunctionK11hipStream_tb">transform (C++ function)</a>, <a href="devicemodule/transform.html#_CPPv4I0000E9transform10hipError_t13InputIterator14OutputIteratorK6size_t13UnaryFunctionK11hipStream_tb">[1]</a>
+</li>
+        <li><a href="devicemodule/transform.html#_CPPv4I_j_j_jE16transform_config">transform_config (C++ type)</a>
+</li>
+        <li><a href="iterators.html#_CPPv4I000E18transform_iterator">transform_iterator (C++ class)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="U" class="genindex-section">
+  <h2>U</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="devicemodule/unique.html#_CPPv4I00000E6unique10hipError_tPvR6size_t13InputIterator14OutputIterator25UniqueCountOutputIteratorK6size_t10EqualityOpK11hipStream_tKb">unique (C++ function)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="devicemodule/unique.html#_CPPv4I0000000E13unique_by_key10hipError_tPvR6size_tK11KeyIteratorK13ValueIteratorK17OutputKeyIteratorK19OutputValueIteratorK25UniqueCountOutputIteratorK6size_tK10EqualityOpK11hipStream_tKb">unique_by_key (C++ function)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="W" class="genindex-section">
+  <h2>W</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="glossary.html#term-Warp"><strong>Warp</strong></a>
+</li>
+        <li><a href="glossary.html#term-Warp-ID"><strong>Warp ID</strong></a>
+</li>
+        <li><a href="warpmodule.html#_CPPv4I0_j_jE13warp_exchange">warp_exchange (C++ class)</a>
+</li>
+        <li><a href="intrinsics.html#_CPPv47warp_idj">warp_id (C++ function)</a>, <a href="intrinsics.html#_CPPv47warp_idv">[1]</a>, <a href="intrinsics.html#_CPPv4I_j_j_jE7warp_idv">[2]</a>
+</li>
+        <li><a href="warpmodule.html#_CPPv4I0_j_j_16warp_load_methodE9warp_load">warp_load (C++ class)</a>
+</li>
+        <li><a href="warpmodule.html#_CPPv416warp_load_method">warp_load_method (C++ enum)</a>
+</li>
+        <li><a href="warpmodule.html#_CPPv4N16warp_load_method14default_methodE">warp_load_method::default_method (C++ enumerator)</a>
+</li>
+        <li><a href="warpmodule.html#_CPPv4N16warp_load_method16warp_load_directE">warp_load_method::warp_load_direct (C++ enumerator)</a>
+</li>
+        <li><a href="warpmodule.html#_CPPv4N16warp_load_method17warp_load_stripedE">warp_load_method::warp_load_striped (C++ enumerator)</a>
+</li>
+        <li><a href="warpmodule.html#_CPPv4N16warp_load_method19warp_load_transposeE">warp_load_method::warp_load_transpose (C++ enumerator)</a>
+</li>
+        <li><a href="warpmodule.html#_CPPv4N16warp_load_method19warp_load_vectorizeE">warp_load_method::warp_load_vectorize (C++ enumerator)</a>
+</li>
+        <li><a href="warpmodule.html#_CPPv4I0_j_bE11warp_reduce">warp_reduce (C++ class)</a>
+</li>
+        <li><a href="warpmodule.html#_CPPv4I0_jE9warp_scan">warp_scan (C++ class)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="warpmodule.html#_CPPv4I0E12warp_shuffle1TRK1TKiKi">warp_shuffle (C++ function)</a>
+</li>
+        <li><a href="warpmodule.html#_CPPv4I0E17warp_shuffle_down1TRK1TKjKi">warp_shuffle_down (C++ function)</a>
+</li>
+        <li><a href="warpmodule.html#_CPPv4I0E16warp_shuffle_xor1TRK1TKiKi">warp_shuffle_xor (C++ function)</a>
+</li>
+        <li><a href="intrinsics.html#_CPPv49warp_sizev">warp_size (C++ function)</a>
+</li>
+        <li><a href="warpmodule.html#_CPPv4I0_j0E9warp_sort">warp_sort (C++ class)</a>, <a href="warpmodule.html#_CPPv4I0_j0E9warp_sort">[1]</a>
+</li>
+        <li><a href="warpmodule.html#_CPPv4I0_j_j_17warp_store_methodE10warp_store">warp_store (C++ class)</a>
+</li>
+        <li><a href="warpmodule.html#_CPPv417warp_store_method">warp_store_method (C++ enum)</a>
+</li>
+        <li><a href="warpmodule.html#_CPPv4N17warp_store_method14default_methodE">warp_store_method::default_method (C++ enumerator)</a>
+</li>
+        <li><a href="warpmodule.html#_CPPv4N17warp_store_method17warp_store_directE">warp_store_method::warp_store_direct (C++ enumerator)</a>
+</li>
+        <li><a href="warpmodule.html#_CPPv4N17warp_store_method18warp_store_stripedE">warp_store_method::warp_store_striped (C++ enumerator)</a>
+</li>
+        <li><a href="warpmodule.html#_CPPv4N17warp_store_method20warp_store_transposeE">warp_store_method::warp_store_transpose (C++ enumerator)</a>
+</li>
+        <li><a href="warpmodule.html#_CPPv4N17warp_store_method20warp_store_vectorizeE">warp_store_method::warp_store_vectorize (C++ enumerator)</a>
+</li>
+        <li><a href="intrinsics.html#_CPPv412wave_barrierv">wave_barrier (C++ function)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="Z" class="genindex-section">
+  <h2>Z</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="iterators.html#_CPPv4I0E12zip_iterator">zip_iterator (C++ class)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="./" id="documentation_options" src="static/documentation_options.js"></script>
+    <script src="static/jquery.js"></script>
+    <script src="static/underscore.js"></script>
+    <script src="static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="static/doctools.js"></script>
+    <script src="static/scripts/furo.js"></script>
+    </body>
+</html>

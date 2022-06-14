@@ -1,0 +1,466 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Glossary" href="glossary.html" /><link rel="prev" title="Iterators" href="iterators.html" />
+
+    <meta name="generator" content="sphinx-5.1.0+/0aedcc9a9, furo 2022.06.04.1"/>
+        <title>Intrinsics - rocPRIM documentation</title>
+      <link rel="stylesheet" type="text/css" href="static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="static/cpp_sig.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #263238;
+  --color-code-foreground: #EEFFFF;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #263238;
+  --color-code-foreground: #EEFFFF;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">rocPRIM  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  
+  <span class="sidebar-brand-text">rocPRIM  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="operations.html">High Level view of the operations</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="devicemodule/index.html">Device-Wide Operations</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/config.html">Configuring the Kernels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/transform.html">Transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/unique.html">Unique</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/sort.html">Sort</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/merge.html">Merge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/partition.html">Partition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/run_length_encoding.html">Run Length Encode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/scan.html">Scan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/select.html">Select</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/reduce.html">Reduce</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/adjacent_difference.html">Adjacent difference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/binary_search.html">Binary Search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/histogram.html">Histogram</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="blockmodule/index.html">Block-Wide Operations</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="blockmodule/ops_classes/index.html">Operation classes</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="blockmodule/ops_classes/load.html">Load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blockmodule/ops_classes/store.html">Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blockmodule/ops_classes/adjacent_difference.html">Adjacent difference</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blockmodule/ops_classes/discontinuity.html">Discontinuity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blockmodule/ops_classes/scan.html">Scan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blockmodule/ops_classes/reduce.html">Reduce</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blockmodule/ops_classes/histogram.html">Histogram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blockmodule/ops_classes/exchange.html">Exchange</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blockmodule/ops_classes/shuffle.html">Shuffle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blockmodule/ops_classes/sort.html">Sort</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="blockmodule/data_mov_funcs.html">Data movement functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="warpmodule.html">Warp-Level Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="threadmodule.html">Thread-Level Operations (Utilities)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="iterators.html">Iterators</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Intrinsics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="intrinsics">
+<h1>Intrinsics<a class="headerlink" href="#intrinsics" title="Permalink to this heading">#</a></h1>
+<section id="bitwise">
+<h2>Bitwise<a class="headerlink" href="#bitwise" title="Permalink to this heading">#</a></h2>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv47get_bitii">
+<span id="_CPPv37get_bitii"></span><span id="_CPPv27get_bitii"></span><span id="get_bit__i.i"></span><span class="declarator"><span class="target" id="group__intrinsicsmodule_1ga431a0ce15e69bef295370bd9d29e4b26"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_bit</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span>, </li><li class="desc-parameter"><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">i</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47get_bitii" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Returns a single bit at ‘i’ from ‘x’. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv49bit_countj">
+<span id="_CPPv39bit_countj"></span><span id="_CPPv29bit_countj"></span><span id="bit_count__unsigned-i"></span><span class="declarator"><span class="target" id="group__intrinsicsmodule_1ga792f5836b31d61f775c2d5cf50fc34e2"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bit_count</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49bit_countj" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Bit count. </p>
+<p>Returns the number of bit of <code class="docutils literal notranslate"><span class="pre">x</span></code> set. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv49bit_county">
+<span id="_CPPv39bit_county"></span><span id="_CPPv29bit_county"></span><span id="bit_count__unsigned-l-l"></span><span class="declarator"><span class="target" id="group__intrinsicsmodule_1ga3cba2382f5522af55a903b4fa2ecc2bc"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bit_count</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49bit_county" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Bit count. </p>
+<p>Returns the number of bit of <code class="docutils literal notranslate"><span class="pre">x</span></code> set. </p>
+</dd></dl>
+
+</section>
+<section id="warp-size">
+<h2>Warp size<a class="headerlink" href="#warp-size" title="Permalink to this heading">#</a></h2>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv49warp_sizev">
+<span id="_CPPv39warp_sizev"></span><span id="_CPPv29warp_sizev"></span><span id="warp_sizeCE"></span><span class="declarator"><span class="target" id="group__intrinsicsmodule_1gad9682f87212da9fc4c021d7e0b7a1371"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">warp_size</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49warp_sizev" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>[DEPRECATED] Returns a number of threads in a hardware warp. </p>
+<p>It is constant for a device. This function is not supported for the gfx1030 architecture and will be removed in a future release. Please use the new <a class="reference internal" href="#group__intrinsicsmodule_1ga7cd8574a169fd876f3e65312c7d89729"><span class="std std-ref">host_warp_size()</span></a> and <a class="reference internal" href="#group__intrinsicsmodule_1ga79ec729e34744dd2875ea8333ea78837"><span class="std std-ref">device_warp_size()</span></a> functions. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv414host_warp_sizev">
+<span id="_CPPv314host_warp_sizev"></span><span id="_CPPv214host_warp_sizev"></span><span id="host_warp_size"></span><span class="declarator"><span class="target" id="group__intrinsicsmodule_1ga7cd8574a169fd876f3e65312c7d89729"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">host_warp_size</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414host_warp_sizev" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Returns a number of threads in a hardware warp for the actual device. At host side this constant is available at runtime time only. </p>
+<p>It is constant for a device. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv416device_warp_sizev">
+<span id="_CPPv316device_warp_sizev"></span><span id="_CPPv216device_warp_sizev"></span><span id="device_warp_sizeCE"></span><span class="declarator"><span class="target" id="group__intrinsicsmodule_1ga79ec729e34744dd2875ea8333ea78837"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">device_warp_size</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416device_warp_sizev" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Returns a number of threads in a hardware warp for the actual target. At device side this constant is available at compile time. </p>
+<p>It is constant for a device. </p>
+</dd></dl>
+
+</section>
+<section id="lane-and-warp-id">
+<h2>Lane and Warp ID<a class="headerlink" href="#lane-and-warp-id" title="Permalink to this heading">#</a></h2>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv47lane_idv">
+<span id="_CPPv37lane_idv"></span><span id="_CPPv27lane_idv"></span><span id="lane_id"></span><span class="declarator"><span class="target" id="group__intrinsicsmodule_1ga30380fbf8fe2dc9029338d18a0a0ac2a"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">lane_id</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47lane_idv" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Returns thread identifier in a warp. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv47warp_idv">
+<span id="_CPPv37warp_idv"></span><span id="_CPPv27warp_idv"></span><span id="warp_id"></span><span class="declarator"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">warp_id</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47warp_idv" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Returns warp id in a block (tile).</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv47warp_idj">
+<span id="_CPPv37warp_idj"></span><span id="_CPPv27warp_idj"></span><span id="warp_id__unsigned-i"></span><span class="declarator"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">warp_id</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">flat_id</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47warp_idj" title="Permalink to this definition">#</a></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I_j_j_jE7warp_idv">
+<span id="_CPPv3I_j_j_jE7warp_idv"></span><span id="_CPPv2I_j_j_jE7warp_idv"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockSizeX</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockSizeY</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockSizeZ</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="sig-name descname"><span class="n"><span class="pre">warp_id</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_j_j_jE7warp_idv" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Returns warp id in a block (tile). Use template parameters to
+optimize 1D or 2D kernels.</p>
+</dd></dl>
+
+</section>
+<section id="flat-id">
+<h2>Flat ID<a class="headerlink" href="#flat-id" title="Permalink to this heading">#</a></h2>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I_j_j_jE20flat_block_thread_idNSt9enable_ifIXaaeq10BlockSizeYL1Eeq10BlockSizeZL1EEjE4typeEv">
+<span id="_CPPv3I_j_j_jE20flat_block_thread_idv"></span><span id="_CPPv2I_j_j_jE20flat_block_thread_idv"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockSizeX</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockSizeY</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockSizeZ</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flat_block_thread_id</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="o"><span class="pre">-&gt;</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">enable_if</span></span><span class="p"><span class="pre">&lt;</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="#_CPPv4I_j_j_jE20flat_block_thread_idNSt9enable_ifIXaaeq10BlockSizeYL1Eeq10BlockSizeZL1EEjE4typeEv" title="flat_block_thread_id::BlockSizeY"><span class="n"><span class="pre">BlockSizeY</span></span></a><span class="w"> </span><span class="o"><span class="pre">==</span></span><span class="w"> </span><span class="m"><span class="pre">1</span></span><span class="w"> </span><span class="o"><span class="pre">&amp;&amp;</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_j_j_jE20flat_block_thread_idNSt9enable_ifIXaaeq10BlockSizeYL1Eeq10BlockSizeZL1EEjE4typeEv" title="flat_block_thread_id::BlockSizeZ"><span class="n"><span class="pre">BlockSizeZ</span></span></a><span class="w"> </span><span class="o"><span class="pre">==</span></span><span class="w"> </span><span class="m"><span class="pre">1</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">type</span></span><a class="headerlink" href="#_CPPv4I_j_j_jE20flat_block_thread_idNSt9enable_ifIXaaeq10BlockSizeYL1Eeq10BlockSizeZL1EEjE4typeEv" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Returns flat (linear, 1D) thread identifier in a multidimensional
+block (tile). Use template parameters to optimize 1D or 2D kernels.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv420flat_block_thread_idv">
+<span id="_CPPv320flat_block_thread_idv"></span><span id="_CPPv220flat_block_thread_idv"></span><span id="flat_block_thread_id"></span><span class="declarator"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flat_block_thread_id</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420flat_block_thread_idv" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Returns flat (linear, 1D) thread identifier in a multidimensional
+block (tile).</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv413flat_block_idv">
+<span id="_CPPv313flat_block_idv"></span><span id="_CPPv213flat_block_idv"></span><span id="flat_block_id"></span><span class="declarator"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flat_block_id</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413flat_block_idv" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Returns flat (linear, 1D) block identifier in a multidimensional grid.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I_j_j_jE13flat_block_idNSt9enable_ifIXaaeq10BlockSizeYL1Eeq10BlockSizeZL1EEjE4typeEv">
+<span id="_CPPv3I_j_j_jE13flat_block_idv"></span><span id="_CPPv2I_j_j_jE13flat_block_idv"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockSizeX</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockSizeY</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockSizeZ</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flat_block_id</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="o"><span class="pre">-&gt;</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">enable_if</span></span><span class="p"><span class="pre">&lt;</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="#_CPPv4I_j_j_jE13flat_block_idNSt9enable_ifIXaaeq10BlockSizeYL1Eeq10BlockSizeZL1EEjE4typeEv" title="flat_block_id::BlockSizeY"><span class="n"><span class="pre">BlockSizeY</span></span></a><span class="w"> </span><span class="o"><span class="pre">==</span></span><span class="w"> </span><span class="m"><span class="pre">1</span></span><span class="w"> </span><span class="o"><span class="pre">&amp;&amp;</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_j_j_jE13flat_block_idNSt9enable_ifIXaaeq10BlockSizeYL1Eeq10BlockSizeZL1EEjE4typeEv" title="flat_block_id::BlockSizeZ"><span class="n"><span class="pre">BlockSizeZ</span></span></a><span class="w"> </span><span class="o"><span class="pre">==</span></span><span class="w"> </span><span class="m"><span class="pre">1</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">type</span></span><a class="headerlink" href="#_CPPv4I_j_j_jE13flat_block_idNSt9enable_ifIXaaeq10BlockSizeYL1Eeq10BlockSizeZL1EEjE4typeEv" title="Permalink to this definition">#</a></span><br /></dt>
+<dd></dd></dl>
+
+</section>
+<section id="flat-size">
+<h2>Flat Size<a class="headerlink" href="#flat-size" title="Permalink to this heading">#</a></h2>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv415flat_block_sizev">
+<span id="_CPPv315flat_block_sizev"></span><span id="_CPPv215flat_block_sizev"></span><span id="flat_block_size"></span><span class="declarator"><span class="target" id="group__intrinsicsmodule_1gafc6344bb5f12e1d7b2eca445ac5274f7"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flat_block_size</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415flat_block_sizev" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Returns flat size of a multidimensional block (tile). </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv414flat_tile_sizev">
+<span id="_CPPv314flat_tile_sizev"></span><span id="_CPPv214flat_tile_sizev"></span><span id="flat_tile_size"></span><span class="declarator"><span class="target" id="group__intrinsicsmodule_1ga439d6eccfad82bb58a9f2c532314f048"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flat_tile_size</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414flat_tile_sizev" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Returns flat size of a multidimensional tile (block). </p>
+</dd></dl>
+
+</section>
+<section id="synchronisation">
+<h2>Synchronisation<a class="headerlink" href="#synchronisation" title="Permalink to this heading">#</a></h2>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv411syncthreadsv">
+<span id="_CPPv311syncthreadsv"></span><span id="_CPPv211syncthreadsv"></span><span id="syncthreads"></span><span class="declarator"><span class="target" id="group__intrinsicsmodule_1ga55405d8a5fc4b2e6a14363bbf16fbc67"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">syncthreads</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411syncthreadsv" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Synchronize all threads in a block (tile) </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv412wave_barrierv">
+<span id="_CPPv312wave_barrierv"></span><span id="_CPPv212wave_barrierv"></span><span id="wave_barrier"></span><span class="declarator"><span class="target" id="group__intrinsicsmodule_1ga556a7c4245a2a5964edc2075705d4838"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wave_barrier</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412wave_barrierv" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>All lanes in a wave come to convergence point simultaneously with SIMT, thus no special instruction is needed in the ISA. </p>
+</dd></dl>
+
+</section>
+<section id="active-threads">
+<h2>Active threads<a class="headerlink" href="#active-threads" title="Permalink to this heading">#</a></h2>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv46balloti">
+<span id="_CPPv36balloti"></span><span id="_CPPv26balloti"></span><span id="ballot__i"></span><span class="declarator"><span class="target" id="group__intrinsicsmodule_1ga1faa11cced8c27bb4dcd204c026f9718"></span><span class="n"><span class="pre">lane_mask_type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ballot</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">predicate</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46balloti" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Evaluate predicate for all active work-items in the warp and return an integer whose <code class="docutils literal notranslate"><span class="pre">i</span></code>-th bit is set if and only if <code class="docutils literal notranslate"><span class="pre">predicate</span></code> is <code class="docutils literal notranslate"><span class="pre">true</span></code> for the <code class="docutils literal notranslate"><span class="pre">i</span></code>-th thread of the warp and the <code class="docutils literal notranslate"><span class="pre">i</span></code>-th thread is active.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>predicate</strong> – - input to be evaluated for all active lanes </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv416masked_bit_count14lane_mask_typej">
+<span id="_CPPv316masked_bit_count14lane_mask_typej"></span><span id="_CPPv216masked_bit_count14lane_mask_typej"></span><span id="masked_bit_count__lane_mask_type.unsigned-i"></span><span class="declarator"><span class="target" id="group__intrinsicsmodule_1gaf59a59b66604401aab781f05c7a1c76f"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">masked_bit_count</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="n"><span class="pre">lane_mask_type</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span>, </li><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">add</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416masked_bit_count14lane_mask_typej" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Masked bit count. </p>
+<p>For each thread, this function returns the number of active threads which have <code class="docutils literal notranslate"><span class="pre">i</span></code>-th bit of <code class="docutils literal notranslate"><span class="pre">x</span></code> set and come before the current thread. </p>
+</dd></dl>
+
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="glossary.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Glossary</div>
+              </div>
+              <svg><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="iterators.html">
+              <svg><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Iterators</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Intrinsics</a><ul>
+<li><a class="reference internal" href="#bitwise">Bitwise</a></li>
+<li><a class="reference internal" href="#warp-size">Warp size</a></li>
+<li><a class="reference internal" href="#lane-and-warp-id">Lane and Warp ID</a></li>
+<li><a class="reference internal" href="#flat-id">Flat ID</a></li>
+<li><a class="reference internal" href="#flat-size">Flat Size</a></li>
+<li><a class="reference internal" href="#synchronisation">Synchronisation</a></li>
+<li><a class="reference internal" href="#active-threads">Active threads</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="./" id="documentation_options" src="static/documentation_options.js"></script>
+    <script src="static/jquery.js"></script>
+    <script src="static/underscore.js"></script>
+    <script src="static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="static/doctools.js"></script>
+    <script src="static/scripts/furo.js"></script>
+    </body>
+</html>

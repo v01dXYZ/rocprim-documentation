@@ -1,0 +1,494 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Scan" href="scan.html" /><link rel="prev" title="Partition" href="partition.html" />
+
+    <meta name="generator" content="sphinx-5.1.0+/0aedcc9a9, furo 2022.06.04.1"/>
+        <title>Run Length Encode - rocPRIM documentation</title>
+      <link rel="stylesheet" type="text/css" href="../static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="../static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../static/cpp_sig.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #263238;
+  --color-code-foreground: #EEFFFF;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #263238;
+  --color-code-foreground: #EEFFFF;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">rocPRIM  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  
+  <span class="sidebar-brand-text">rocPRIM  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operations.html">High Level view of the operations</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">Device-Wide Operations</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="config.html">Configuring the Kernels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transform.html">Transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unique.html">Unique</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sort.html">Sort</a></li>
+<li class="toctree-l2"><a class="reference internal" href="merge.html">Merge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="partition.html">Partition</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Run Length Encode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scan.html">Scan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="select.html">Select</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reduce.html">Reduce</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adjacent_difference.html">Adjacent difference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="binary_search.html">Binary Search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="histogram.html">Histogram</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../blockmodule/index.html">Block-Wide Operations</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../blockmodule/ops_classes/index.html">Operation classes</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../blockmodule/ops_classes/load.html">Load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../blockmodule/ops_classes/store.html">Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../blockmodule/ops_classes/adjacent_difference.html">Adjacent difference</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../blockmodule/ops_classes/discontinuity.html">Discontinuity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../blockmodule/ops_classes/scan.html">Scan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../blockmodule/ops_classes/reduce.html">Reduce</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../blockmodule/ops_classes/histogram.html">Histogram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../blockmodule/ops_classes/exchange.html">Exchange</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../blockmodule/ops_classes/shuffle.html">Shuffle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../blockmodule/ops_classes/sort.html">Sort</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../blockmodule/data_mov_funcs.html">Data movement functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../warpmodule.html">Warp-Level Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../threadmodule.html">Thread-Level Operations (Utilities)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../iterators.html">Iterators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intrinsics.html">Intrinsics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="run-length-encode">
+<h1>Run Length Encode<a class="headerlink" href="#run-length-encode" title="Permalink to this heading">#</a></h1>
+<section id="configuring-the-kernel">
+<h2>Configuring the kernel<a class="headerlink" href="#configuring-the-kernel" title="Permalink to this heading">#</a></h2>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4I00E24run_length_encode_config">
+<span id="_CPPv3I00E24run_length_encode_config"></span><span id="_CPPv2I00E24run_length_encode_config"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ReduceByKeyConfig</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SelectConfig</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="config.html#_CPPv414default_config" title="default_config"><span class="n"><span class="pre">default_config</span></span></a><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="structrun__length__encode__config"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">run_length_encode_config</span></span></span><a class="headerlink" href="#_CPPv4I00E24run_length_encode_config" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Configuration of device-level run-length encoding operation. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ReduceByKeyConfig</strong> – - configuration of device-level reduce-by-key operation. Must be <code class="docutils literal notranslate"><a class="reference internal" href="reduce.html#structreduce__by__key__config"><span class="std std-ref"><span class="pre">reduce_by_key_config</span></span></a></code> or <code class="docutils literal notranslate"><a class="reference internal" href="config.html#structdefault__config"><span class="std std-ref"><span class="pre">default_config</span></span></a></code>. </p></li>
+<li><p><strong>SelectConfig</strong> – - configuration of device-level select operation. Must be <code class="docutils literal notranslate"><a class="reference internal" href="select.html#structselect__config"><span class="std std-ref"><span class="pre">select_config</span></span></a></code> or <code class="docutils literal notranslate"><a class="reference internal" href="config.html#structdefault__config"><span class="std std-ref"><span class="pre">default_config</span></span></a></code>. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="id1">
+<h2>run_length_encode<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h2>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00000E17run_length_encode10hipError_tPvR6size_t13InputIteratorj20UniqueOutputIterator20CountsOutputIterator23RunsCountOutputIterator11hipStream_tb">
+<span id="_CPPv3I00000E17run_length_encodePvR6size_t13InputIteratorj20UniqueOutputIterator20CountsOutputIterator23RunsCountOutputIterator11hipStream_tb"></span><span id="_CPPv2I00000E17run_length_encodePvR6size_t13InputIteratorj20UniqueOutputIterator20CountsOutputIterator23RunsCountOutputIterator11hipStream_tb"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Config</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="config.html#_CPPv414default_config" title="default_config"><span class="n"><span class="pre">default_config</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UniqueOutputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CountsOutputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RunsCountOutputIterator</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="group__devicemodule_1gac30e9aff7c057407bc1e177b9bf949f0"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">hipError_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">run_length_encode</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">temporary_storage</span></span>, </li><li class="desc-parameter"><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">storage_size</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I00000E17run_length_encode10hipError_tPvR6size_t13InputIteratorj20UniqueOutputIterator20CountsOutputIterator23RunsCountOutputIterator11hipStream_tb" title="run_length_encode::InputIterator"><span class="n"><span class="pre">InputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">input</span></span>, </li><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I00000E17run_length_encode10hipError_tPvR6size_t13InputIteratorj20UniqueOutputIterator20CountsOutputIterator23RunsCountOutputIterator11hipStream_tb" title="run_length_encode::UniqueOutputIterator"><span class="n"><span class="pre">UniqueOutputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">unique_output</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I00000E17run_length_encode10hipError_tPvR6size_t13InputIteratorj20UniqueOutputIterator20CountsOutputIterator23RunsCountOutputIterator11hipStream_tb" title="run_length_encode::CountsOutputIterator"><span class="n"><span class="pre">CountsOutputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">counts_output</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I00000E17run_length_encode10hipError_tPvR6size_t13InputIteratorj20UniqueOutputIterator20CountsOutputIterator23RunsCountOutputIterator11hipStream_tb" title="run_length_encode::RunsCountOutputIterator"><span class="n"><span class="pre">RunsCountOutputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">runs_count_output</span></span>, </li><li class="desc-parameter"><span class="n"><span class="pre">hipStream_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stream</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span>, </li><li class="desc-parameter"><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">debug_synchronous</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00000E17run_length_encode10hipError_tPvR6size_t13InputIteratorj20UniqueOutputIterator20CountsOutputIterator23RunsCountOutputIterator11hipStream_tb" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Parallel run-length encoding for device level. </p>
+<p>run_length_encode function performs a device-wide run-length encoding of runs (groups) of consecutive values. The first value of each run is copied to <code class="docutils literal notranslate"><span class="pre">unique_output</span></code> and the length of the run is written to <code class="docutils literal notranslate"><span class="pre">counts_output</span></code>. The total number of runs is written to <code class="docutils literal notranslate"><span class="pre">runs_count_output</span></code>.</p>
+<p><dl class="simple">
+<dt><strong>Overview</strong></dt><dd><p><ul class="simple">
+<li><p>Returns the required size of <code class="docutils literal notranslate"><span class="pre">temporary_storage</span></code> in <code class="docutils literal notranslate"><span class="pre">storage_size</span></code> if <code class="docutils literal notranslate"><span class="pre">temporary_storage</span></code> in a null pointer.</p></li>
+<li><p>Range specified by <code class="docutils literal notranslate"><span class="pre">input</span></code> must have at least <code class="docutils literal notranslate"><span class="pre">size</span></code> elements.</p></li>
+<li><p>Range specified by <code class="docutils literal notranslate"><span class="pre">runs_count_output</span></code> must have at least 1 element.</p></li>
+<li><p>Ranges specified by <code class="docutils literal notranslate"><span class="pre">unique_output</span></code> and <code class="docutils literal notranslate"><span class="pre">counts_output</span></code> must have at least <code class="docutils literal notranslate"><span class="pre">*runs_count_output</span></code> (i.e. the number of runs) elements.</p></li>
+</ul>
+</p>
+</dd>
+<dt><strong>Example</strong></dt><dd><p><p>In this example a device-level run-length encoding operation is performed on an array of integer values.</p>
+<p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;rocprim/rocprim.hpp&gt;</span><span class="cp"></span>
+
+<span class="c1">// Prepare input and output (declare pointers, allocate device memory etc.)</span>
+<span class="kt">size_t</span><span class="w"> </span><span class="n">input_size</span><span class="p">;</span><span class="w">          </span><span class="c1">// e.g., 8</span>
+<span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">input</span><span class="p">;</span><span class="w">                </span><span class="c1">// e.g., [1, 1, 1, 2, 10, 10, 10, 88]</span>
+<span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">unique_output</span><span class="p">;</span><span class="w">        </span><span class="c1">// empty array of at least 4 elements</span>
+<span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">counts_output</span><span class="p">;</span><span class="w">        </span><span class="c1">// empty array of at least 4 elements</span>
+<span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">runs_count_output</span><span class="p">;</span><span class="w">    </span><span class="c1">// empty array of 1 element</span>
+
+<span class="kt">size_t</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">;</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">temporary_storage_ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nullptr</span><span class="p">;</span><span class="w"></span>
+<span class="c1">// Get required size of the temporary storage</span>
+<span class="n">rocprim</span><span class="o">::</span><span class="n">run_length_encode</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">temporary_storage_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="n">input_size</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">unique_output</span><span class="p">,</span><span class="w"> </span><span class="n">counts_output</span><span class="p">,</span><span class="w"> </span><span class="n">runs_count_output</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+
+<span class="c1">// allocate temporary storage</span>
+<span class="n">hipMalloc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">temporary_storage_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">);</span><span class="w"></span>
+
+<span class="c1">// perform encoding</span>
+<span class="n">rocprim</span><span class="o">::</span><span class="n">run_length_encode</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">temporary_storage_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="n">input_size</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">unique_output</span><span class="p">,</span><span class="w"> </span><span class="n">counts_output</span><span class="p">,</span><span class="w"> </span><span class="n">runs_count_output</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+<span class="c1">// unique_output:     [1, 2, 10, 88]</span>
+<span class="c1">// counts_output:     [3, 1,  3,  1]</span>
+<span class="c1">// runs_count_output: [4]</span>
+</pre></div>
+</div>
+ </p>
+</p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Config</strong> – - [optional] configuration of the primitive. It can be <code class="docutils literal notranslate"><a class="reference internal" href="#structrun__length__encode__config"><span class="std std-ref"><span class="pre">run_length_encode_config</span></span></a></code> or a custom class with the same members. </p></li>
+<li><p><strong>InputIterator</strong> – - random-access iterator type of the input range. Must meet the requirements of a C++ InputIterator concept. It can be a simple pointer type. </p></li>
+<li><p><strong>UniqueOutputIterator</strong> – - random-access iterator type of the output range. Must meet the requirements of a C++ OutputIterator concept. It can be a simple pointer type. </p></li>
+<li><p><strong>CountsOutputIterator</strong> – - random-access iterator type of the output range. Must meet the requirements of a C++ OutputIterator concept. It can be a simple pointer type. </p></li>
+<li><p><strong>RunsCountOutputIterator</strong> – - random-access iterator type of the output range. Must meet the requirements of a C++ OutputIterator concept. It can be a simple pointer type.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>temporary_storage</strong> – <strong>[in]</strong> - pointer to a device-accessible temporary storage. When a null pointer is passed, the required allocation size (in bytes) is written to <code class="docutils literal notranslate"><span class="pre">storage_size</span></code> and function returns without performing the operation. </p></li>
+<li><p><strong>storage_size</strong> – <strong>[inout]</strong> - reference to a size (in bytes) of <code class="docutils literal notranslate"><span class="pre">temporary_storage</span></code>. </p></li>
+<li><p><strong>input</strong> – <strong>[in]</strong> - iterator to the first element in the range of values. </p></li>
+<li><p><strong>size</strong> – <strong>[in]</strong> - number of element in the input range. </p></li>
+<li><p><strong>unique_output</strong> – <strong>[out]</strong> - iterator to the first element in the output range of unique values. </p></li>
+<li><p><strong>counts_output</strong> – <strong>[out]</strong> - iterator to the first element in the output range of lenghts. </p></li>
+<li><p><strong>runs_count_output</strong> – <strong>[out]</strong> - iterator to total number of runs. </p></li>
+<li><p><strong>stream</strong> – <strong>[in]</strong> - [optional] HIP stream object. Default is <code class="docutils literal notranslate"><span class="pre">0</span></code> (default stream). </p></li>
+<li><p><strong>debug_synchronous</strong> – <strong>[in]</strong> - [optional] If true, synchronization after every kernel launch is forced in order to check for errors. Default value is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">hipSuccess</span></code> (<code class="docutils literal notranslate"><span class="pre">0</span></code>) after successful operation; otherwise a HIP runtime error of type <code class="docutils literal notranslate"><span class="pre">hipError_t</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="run-length-encode-non-trivial-runs">
+<h2>run_length_encode_non_trivial_runs<a class="headerlink" href="#run-length-encode-non-trivial-runs" title="Permalink to this heading">#</a></h2>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00000E34run_length_encode_non_trivial_runs10hipError_tPvR6size_t13InputIteratorj21OffsetsOutputIterator20CountsOutputIterator23RunsCountOutputIterator11hipStream_tb">
+<span id="_CPPv3I00000E34run_length_encode_non_trivial_runsPvR6size_t13InputIteratorj21OffsetsOutputIterator20CountsOutputIterator23RunsCountOutputIterator11hipStream_tb"></span><span id="_CPPv2I00000E34run_length_encode_non_trivial_runsPvR6size_t13InputIteratorj21OffsetsOutputIterator20CountsOutputIterator23RunsCountOutputIterator11hipStream_tb"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Config</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="config.html#_CPPv414default_config" title="default_config"><span class="n"><span class="pre">default_config</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OffsetsOutputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CountsOutputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RunsCountOutputIterator</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="group__devicemodule_1gaaa3f89f3432fe15cb12cad5a61bc83c9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">hipError_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">run_length_encode_non_trivial_runs</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">temporary_storage</span></span>, </li><li class="desc-parameter"><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">storage_size</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I00000E34run_length_encode_non_trivial_runs10hipError_tPvR6size_t13InputIteratorj21OffsetsOutputIterator20CountsOutputIterator23RunsCountOutputIterator11hipStream_tb" title="run_length_encode_non_trivial_runs::InputIterator"><span class="n"><span class="pre">InputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">input</span></span>, </li><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I00000E34run_length_encode_non_trivial_runs10hipError_tPvR6size_t13InputIteratorj21OffsetsOutputIterator20CountsOutputIterator23RunsCountOutputIterator11hipStream_tb" title="run_length_encode_non_trivial_runs::OffsetsOutputIterator"><span class="n"><span class="pre">OffsetsOutputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">offsets_output</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I00000E34run_length_encode_non_trivial_runs10hipError_tPvR6size_t13InputIteratorj21OffsetsOutputIterator20CountsOutputIterator23RunsCountOutputIterator11hipStream_tb" title="run_length_encode_non_trivial_runs::CountsOutputIterator"><span class="n"><span class="pre">CountsOutputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">counts_output</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I00000E34run_length_encode_non_trivial_runs10hipError_tPvR6size_t13InputIteratorj21OffsetsOutputIterator20CountsOutputIterator23RunsCountOutputIterator11hipStream_tb" title="run_length_encode_non_trivial_runs::RunsCountOutputIterator"><span class="n"><span class="pre">RunsCountOutputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">runs_count_output</span></span>, </li><li class="desc-parameter"><span class="n"><span class="pre">hipStream_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stream</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span>, </li><li class="desc-parameter"><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">debug_synchronous</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00000E34run_length_encode_non_trivial_runs10hipError_tPvR6size_t13InputIteratorj21OffsetsOutputIterator20CountsOutputIterator23RunsCountOutputIterator11hipStream_tb" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Parallel run-length encoding of non-trivial runs for device level. </p>
+<p>run_length_encode_non_trivial_runs function performs a device-wide run-length encoding of non-trivial runs (groups) of consecutive values (groups of more than one element). The offset of the first value of each non-trivial run is copied to <code class="docutils literal notranslate"><span class="pre">offsets_output</span></code> and the length of the run (the count of elements) is written to <code class="docutils literal notranslate"><span class="pre">counts_output</span></code>. The total number of non-trivial runs is written to <code class="docutils literal notranslate"><span class="pre">runs_count_output</span></code>.</p>
+<p><dl class="simple">
+<dt><strong>Overview</strong></dt><dd><p><ul class="simple">
+<li><p>Returns the required size of <code class="docutils literal notranslate"><span class="pre">temporary_storage</span></code> in <code class="docutils literal notranslate"><span class="pre">storage_size</span></code> if <code class="docutils literal notranslate"><span class="pre">temporary_storage</span></code> in a null pointer.</p></li>
+<li><p>Range specified by <code class="docutils literal notranslate"><span class="pre">input</span></code> must have at least <code class="docutils literal notranslate"><span class="pre">size</span></code> elements.</p></li>
+<li><p>Range specified by <code class="docutils literal notranslate"><span class="pre">runs_count_output</span></code> must have at least 1 element.</p></li>
+<li><p>Ranges specified by <code class="docutils literal notranslate"><span class="pre">offsets_output</span></code> and <code class="docutils literal notranslate"><span class="pre">counts_output</span></code> must have at least <code class="docutils literal notranslate"><span class="pre">*runs_count_output</span></code> (i.e. the number of non-trivial runs) elements.</p></li>
+</ul>
+</p>
+</dd>
+<dt><strong>Example</strong></dt><dd><p><p>In this example a device-level run-length encoding of non-trivial runs is performed on an array of integer values.</p>
+<p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;rocprim/rocprim.hpp&gt;</span><span class="cp"></span>
+
+<span class="c1">// Prepare input and output (declare pointers, allocate device memory etc.)</span>
+<span class="kt">size_t</span><span class="w"> </span><span class="n">input_size</span><span class="p">;</span><span class="w">          </span><span class="c1">// e.g., 8</span>
+<span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">input</span><span class="p">;</span><span class="w">                </span><span class="c1">// e.g., [1, 1, 1, 2, 10, 10, 10, 88]</span>
+<span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">offsets_output</span><span class="p">;</span><span class="w">       </span><span class="c1">// empty array of at least 2 elements</span>
+<span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">counts_output</span><span class="p">;</span><span class="w">        </span><span class="c1">// empty array of at least 2 elements</span>
+<span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">runs_count_output</span><span class="p">;</span><span class="w">    </span><span class="c1">// empty array of 1 element</span>
+
+<span class="kt">size_t</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">;</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">temporary_storage_ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nullptr</span><span class="p">;</span><span class="w"></span>
+<span class="c1">// Get required size of the temporary storage</span>
+<span class="n">rocprim</span><span class="o">::</span><span class="n">run_length_encode_non_trivial_runs</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">temporary_storage_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="n">input_size</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">offsets_output</span><span class="p">,</span><span class="w"> </span><span class="n">counts_output</span><span class="p">,</span><span class="w"> </span><span class="n">runs_count_output</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+
+<span class="c1">// allocate temporary storage</span>
+<span class="n">hipMalloc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">temporary_storage_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">);</span><span class="w"></span>
+
+<span class="c1">// perform encoding</span>
+<span class="n">rocprim</span><span class="o">::</span><span class="n">run_length_encode_non_trivial_runs</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">temporary_storage_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="n">input_size</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">offsets_output</span><span class="p">,</span><span class="w"> </span><span class="n">counts_output</span><span class="p">,</span><span class="w"> </span><span class="n">runs_count_output</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+<span class="c1">// offsets_output:    [0, 4]</span>
+<span class="c1">// counts_output:     [3, 3]</span>
+<span class="c1">// runs_count_output: [2]</span>
+</pre></div>
+</div>
+ </p>
+</p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Config</strong> – - [optional] configuration of the primitive. It can be <code class="docutils literal notranslate"><a class="reference internal" href="#structrun__length__encode__config"><span class="std std-ref"><span class="pre">run_length_encode_config</span></span></a></code> or a custom class with the same members. </p></li>
+<li><p><strong>InputIterator</strong> – - random-access iterator type of the input range. Must meet the requirements of a C++ InputIterator concept. It can be a simple pointer type. </p></li>
+<li><p><strong>OffsetsOutputIterator</strong> – - random-access iterator type of the output range. Must meet the requirements of a C++ OutputIterator concept. It can be a simple pointer type. </p></li>
+<li><p><strong>CountsOutputIterator</strong> – - random-access iterator type of the output range. Must meet the requirements of a C++ OutputIterator concept. It can be a simple pointer type. </p></li>
+<li><p><strong>RunsCountOutputIterator</strong> – - random-access iterator type of the output range. Must meet the requirements of a C++ OutputIterator concept. It can be a simple pointer type.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>temporary_storage</strong> – <strong>[in]</strong> - pointer to a device-accessible temporary storage. When a null pointer is passed, the required allocation size (in bytes) is written to <code class="docutils literal notranslate"><span class="pre">storage_size</span></code> and function returns without performing the operation. </p></li>
+<li><p><strong>storage_size</strong> – <strong>[inout]</strong> - reference to a size (in bytes) of <code class="docutils literal notranslate"><span class="pre">temporary_storage</span></code>. </p></li>
+<li><p><strong>input</strong> – <strong>[in]</strong> - iterator to the first element in the range of values. </p></li>
+<li><p><strong>size</strong> – <strong>[in]</strong> - number of element in the input range. </p></li>
+<li><p><strong>offsets_output</strong> – <strong>[out]</strong> - iterator to the first element in the output range of offsets. </p></li>
+<li><p><strong>counts_output</strong> – <strong>[out]</strong> - iterator to the first element in the output range of lenghts. </p></li>
+<li><p><strong>runs_count_output</strong> – <strong>[out]</strong> - iterator to total number of runs. </p></li>
+<li><p><strong>stream</strong> – <strong>[in]</strong> - [optional] HIP stream object. Default is <code class="docutils literal notranslate"><span class="pre">0</span></code> (default stream). </p></li>
+<li><p><strong>debug_synchronous</strong> – <strong>[in]</strong> - [optional] If true, synchronization after every kernel launch is forced in order to check for errors. Default value is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">hipSuccess</span></code> (<code class="docutils literal notranslate"><span class="pre">0</span></code>) after successful operation; otherwise a HIP runtime error of type <code class="docutils literal notranslate"><span class="pre">hipError_t</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="scan.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Scan</div>
+              </div>
+              <svg><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="partition.html">
+              <svg><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Partition</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Run Length Encode</a><ul>
+<li><a class="reference internal" href="#configuring-the-kernel">Configuring the kernel</a></li>
+<li><a class="reference internal" href="#id1">run_length_encode</a></li>
+<li><a class="reference internal" href="#run-length-encode-non-trivial-runs">run_length_encode_non_trivial_runs</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../" id="documentation_options" src="../static/documentation_options.js"></script>
+    <script src="../static/jquery.js"></script>
+    <script src="../static/underscore.js"></script>
+    <script src="../static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../static/doctools.js"></script>
+    <script src="../static/scripts/furo.js"></script>
+    </body>
+</html>

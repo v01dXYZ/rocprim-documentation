@@ -1,0 +1,913 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Select" href="select.html" /><link rel="prev" title="Run Length Encode" href="run_length_encoding.html" />
+
+    <meta name="generator" content="sphinx-5.1.0+/0aedcc9a9, furo 2022.06.04.1"/>
+        <title>Scan - rocPRIM documentation</title>
+      <link rel="stylesheet" type="text/css" href="../static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="../static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../static/cpp_sig.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #263238;
+  --color-code-foreground: #EEFFFF;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #263238;
+  --color-code-foreground: #EEFFFF;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">rocPRIM  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  
+  <span class="sidebar-brand-text">rocPRIM  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operations.html">High Level view of the operations</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">Device-Wide Operations</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="config.html">Configuring the Kernels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transform.html">Transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unique.html">Unique</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sort.html">Sort</a></li>
+<li class="toctree-l2"><a class="reference internal" href="merge.html">Merge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="partition.html">Partition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_length_encoding.html">Run Length Encode</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Scan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="select.html">Select</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reduce.html">Reduce</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adjacent_difference.html">Adjacent difference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="binary_search.html">Binary Search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="histogram.html">Histogram</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../blockmodule/index.html">Block-Wide Operations</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../blockmodule/ops_classes/index.html">Operation classes</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../blockmodule/ops_classes/load.html">Load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../blockmodule/ops_classes/store.html">Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../blockmodule/ops_classes/adjacent_difference.html">Adjacent difference</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../blockmodule/ops_classes/discontinuity.html">Discontinuity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../blockmodule/ops_classes/scan.html">Scan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../blockmodule/ops_classes/reduce.html">Reduce</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../blockmodule/ops_classes/histogram.html">Histogram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../blockmodule/ops_classes/exchange.html">Exchange</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../blockmodule/ops_classes/shuffle.html">Shuffle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../blockmodule/ops_classes/sort.html">Sort</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../blockmodule/data_mov_funcs.html">Data movement functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../warpmodule.html">Warp-Level Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../threadmodule.html">Thread-Level Operations (Utilities)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../iterators.html">Iterators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intrinsics.html">Intrinsics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="scan">
+<h1>Scan<a class="headerlink" href="#scan" title="Permalink to this heading">#</a></h1>
+<section id="configuring-the-kernel">
+<h2>Configuring the kernel<a class="headerlink" href="#configuring-the-kernel" title="Permalink to this heading">#</a></h2>
+<section id="id1">
+<h3>scan<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4I_j_j_b_N7rocprim17block_load_methodE_N7rocprim18block_store_methodE_N7rocprim20block_scan_algorithmE_jE11scan_config">
+<span id="_CPPv3I_j_j_b_N7rocprim17block_load_methodE_N7rocprim18block_store_methodE_N7rocprim20block_scan_algorithmE_jE11scan_config"></span><span id="_CPPv2I_j_j_b_N7rocprim17block_load_methodE_N7rocprim18block_store_methodE_N7rocprim20block_scan_algorithmE_jE11scan_config"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockSize</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ItemsPerThread</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UseLookback</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">rocprim</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">block_load_method</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockLoadMethod</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">rocprim</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">block_store_method</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockStoreMethod</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">rocprim</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">block_scan_algorithm</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockScanMethod</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SizeLimit</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">ROCPRIM_GRID_SIZE_LIMIT</span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="structscan__config"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">scan_config</span></span></span><a class="headerlink" href="#_CPPv4I_j_j_b_N7rocprim17block_load_methodE_N7rocprim18block_store_methodE_N7rocprim20block_scan_algorithmE_jE11scan_config" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Configuration of device-level scan primitives. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>BlockSize</strong> – - number of threads in a block. </p></li>
+<li><p><strong>ItemsPerThread</strong> – - number of items processed by each thread. </p></li>
+<li><p><strong>UseLookback</strong> – - whether to use lookback scan or reduce-then-scan algorithm. </p></li>
+<li><p><strong>BlockLoadMethod</strong> – - method for loading input values. </p></li>
+<li><p><strong>StoreLoadMethod</strong> – - method for storing values. </p></li>
+<li><p><strong>BlockScanMethod</strong> – - algorithm for block scan. </p></li>
+<li><p><strong>SizeLimit</strong> – - limit on the number of items for a single scan kernel launch. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="scan-by-key">
+<h3>scan_by_key<a class="headerlink" href="#scan-by-key" title="Permalink to this heading">#</a></h3>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4I_j_j_b_N7rocprim17block_load_methodE_N7rocprim18block_store_methodE_N7rocprim20block_scan_algorithmE_jE18scan_by_key_config">
+<span id="_CPPv3I_j_j_b_N7rocprim17block_load_methodE_N7rocprim18block_store_methodE_N7rocprim20block_scan_algorithmE_jE18scan_by_key_config"></span><span id="_CPPv2I_j_j_b_N7rocprim17block_load_methodE_N7rocprim18block_store_methodE_N7rocprim20block_scan_algorithmE_jE18scan_by_key_config"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockSize</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ItemsPerThread</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UseLookback</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">rocprim</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">block_load_method</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockLoadMethod</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">rocprim</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">block_store_method</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockStoreMethod</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">rocprim</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">block_scan_algorithm</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockScanMethod</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SizeLimit</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">ROCPRIM_GRID_SIZE_LIMIT</span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="structscan__by__key__config"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">scan_by_key_config</span></span></span><a class="headerlink" href="#_CPPv4I_j_j_b_N7rocprim17block_load_methodE_N7rocprim18block_store_methodE_N7rocprim20block_scan_algorithmE_jE18scan_by_key_config" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Configuration of device-level scan-by-key operation. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>BlockSize</strong> – - number of threads in a block. </p></li>
+<li><p><strong>ItemsPerThread</strong> – - number of items processed by each thread. </p></li>
+<li><p><strong>UseLookback</strong> – - whether to use lookback scan or reduce-then-scan algorithm. </p></li>
+<li><p><strong>BlockLoadMethod</strong> – - method for loading input values. </p></li>
+<li><p><strong>StoreLoadMethod</strong> – - method for storing values. </p></li>
+<li><p><strong>BlockScanMethod</strong> – - algorithm for block scan. </p></li>
+<li><p><strong>SizeLimit</strong> – - limit on the number of items for a single scan kernel launch. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="id2">
+<h2>scan<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h2>
+<section id="inclusive">
+<h3>inclusive<a class="headerlink" href="#inclusive" title="Permalink to this heading">#</a></h3>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0000E14inclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorK6size_t14BinaryFunctionK11hipStream_tb">
+<span id="_CPPv3I0000E14inclusive_scanPvR6size_t13InputIterator14OutputIteratorK6size_t14BinaryFunctionK11hipStream_tb"></span><span id="_CPPv2I0000E14inclusive_scanPvR6size_t13InputIterator14OutputIteratorK6size_t14BinaryFunctionK11hipStream_tb"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Config</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="config.html#_CPPv414default_config" title="default_config"><span class="n"><span class="pre">default_config</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OutputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BinaryFunction</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">rocprim</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">plus</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">iterator_traits</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0000E14inclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorK6size_t14BinaryFunctionK11hipStream_tb" title="inclusive_scan::InputIterator"><span class="n"><span class="pre">InputIterator</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value_type</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="group__devicemodule_1gabe5929f254e8caa9996c67c2855c8db1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">hipError_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">inclusive_scan</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">temporary_storage</span></span>, </li><li class="desc-parameter"><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">storage_size</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I0000E14inclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorK6size_t14BinaryFunctionK11hipStream_tb" title="inclusive_scan::InputIterator"><span class="n"><span class="pre">InputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">input</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I0000E14inclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorK6size_t14BinaryFunctionK11hipStream_tb" title="inclusive_scan::OutputIterator"><span class="n"><span class="pre">OutputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">output</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I0000E14inclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorK6size_t14BinaryFunctionK11hipStream_tb" title="inclusive_scan::BinaryFunction"><span class="n"><span class="pre">BinaryFunction</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">scan_op</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0000E14inclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorK6size_t14BinaryFunctionK11hipStream_tb" title="inclusive_scan::BinaryFunction"><span class="n"><span class="pre">BinaryFunction</span></span></a><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">hipStream_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stream</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span>, </li><li class="desc-parameter"><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">debug_synchronous</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0000E14inclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorK6size_t14BinaryFunctionK11hipStream_tb" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Parallel inclusive scan primitive for device level. </p>
+<p>inclusive_scan function performs a device-wide inclusive prefix scan operation using binary <code class="docutils literal notranslate"><span class="pre">scan_op</span></code> operator.</p>
+<p><dl class="simple">
+<dt><strong>Overview</strong></dt><dd><p><ul class="simple">
+<li><p>Supports non-commutative scan operators. However, a scan operator should be associative. When used with non-associative functions the results may be non-deterministic and/or vary in precision.</p></li>
+<li><p>Returns the required size of <code class="docutils literal notranslate"><span class="pre">temporary_storage</span></code> in <code class="docutils literal notranslate"><span class="pre">storage_size</span></code> if <code class="docutils literal notranslate"><span class="pre">temporary_storage</span></code> in a null pointer.</p></li>
+<li><p>Ranges specified by <code class="docutils literal notranslate"><span class="pre">input</span></code> and <code class="docutils literal notranslate"><span class="pre">output</span></code> must have at least <code class="docutils literal notranslate"><span class="pre">size</span></code> elements.</p></li>
+<li><p>By default, the input type is used for accumulation. A custom type can be specified using <code class="docutils literal notranslate"><span class="pre">rocprim::transform_iterator</span></code>, see the example below.</p></li>
+</ul>
+</p>
+</dd>
+<dt><strong>Example</strong></dt><dd><p><p>In this example a device-level inclusive sum operation is performed on an array of integer values (<code class="docutils literal notranslate"><span class="pre">short</span></code>s are scanned into <code class="docutils literal notranslate"><span class="pre">int</span></code>s).</p>
+<p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;rocprim/rocprim.hpp&gt;</span><span class="cp"></span>
+
+<span class="c1">// Prepare input and output (declare pointers, allocate device memory etc.)</span>
+<span class="kt">size_t</span><span class="w"> </span><span class="n">input_size</span><span class="p">;</span><span class="w">    </span><span class="c1">// e.g., 8</span>
+<span class="kt">short</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">input</span><span class="p">;</span><span class="w">        </span><span class="c1">// e.g., [1, 2, 3, 4, 5, 6, 7, 8]</span>
+<span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">output</span><span class="p">;</span><span class="w">         </span><span class="c1">// empty array of 8 elements</span>
+
+<span class="kt">size_t</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">;</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">temporary_storage_ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nullptr</span><span class="p">;</span><span class="w"></span>
+<span class="c1">// Get required size of the temporary storage</span>
+<span class="n">rocprim</span><span class="o">::</span><span class="n">inclusive_scan</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">temporary_storage_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="n">output</span><span class="p">,</span><span class="w"> </span><span class="n">input_size</span><span class="p">,</span><span class="w"> </span><span class="n">rocprim</span><span class="o">::</span><span class="n">plus</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">()</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+
+<span class="c1">// allocate temporary storage</span>
+<span class="n">hipMalloc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">temporary_storage_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">);</span><span class="w"></span>
+
+<span class="c1">// perform scan</span>
+<span class="n">rocprim</span><span class="o">::</span><span class="n">inclusive_scan</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">temporary_storage_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="n">output</span><span class="p">,</span><span class="w"> </span><span class="n">input_size</span><span class="p">,</span><span class="w"> </span><span class="n">rocprim</span><span class="o">::</span><span class="n">plus</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">()</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+<span class="c1">// output: [1, 3, 6, 10, 15, 21, 28, 36]</span>
+</pre></div>
+</div>
+</p>
+<p>The same example as above, but now a custom accumulator type is specified.</p>
+<p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;rocprim/rocprim.hpp&gt;</span><span class="cp"></span>
+
+<span class="kt">size_t</span><span class="w"> </span><span class="n">input_size</span><span class="p">;</span><span class="w"></span>
+<span class="kt">short</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">input</span><span class="p">;</span><span class="w"></span>
+<span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">output</span><span class="p">;</span><span class="w"></span>
+
+<span class="c1">// Use a transform iterator to specifiy a custom accumulator type</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">input_iterator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rocprim</span><span class="o">::</span><span class="n">make_transform_iterator</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="n">__device__</span><span class="w"> </span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">in</span><span class="p">);</span><span class="w"> </span><span class="p">});</span><span class="w"></span>
+
+<span class="kt">size_t</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">;</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">temporary_storage_ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nullptr</span><span class="p">;</span><span class="w"></span>
+<span class="c1">// Use the transform iterator</span>
+<span class="n">rocprim</span><span class="o">::</span><span class="n">inclusive_scan</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">temporary_storage_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">input_iterator</span><span class="p">,</span><span class="w"> </span><span class="n">output</span><span class="p">,</span><span class="w"> </span><span class="n">input_size</span><span class="p">,</span><span class="w"> </span><span class="n">rocprim</span><span class="o">::</span><span class="n">plus</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">()</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+
+<span class="n">hipMalloc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">temporary_storage_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">);</span><span class="w"></span>
+
+<span class="n">rocprim</span><span class="o">::</span><span class="n">inclusive_scan</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">temporary_storage_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">input_iterator</span><span class="p">,</span><span class="w"> </span><span class="n">output</span><span class="p">,</span><span class="w"> </span><span class="n">input_size</span><span class="p">,</span><span class="w"> </span><span class="n">rocprim</span><span class="o">::</span><span class="n">plus</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">()</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+ </p>
+</p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Config</strong> – - [optional] configuration of the primitive. It can be <code class="docutils literal notranslate"><a class="reference internal" href="#structscan__config"><span class="std std-ref"><span class="pre">scan_config</span></span></a></code> or a custom class with the same members. </p></li>
+<li><p><strong>InputIterator</strong> – - random-access iterator type of the input range. Must meet the requirements of a C++ InputIterator concept. It can be a simple pointer type. </p></li>
+<li><p><strong>OutputIterator</strong> – - random-access iterator type of the output range. Must meet the requirements of a C++ OutputIterator concept. It can be a simple pointer type. </p></li>
+<li><p><strong>BinaryFunction</strong> – - type of binary function used for scan. Default type is <code class="docutils literal notranslate"><span class="pre">rocprim::plus&lt;T&gt;</span></code>, where <code class="docutils literal notranslate"><span class="pre">T</span></code> is a <code class="docutils literal notranslate"><span class="pre">value_type</span></code> of <code class="docutils literal notranslate"><span class="pre">InputIterator</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>temporary_storage</strong> – <strong>[in]</strong> - pointer to a device-accessible temporary storage. When a null pointer is passed, the required allocation size (in bytes) is written to <code class="docutils literal notranslate"><span class="pre">storage_size</span></code> and function returns without performing the scan operation. </p></li>
+<li><p><strong>storage_size</strong> – <strong>[inout]</strong> - reference to a size (in bytes) of <code class="docutils literal notranslate"><span class="pre">temporary_storage</span></code>. </p></li>
+<li><p><strong>input</strong> – <strong>[in]</strong> - iterator to the first element in the range to scan. </p></li>
+<li><p><strong>output</strong> – <strong>[out]</strong> - iterator to the first element in the output range. It can be same as <code class="docutils literal notranslate"><span class="pre">input</span></code>. </p></li>
+<li><p><strong>size</strong> – <strong>[in]</strong> - number of element in the input range. </p></li>
+<li><p><strong>scan_op</strong> – <strong>[in]</strong> - binary operation function object that will be used for scan. The signature of the function should be equivalent to the following: <code class="docutils literal notranslate"><span class="pre">T</span> <span class="pre">f(const</span> <span class="pre">T</span> <span class="pre">&amp;a,</span> <span class="pre">const</span> <span class="pre">T</span> <span class="pre">&amp;b);</span></code>. The signature does not need to have <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">&amp;</span></code>, but function object must not modify the objects passed to it. Default is BinaryFunction(). </p></li>
+<li><p><strong>stream</strong> – <strong>[in]</strong> - [optional] HIP stream object. Default is <code class="docutils literal notranslate"><span class="pre">0</span></code> (default stream). </p></li>
+<li><p><strong>debug_synchronous</strong> – <strong>[in]</strong> - [optional] If true, synchronization after every kernel launch is forced in order to check for errors. Default value is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">hipSuccess</span></code> (<code class="docutils literal notranslate"><span class="pre">0</span></code>) after successful scan; otherwise a HIP runtime error of type <code class="docutils literal notranslate"><span class="pre">hipError_t</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="exclusive">
+<h3>exclusive<a class="headerlink" href="#exclusive" title="Permalink to this heading">#</a></h3>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00000E14exclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorK13InitValueTypeK6size_t14BinaryFunctionK11hipStream_tb">
+<span id="_CPPv3I00000E14exclusive_scanPvR6size_t13InputIterator14OutputIteratorK13InitValueTypeK6size_t14BinaryFunctionK11hipStream_tb"></span><span id="_CPPv2I00000E14exclusive_scanPvR6size_t13InputIterator14OutputIteratorK13InitValueTypeK6size_t14BinaryFunctionK11hipStream_tb"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Config</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="config.html#_CPPv414default_config" title="default_config"><span class="n"><span class="pre">default_config</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OutputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InitValueType</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BinaryFunction</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">rocprim</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">plus</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">iterator_traits</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00000E14exclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorK13InitValueTypeK6size_t14BinaryFunctionK11hipStream_tb" title="exclusive_scan::InputIterator"><span class="n"><span class="pre">InputIterator</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value_type</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="group__devicemodule_1ga08350218d0f770d9d86013d9aa77edc7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">hipError_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">exclusive_scan</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">temporary_storage</span></span>, </li><li class="desc-parameter"><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">storage_size</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I00000E14exclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorK13InitValueTypeK6size_t14BinaryFunctionK11hipStream_tb" title="exclusive_scan::InputIterator"><span class="n"><span class="pre">InputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">input</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I00000E14exclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorK13InitValueTypeK6size_t14BinaryFunctionK11hipStream_tb" title="exclusive_scan::OutputIterator"><span class="n"><span class="pre">OutputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">output</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00000E14exclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorK13InitValueTypeK6size_t14BinaryFunctionK11hipStream_tb" title="exclusive_scan::InitValueType"><span class="n"><span class="pre">InitValueType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">initial_value</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I00000E14exclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorK13InitValueTypeK6size_t14BinaryFunctionK11hipStream_tb" title="exclusive_scan::BinaryFunction"><span class="n"><span class="pre">BinaryFunction</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">scan_op</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00000E14exclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorK13InitValueTypeK6size_t14BinaryFunctionK11hipStream_tb" title="exclusive_scan::BinaryFunction"><span class="n"><span class="pre">BinaryFunction</span></span></a><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">hipStream_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stream</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span>, </li><li class="desc-parameter"><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">debug_synchronous</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00000E14exclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorK13InitValueTypeK6size_t14BinaryFunctionK11hipStream_tb" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Parallel exclusive scan primitive for device level. </p>
+<p>exclusive_scan function performs a device-wide exclusive prefix scan operation using binary <code class="docutils literal notranslate"><span class="pre">scan_op</span></code> operator.</p>
+<p><dl class="simple">
+<dt><strong>Overview</strong></dt><dd><p><ul class="simple">
+<li><p>Supports non-commutative scan operators. However, a scan operator should be associative. When used with non-associative functions the results may be non-deterministic and/or vary in precision.</p></li>
+<li><p>Returns the required size of <code class="docutils literal notranslate"><span class="pre">temporary_storage</span></code> in <code class="docutils literal notranslate"><span class="pre">storage_size</span></code> if <code class="docutils literal notranslate"><span class="pre">temporary_storage</span></code> in a null pointer.</p></li>
+<li><p>Ranges specified by <code class="docutils literal notranslate"><span class="pre">input</span></code> and <code class="docutils literal notranslate"><span class="pre">output</span></code> must have at least <code class="docutils literal notranslate"><span class="pre">size</span></code> elements.</p></li>
+</ul>
+</p>
+</dd>
+<dt><strong>Example</strong></dt><dd><p><p>In this example a device-level exclusive min-scan operation is performed on an array of integer values (<code class="docutils literal notranslate"><span class="pre">short</span></code>s are scanned into <code class="docutils literal notranslate"><span class="pre">int</span></code>s) using custom operator.</p>
+<p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;rocprim/rocprim.hpp&gt;</span><span class="cp"></span>
+
+<span class="c1">// custom scan function</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">min_op</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">    </span><span class="p">[]</span><span class="w"> </span><span class="n">__device__</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="kt">int</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">};</span><span class="w"></span>
+
+<span class="c1">// Prepare input and output (declare pointers, allocate device memory etc.)</span>
+<span class="kt">size_t</span><span class="w"> </span><span class="n">input_size</span><span class="p">;</span><span class="w">    </span><span class="c1">// e.g., 8</span>
+<span class="kt">short</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">input</span><span class="p">;</span><span class="w">        </span><span class="c1">// e.g., [4, 7, 6, 2, 5, 1, 3, 8]</span>
+<span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">output</span><span class="p">;</span><span class="w">         </span><span class="c1">// empty array of 8 elements</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">start_value</span><span class="p">;</span><span class="w">      </span><span class="c1">// e.g., 9</span>
+
+<span class="kt">size_t</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">;</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">temporary_storage_ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nullptr</span><span class="p">;</span><span class="w"></span>
+<span class="c1">// Get required size of the temporary storage</span>
+<span class="n">rocprim</span><span class="o">::</span><span class="n">exclusive_scan</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">temporary_storage_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="n">output</span><span class="p">,</span><span class="w"> </span><span class="n">start_value</span><span class="p">,</span><span class="w"> </span><span class="n">input_size</span><span class="p">,</span><span class="w"> </span><span class="n">min_op</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+
+<span class="c1">// allocate temporary storage</span>
+<span class="n">hipMalloc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">temporary_storage_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">);</span><span class="w"></span>
+
+<span class="c1">// perform scan</span>
+<span class="n">rocprim</span><span class="o">::</span><span class="n">exclusive_scan</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">temporary_storage_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="n">output</span><span class="p">,</span><span class="w"> </span><span class="n">start_value</span><span class="p">,</span><span class="w"> </span><span class="n">input_size</span><span class="p">,</span><span class="w"> </span><span class="n">min_op</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+<span class="c1">// output: [9, 4, 7, 6, 2, 2, 1, 1]</span>
+</pre></div>
+</div>
+ </p>
+</p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Config</strong> – - [optional] configuration of the primitive. It can be <code class="docutils literal notranslate"><a class="reference internal" href="#structscan__config"><span class="std std-ref"><span class="pre">scan_config</span></span></a></code> or a custom class with the same members. </p></li>
+<li><p><strong>InputIterator</strong> – - random-access iterator type of the input range. Must meet the requirements of a C++ InputIterator concept. It can be a simple pointer type. </p></li>
+<li><p><strong>OutputIterator</strong> – - random-access iterator type of the output range. Must meet the requirements of a C++ OutputIterator concept. It can be a simple pointer type. </p></li>
+<li><p><strong>InitValueType</strong> – - type of the initial value. </p></li>
+<li><p><strong>BinaryFunction</strong> – - type of binary function used for scan. Default type is <code class="docutils literal notranslate"><span class="pre">rocprim::plus&lt;T&gt;</span></code>, where <code class="docutils literal notranslate"><span class="pre">T</span></code> is a <code class="docutils literal notranslate"><span class="pre">value_type</span></code> of <code class="docutils literal notranslate"><span class="pre">InputIterator</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>temporary_storage</strong> – <strong>[in]</strong> - pointer to a device-accessible temporary storage. When a null pointer is passed, the required allocation size (in bytes) is written to <code class="docutils literal notranslate"><span class="pre">storage_size</span></code> and function returns without performing the scan operation. </p></li>
+<li><p><strong>storage_size</strong> – <strong>[inout]</strong> - reference to a size (in bytes) of <code class="docutils literal notranslate"><span class="pre">temporary_storage</span></code>. </p></li>
+<li><p><strong>input</strong> – <strong>[in]</strong> - iterator to the first element in the range to scan. </p></li>
+<li><p><strong>output</strong> – <strong>[out]</strong> - iterator to the first element in the output range. It can be same as <code class="docutils literal notranslate"><span class="pre">input</span></code>. </p></li>
+<li><p><strong>initial_value</strong> – <strong>[in]</strong> - initial value to start the scan. A rocpim::future_value may be passed to use a value that will be later computed. </p></li>
+<li><p><strong>size</strong> – <strong>[in]</strong> - number of element in the input range. </p></li>
+<li><p><strong>scan_op</strong> – <strong>[in]</strong> - binary operation function object that will be used for scan. The signature of the function should be equivalent to the following: <code class="docutils literal notranslate"><span class="pre">T</span> <span class="pre">f(const</span> <span class="pre">T</span> <span class="pre">&amp;a,</span> <span class="pre">const</span> <span class="pre">T</span> <span class="pre">&amp;b);</span></code>. The signature does not need to have <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">&amp;</span></code>, but function object must not modify the objects passed to it. The default value is <code class="docutils literal notranslate"><span class="pre">BinaryFunction()</span></code>. </p></li>
+<li><p><strong>stream</strong> – <strong>[in]</strong> - [optional] HIP stream object. The default is <code class="docutils literal notranslate"><span class="pre">0</span></code> (default stream). </p></li>
+<li><p><strong>debug_synchronous</strong> – <strong>[in]</strong> - [optional] If true, synchronization after every kernel launch is forced in order to check for errors. The default value is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">hipSuccess</span></code> (<code class="docutils literal notranslate"><span class="pre">0</span></code>) after successful scan; otherwise a HIP runtime error of type <code class="docutils literal notranslate"><span class="pre">hipError_t</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="segmented-inclusive">
+<h3>segmented, inclusive<a class="headerlink" href="#segmented-inclusive" title="Permalink to this heading">#</a></h3>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00000E24segmented_inclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorj14OffsetIterator14OffsetIterator14BinaryFunction11hipStream_tb">
+<span id="_CPPv3I00000E24segmented_inclusive_scanPvR6size_t13InputIterator14OutputIteratorj14OffsetIterator14OffsetIterator14BinaryFunction11hipStream_tb"></span><span id="_CPPv2I00000E24segmented_inclusive_scanPvR6size_t13InputIterator14OutputIteratorj14OffsetIterator14OffsetIterator14BinaryFunction11hipStream_tb"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Config</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="config.html#_CPPv414default_config" title="default_config"><span class="n"><span class="pre">default_config</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OutputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OffsetIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BinaryFunction</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">rocprim</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">plus</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">iterator_traits</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00000E24segmented_inclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorj14OffsetIterator14OffsetIterator14BinaryFunction11hipStream_tb" title="segmented_inclusive_scan::InputIterator"><span class="n"><span class="pre">InputIterator</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value_type</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="group__devicemodule_1ga26bdeb6d31390f4166e694458f0ebff4"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">hipError_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">segmented_inclusive_scan</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">temporary_storage</span></span>, </li><li class="desc-parameter"><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">storage_size</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I00000E24segmented_inclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorj14OffsetIterator14OffsetIterator14BinaryFunction11hipStream_tb" title="segmented_inclusive_scan::InputIterator"><span class="n"><span class="pre">InputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">input</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I00000E24segmented_inclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorj14OffsetIterator14OffsetIterator14BinaryFunction11hipStream_tb" title="segmented_inclusive_scan::OutputIterator"><span class="n"><span class="pre">OutputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">output</span></span>, </li><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">segments</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I00000E24segmented_inclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorj14OffsetIterator14OffsetIterator14BinaryFunction11hipStream_tb" title="segmented_inclusive_scan::OffsetIterator"><span class="n"><span class="pre">OffsetIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">begin_offsets</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I00000E24segmented_inclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorj14OffsetIterator14OffsetIterator14BinaryFunction11hipStream_tb" title="segmented_inclusive_scan::OffsetIterator"><span class="n"><span class="pre">OffsetIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">end_offsets</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I00000E24segmented_inclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorj14OffsetIterator14OffsetIterator14BinaryFunction11hipStream_tb" title="segmented_inclusive_scan::BinaryFunction"><span class="n"><span class="pre">BinaryFunction</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">scan_op</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00000E24segmented_inclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorj14OffsetIterator14OffsetIterator14BinaryFunction11hipStream_tb" title="segmented_inclusive_scan::BinaryFunction"><span class="n"><span class="pre">BinaryFunction</span></span></a><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span>, </li><li class="desc-parameter"><span class="n"><span class="pre">hipStream_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stream</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span>, </li><li class="desc-parameter"><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">debug_synchronous</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00000E24segmented_inclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorj14OffsetIterator14OffsetIterator14BinaryFunction11hipStream_tb" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Parallel segmented inclusive scan primitive for device level. </p>
+<p>segmented_inclusive_scan function performs a device-wide inclusive scan operation across multiple sequences from <code class="docutils literal notranslate"><span class="pre">input</span></code> using binary <code class="docutils literal notranslate"><span class="pre">scan_op</span></code> operator.</p>
+<p><dl class="simple">
+<dt><strong>Overview</strong></dt><dd><p><ul class="simple">
+<li><p>Returns the required size of <code class="docutils literal notranslate"><span class="pre">temporary_storage</span></code> in <code class="docutils literal notranslate"><span class="pre">storage_size</span></code> if <code class="docutils literal notranslate"><span class="pre">temporary_storage</span></code> in a null pointer.</p></li>
+<li><p>Ranges specified by <code class="docutils literal notranslate"><span class="pre">input</span></code> and <code class="docutils literal notranslate"><span class="pre">output</span></code> must have at least <code class="docutils literal notranslate"><span class="pre">size</span></code> elements.</p></li>
+<li><p>Ranges specified by <code class="docutils literal notranslate"><span class="pre">begin_offsets</span></code> and <code class="docutils literal notranslate"><span class="pre">end_offsets</span></code> must have at least <code class="docutils literal notranslate"><span class="pre">segments</span></code> elements. They may use the same sequence <code class="docutils literal notranslate"><span class="pre">offsets</span></code> of at least <code class="docutils literal notranslate"><span class="pre">segments</span> <span class="pre">+</span> <span class="pre">1</span></code> elements: <code class="docutils literal notranslate"><span class="pre">offsets</span></code> for <code class="docutils literal notranslate"><span class="pre">begin_offsets</span></code> and <code class="docutils literal notranslate"><span class="pre">offsets</span> <span class="pre">+</span> <span class="pre">1</span></code> for <code class="docutils literal notranslate"><span class="pre">end_offsets</span></code>.</p></li>
+</ul>
+</p>
+</dd>
+<dt><strong>Example</strong></dt><dd><p><p>In this example a device-level segmented inclusive min-scan operation is performed on an array of integer values (<code class="docutils literal notranslate"><span class="pre">short</span></code>s are scanned into <code class="docutils literal notranslate"><span class="pre">int</span></code>s) using custom operator.</p>
+<p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;rocprim/rocprim.hpp&gt;</span><span class="cp"></span>
+
+<span class="c1">// custom scan function</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">min_op</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">    </span><span class="p">[]</span><span class="w"> </span><span class="n">__device__</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="kt">int</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">};</span><span class="w"></span>
+
+<span class="c1">// Prepare input and output (declare pointers, allocate device memory etc.)</span>
+<span class="kt">short</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">input</span><span class="p">;</span><span class="w">        </span><span class="c1">// e.g., [4, 7, 6, 2, 5, 1, 3, 8]</span>
+<span class="kt">int</span><span class="w">   </span><span class="o">*</span><span class="w"> </span><span class="n">output</span><span class="p">;</span><span class="w">       </span><span class="c1">// empty array of 8 elements</span>
+<span class="kt">size_t</span><span class="w"> </span><span class="n">segments</span><span class="p">;</span><span class="w">      </span><span class="c1">// e.g., 3</span>
+<span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">offsets</span><span class="p">;</span><span class="w">        </span><span class="c1">// e.g. [0, 2, 4, 8]</span>
+
+<span class="kt">size_t</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">;</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">temporary_storage_ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nullptr</span><span class="p">;</span><span class="w"></span>
+<span class="c1">// Get required size of the temporary storage</span>
+<span class="n">rocprim</span><span class="o">::</span><span class="n">segmented_inclusive_scan</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">temporary_storage_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="n">output</span><span class="p">,</span><span class="w"> </span><span class="n">segments</span><span class="p">,</span><span class="w"> </span><span class="n">offsets</span><span class="p">,</span><span class="w"> </span><span class="n">offsets</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">min_op</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+
+<span class="c1">// allocate temporary storage</span>
+<span class="n">hipMalloc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">temporary_storage_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">);</span><span class="w"></span>
+
+<span class="c1">// perform scan</span>
+<span class="n">rocprim</span><span class="o">::</span><span class="n">inclusive_scan</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">temporary_storage_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="n">output</span><span class="p">,</span><span class="w"> </span><span class="n">segments</span><span class="p">,</span><span class="w"> </span><span class="n">offsets</span><span class="p">,</span><span class="w"> </span><span class="n">offsets</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">min_op</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+<span class="c1">// output: [4, 4, 6, 2, 5, 1, 1, 1]</span>
+</pre></div>
+</div>
+ </p>
+</p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Config</strong> – - [optional] configuration of the primitive. It can be <code class="docutils literal notranslate"><a class="reference internal" href="#structscan__config"><span class="std std-ref"><span class="pre">scan_config</span></span></a></code> or a custom class with the same members. </p></li>
+<li><p><strong>InputIterator</strong> – - random-access iterator type of the input range. Must meet the requirements of a C++ RandomAccessIterator concept. It can be a simple pointer type. </p></li>
+<li><p><strong>OutputIterator</strong> – - random-access iterator type of the output range. Must meet the requirements of a C++ RandomAccessIterator concept. It can be a simple pointer type. </p></li>
+<li><p><strong>OffsetIterator</strong> – - random-access iterator type of segment offsets. Must meet the requirements of a C++ RandomAccessIterator concept. It can be a simple pointer type. </p></li>
+<li><p><strong>BinaryFunction</strong> – - type of binary function used for scan operation. Default type is <code class="docutils literal notranslate"><span class="pre">rocprim::plus&lt;T&gt;</span></code>, where <code class="docutils literal notranslate"><span class="pre">T</span></code> is a <code class="docutils literal notranslate"><span class="pre">value_type</span></code> of <code class="docutils literal notranslate"><span class="pre">InputIterator</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>temporary_storage</strong> – <strong>[in]</strong> - pointer to a device-accessible temporary storage. When a null pointer is passed, the required allocation size (in bytes) is written to <code class="docutils literal notranslate"><span class="pre">storage_size</span></code> and function returns without performing the scan operation. </p></li>
+<li><p><strong>storage_size</strong> – <strong>[inout]</strong> - reference to a size (in bytes) of <code class="docutils literal notranslate"><span class="pre">temporary_storage</span></code>. </p></li>
+<li><p><strong>input</strong> – <strong>[in]</strong> - iterator to the first element in the range to scan. </p></li>
+<li><p><strong>output</strong> – <strong>[out]</strong> - iterator to the first element in the output range. </p></li>
+<li><p><strong>segments</strong> – <strong>[in]</strong> - number of segments in the input range. </p></li>
+<li><p><strong>begin_offsets</strong> – <strong>[in]</strong> - iterator to the first element in the range of beginning offsets. </p></li>
+<li><p><strong>end_offsets</strong> – <strong>[in]</strong> - iterator to the first element in the range of ending offsets. </p></li>
+<li><p><strong>scan_op</strong> – <strong>[in]</strong> - binary operation function object that will be used for scan. The signature of the function should be equivalent to the following: <code class="docutils literal notranslate"><span class="pre">T</span> <span class="pre">f(const</span> <span class="pre">T</span> <span class="pre">&amp;a,</span> <span class="pre">const</span> <span class="pre">T</span> <span class="pre">&amp;b);</span></code>. The signature does not need to have <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">&amp;</span></code>, but function object must not modify the objects passed to it. The default value is <code class="docutils literal notranslate"><span class="pre">BinaryFunction()</span></code>. </p></li>
+<li><p><strong>stream</strong> – <strong>[in]</strong> - [optional] HIP stream object. The default is <code class="docutils literal notranslate"><span class="pre">0</span></code> (default stream). </p></li>
+<li><p><strong>debug_synchronous</strong> – <strong>[in]</strong> - [optional] If true, synchronization after every kernel launch is forced in order to check for errors. The default value is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">hipSuccess</span></code> (<code class="docutils literal notranslate"><span class="pre">0</span></code>) after successful scan; otherwise a HIP runtime error of type <code class="docutils literal notranslate"><span class="pre">hipError_t</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="segmented-exclusive">
+<h3>segmented, exclusive<a class="headerlink" href="#segmented-exclusive" title="Permalink to this heading">#</a></h3>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I000000E24segmented_exclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorj14OffsetIterator14OffsetIteratorK13InitValueType14BinaryFunction11hipStream_tb">
+<span id="_CPPv3I000000E24segmented_exclusive_scanPvR6size_t13InputIterator14OutputIteratorj14OffsetIterator14OffsetIteratorK13InitValueType14BinaryFunction11hipStream_tb"></span><span id="_CPPv2I000000E24segmented_exclusive_scanPvR6size_t13InputIterator14OutputIteratorj14OffsetIterator14OffsetIteratorK13InitValueType14BinaryFunction11hipStream_tb"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Config</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="config.html#_CPPv414default_config" title="default_config"><span class="n"><span class="pre">default_config</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OutputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OffsetIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InitValueType</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BinaryFunction</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">rocprim</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">plus</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">iterator_traits</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I000000E24segmented_exclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorj14OffsetIterator14OffsetIteratorK13InitValueType14BinaryFunction11hipStream_tb" title="segmented_exclusive_scan::InputIterator"><span class="n"><span class="pre">InputIterator</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value_type</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="group__devicemodule_1ga20076b61b6315f2af0abe654450c2297"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">hipError_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">segmented_exclusive_scan</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">temporary_storage</span></span>, </li><li class="desc-parameter"><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">storage_size</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I000000E24segmented_exclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorj14OffsetIterator14OffsetIteratorK13InitValueType14BinaryFunction11hipStream_tb" title="segmented_exclusive_scan::InputIterator"><span class="n"><span class="pre">InputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">input</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I000000E24segmented_exclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorj14OffsetIterator14OffsetIteratorK13InitValueType14BinaryFunction11hipStream_tb" title="segmented_exclusive_scan::OutputIterator"><span class="n"><span class="pre">OutputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">output</span></span>, </li><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">segments</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I000000E24segmented_exclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorj14OffsetIterator14OffsetIteratorK13InitValueType14BinaryFunction11hipStream_tb" title="segmented_exclusive_scan::OffsetIterator"><span class="n"><span class="pre">OffsetIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">begin_offsets</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I000000E24segmented_exclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorj14OffsetIterator14OffsetIteratorK13InitValueType14BinaryFunction11hipStream_tb" title="segmented_exclusive_scan::OffsetIterator"><span class="n"><span class="pre">OffsetIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">end_offsets</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I000000E24segmented_exclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorj14OffsetIterator14OffsetIteratorK13InitValueType14BinaryFunction11hipStream_tb" title="segmented_exclusive_scan::InitValueType"><span class="n"><span class="pre">InitValueType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">initial_value</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I000000E24segmented_exclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorj14OffsetIterator14OffsetIteratorK13InitValueType14BinaryFunction11hipStream_tb" title="segmented_exclusive_scan::BinaryFunction"><span class="n"><span class="pre">BinaryFunction</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">scan_op</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I000000E24segmented_exclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorj14OffsetIterator14OffsetIteratorK13InitValueType14BinaryFunction11hipStream_tb" title="segmented_exclusive_scan::BinaryFunction"><span class="n"><span class="pre">BinaryFunction</span></span></a><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span>, </li><li class="desc-parameter"><span class="n"><span class="pre">hipStream_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stream</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span>, </li><li class="desc-parameter"><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">debug_synchronous</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I000000E24segmented_exclusive_scan10hipError_tPvR6size_t13InputIterator14OutputIteratorj14OffsetIterator14OffsetIteratorK13InitValueType14BinaryFunction11hipStream_tb" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Parallel segmented exclusive scan primitive for device level. </p>
+<p>segmented_exclusive_scan function performs a device-wide exclusive scan operation across multiple sequences from <code class="docutils literal notranslate"><span class="pre">input</span></code> using binary <code class="docutils literal notranslate"><span class="pre">scan_op</span></code> operator.</p>
+<p><dl class="simple">
+<dt><strong>Overview</strong></dt><dd><p><ul class="simple">
+<li><p>Returns the required size of <code class="docutils literal notranslate"><span class="pre">temporary_storage</span></code> in <code class="docutils literal notranslate"><span class="pre">storage_size</span></code> if <code class="docutils literal notranslate"><span class="pre">temporary_storage</span></code> in a null pointer.</p></li>
+<li><p>Ranges specified by <code class="docutils literal notranslate"><span class="pre">input</span></code> and <code class="docutils literal notranslate"><span class="pre">output</span></code> must have at least <code class="docutils literal notranslate"><span class="pre">size</span></code> elements.</p></li>
+<li><p>Ranges specified by <code class="docutils literal notranslate"><span class="pre">begin_offsets</span></code> and <code class="docutils literal notranslate"><span class="pre">end_offsets</span></code> must have at least <code class="docutils literal notranslate"><span class="pre">segments</span></code> elements. They may use the same sequence <code class="docutils literal notranslate"><span class="pre">offsets</span></code> of at least <code class="docutils literal notranslate"><span class="pre">segments</span> <span class="pre">+</span> <span class="pre">1</span></code> elements: <code class="docutils literal notranslate"><span class="pre">offsets</span></code> for <code class="docutils literal notranslate"><span class="pre">begin_offsets</span></code> and <code class="docutils literal notranslate"><span class="pre">offsets</span> <span class="pre">+</span> <span class="pre">1</span></code> for <code class="docutils literal notranslate"><span class="pre">end_offsets</span></code>.</p></li>
+</ul>
+</p>
+</dd>
+<dt><strong>Example</strong></dt><dd><p><p>In this example a device-level segmented exclusive min-scan operation is performed on an array of integer values (<code class="docutils literal notranslate"><span class="pre">short</span></code>s are scanned into <code class="docutils literal notranslate"><span class="pre">int</span></code>s) using custom operator.</p>
+<p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;rocprim/rocprim.hpp&gt;</span><span class="cp"></span>
+
+<span class="c1">// custom scan function</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">min_op</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">    </span><span class="p">[]</span><span class="w"> </span><span class="n">__device__</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="kt">int</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">};</span><span class="w"></span>
+
+<span class="c1">// Prepare input and output (declare pointers, allocate device memory etc.)</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">start_value</span><span class="p">;</span><span class="w">      </span><span class="c1">// e.g., 9</span>
+<span class="kt">short</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">input</span><span class="p">;</span><span class="w">        </span><span class="c1">// e.g., [4, 7, 6, 2, 5, 1, 3, 8]</span>
+<span class="kt">int</span><span class="w">   </span><span class="o">*</span><span class="w"> </span><span class="n">output</span><span class="p">;</span><span class="w">       </span><span class="c1">// empty array of 8 elements</span>
+<span class="kt">size_t</span><span class="w"> </span><span class="n">segments</span><span class="p">;</span><span class="w">      </span><span class="c1">// e.g., 3</span>
+<span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">offsets</span><span class="p">;</span><span class="w">        </span><span class="c1">// e.g. [0, 2, 4, 8]</span>
+
+<span class="kt">size_t</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">;</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">temporary_storage_ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nullptr</span><span class="p">;</span><span class="w"></span>
+<span class="c1">// Get required size of the temporary storage</span>
+<span class="n">rocprim</span><span class="o">::</span><span class="n">segmented_exclusive_scan</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">temporary_storage_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="n">output</span><span class="p">,</span><span class="w"> </span><span class="n">segments</span><span class="p">,</span><span class="w"> </span><span class="n">offsets</span><span class="p">,</span><span class="w"> </span><span class="n">offsets</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">    </span><span class="n">start_value</span><span class="p">,</span><span class="w"> </span><span class="n">min_op</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+
+<span class="c1">// allocate temporary storage</span>
+<span class="n">hipMalloc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">temporary_storage_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">);</span><span class="w"></span>
+
+<span class="c1">// perform scan</span>
+<span class="n">rocprim</span><span class="o">::</span><span class="n">exclusive_scan</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">temporary_storage_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="n">output</span><span class="p">,</span><span class="w"> </span><span class="n">segments</span><span class="p">,</span><span class="w"> </span><span class="n">offsets</span><span class="p">,</span><span class="w"> </span><span class="n">offsets</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">    </span><span class="n">start_value</span><span class="p">,</span><span class="w"> </span><span class="n">min_op</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+<span class="c1">// output: [9, 4, 9, 6, 9, 5, 1, 1]</span>
+</pre></div>
+</div>
+ </p>
+</p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Config</strong> – - [optional] configuration of the primitive. It can be <code class="docutils literal notranslate"><a class="reference internal" href="#structscan__config"><span class="std std-ref"><span class="pre">scan_config</span></span></a></code> or a custom class with the same members. </p></li>
+<li><p><strong>InputIterator</strong> – - random-access iterator type of the input range. Must meet the requirements of a C++ RandomAccessIterator concept. It can be a simple pointer type. </p></li>
+<li><p><strong>OutputIterator</strong> – - random-access iterator type of the output range. Must meet the requirements of a C++ RandomAccessIterator concept. It can be a simple pointer type. </p></li>
+<li><p><strong>OffsetIterator</strong> – - random-access iterator type of segment offsets. Must meet the requirements of a C++ RandomAccessIterator concept. It can be a simple pointer type. </p></li>
+<li><p><strong>InitValueType</strong> – - type of the initial value. </p></li>
+<li><p><strong>BinaryFunction</strong> – - type of binary function used for scan operation. Default type is <code class="docutils literal notranslate"><span class="pre">rocprim::plus&lt;T&gt;</span></code>, where <code class="docutils literal notranslate"><span class="pre">T</span></code> is a <code class="docutils literal notranslate"><span class="pre">value_type</span></code> of <code class="docutils literal notranslate"><span class="pre">InputIterator</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>temporary_storage</strong> – <strong>[in]</strong> - pointer to a device-accessible temporary storage. When a null pointer is passed, the required allocation size (in bytes) is written to <code class="docutils literal notranslate"><span class="pre">storage_size</span></code> and function returns without performing the scan operation. </p></li>
+<li><p><strong>storage_size</strong> – <strong>[inout]</strong> - reference to a size (in bytes) of <code class="docutils literal notranslate"><span class="pre">temporary_storage</span></code>. </p></li>
+<li><p><strong>input</strong> – <strong>[in]</strong> - iterator to the first element in the range to scan. </p></li>
+<li><p><strong>output</strong> – <strong>[out]</strong> - iterator to the first element in the output range. </p></li>
+<li><p><strong>segments</strong> – <strong>[in]</strong> - number of segments in the input range. </p></li>
+<li><p><strong>begin_offsets</strong> – <strong>[in]</strong> - iterator to the first element in the range of beginning offsets. </p></li>
+<li><p><strong>end_offsets</strong> – <strong>[in]</strong> - iterator to the first element in the range of ending offsets. </p></li>
+<li><p><strong>initial_value</strong> – <strong>[in]</strong> - initial value to start the scan. </p></li>
+<li><p><strong>scan_op</strong> – <strong>[in]</strong> - binary operation function object that will be used for scan. The signature of the function should be equivalent to the following: <code class="docutils literal notranslate"><span class="pre">T</span> <span class="pre">f(const</span> <span class="pre">T</span> <span class="pre">&amp;a,</span> <span class="pre">const</span> <span class="pre">T</span> <span class="pre">&amp;b);</span></code>. The signature does not need to have <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">&amp;</span></code>, but function object must not modify the objects passed to it. The default value is <code class="docutils literal notranslate"><span class="pre">BinaryFunction()</span></code>. </p></li>
+<li><p><strong>stream</strong> – <strong>[in]</strong> - [optional] HIP stream object. The default is <code class="docutils literal notranslate"><span class="pre">0</span></code> (default stream). </p></li>
+<li><p><strong>debug_synchronous</strong> – <strong>[in]</strong> - [optional] If true, synchronization after every kernel launch is forced in order to check for errors. The default value is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">hipSuccess</span></code> (<code class="docutils literal notranslate"><span class="pre">0</span></code>) after successful scan; otherwise a HIP runtime error of type <code class="docutils literal notranslate"><span class="pre">hipError_t</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="id3">
+<h2>scan_by_key<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h2>
+<section id="id4">
+<h3>inclusive<a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h3>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I000000E21inclusive_scan_by_key10hipError_tPCvR6size_tK17KeysInputIteratorK19ValuesInputIteratorK20ValuesOutputIteratorK6size_tK14BinaryFunctionK18KeyCompareFunctionK11hipStream_tKb">
+<span id="_CPPv3I000000E21inclusive_scan_by_keyPCvR6size_tK17KeysInputIteratorK19ValuesInputIteratorK20ValuesOutputIteratorK6size_tK14BinaryFunctionK18KeyCompareFunctionK11hipStream_tKb"></span><span id="_CPPv2I000000E21inclusive_scan_by_keyPCvR6size_tK17KeysInputIteratorK19ValuesInputIteratorK20ValuesOutputIteratorK6size_tK14BinaryFunctionK18KeyCompareFunctionK11hipStream_tKb"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Config</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="config.html#_CPPv414default_config" title="default_config"><span class="n"><span class="pre">default_config</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">KeysInputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ValuesInputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ValuesOutputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BinaryFunction</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">rocprim</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">plus</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">iterator_traits</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I000000E21inclusive_scan_by_key10hipError_tPCvR6size_tK17KeysInputIteratorK19ValuesInputIteratorK20ValuesOutputIteratorK6size_tK14BinaryFunctionK18KeyCompareFunctionK11hipStream_tKb" title="inclusive_scan_by_key::ValuesInputIterator"><span class="n"><span class="pre">ValuesInputIterator</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value_type</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">KeyCompareFunction</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">rocprim</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">equal_to</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">iterator_traits</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I000000E21inclusive_scan_by_key10hipError_tPCvR6size_tK17KeysInputIteratorK19ValuesInputIteratorK20ValuesOutputIteratorK6size_tK14BinaryFunctionK18KeyCompareFunctionK11hipStream_tKb" title="inclusive_scan_by_key::KeysInputIterator"><span class="n"><span class="pre">KeysInputIterator</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value_type</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="group__devicemodule_1ga23b27c2118e4f4bb09fda99bc90d2b8a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">hipError_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">inclusive_scan_by_key</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">temporary_storage</span></span>, </li><li class="desc-parameter"><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">storage_size</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I000000E21inclusive_scan_by_key10hipError_tPCvR6size_tK17KeysInputIteratorK19ValuesInputIteratorK20ValuesOutputIteratorK6size_tK14BinaryFunctionK18KeyCompareFunctionK11hipStream_tKb" title="inclusive_scan_by_key::KeysInputIterator"><span class="n"><span class="pre">KeysInputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">keys_input</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I000000E21inclusive_scan_by_key10hipError_tPCvR6size_tK17KeysInputIteratorK19ValuesInputIteratorK20ValuesOutputIteratorK6size_tK14BinaryFunctionK18KeyCompareFunctionK11hipStream_tKb" title="inclusive_scan_by_key::ValuesInputIterator"><span class="n"><span class="pre">ValuesInputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">values_input</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I000000E21inclusive_scan_by_key10hipError_tPCvR6size_tK17KeysInputIteratorK19ValuesInputIteratorK20ValuesOutputIteratorK6size_tK14BinaryFunctionK18KeyCompareFunctionK11hipStream_tKb" title="inclusive_scan_by_key::ValuesOutputIterator"><span class="n"><span class="pre">ValuesOutputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">values_output</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I000000E21inclusive_scan_by_key10hipError_tPCvR6size_tK17KeysInputIteratorK19ValuesInputIteratorK20ValuesOutputIteratorK6size_tK14BinaryFunctionK18KeyCompareFunctionK11hipStream_tKb" title="inclusive_scan_by_key::BinaryFunction"><span class="n"><span class="pre">BinaryFunction</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">scan_op</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I000000E21inclusive_scan_by_key10hipError_tPCvR6size_tK17KeysInputIteratorK19ValuesInputIteratorK20ValuesOutputIteratorK6size_tK14BinaryFunctionK18KeyCompareFunctionK11hipStream_tKb" title="inclusive_scan_by_key::BinaryFunction"><span class="n"><span class="pre">BinaryFunction</span></span></a><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I000000E21inclusive_scan_by_key10hipError_tPCvR6size_tK17KeysInputIteratorK19ValuesInputIteratorK20ValuesOutputIteratorK6size_tK14BinaryFunctionK18KeyCompareFunctionK11hipStream_tKb" title="inclusive_scan_by_key::KeyCompareFunction"><span class="n"><span class="pre">KeyCompareFunction</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">key_compare_op</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I000000E21inclusive_scan_by_key10hipError_tPCvR6size_tK17KeysInputIteratorK19ValuesInputIteratorK20ValuesOutputIteratorK6size_tK14BinaryFunctionK18KeyCompareFunctionK11hipStream_tKb" title="inclusive_scan_by_key::KeyCompareFunction"><span class="n"><span class="pre">KeyCompareFunction</span></span></a><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">hipStream_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stream</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">debug_synchronous</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I000000E21inclusive_scan_by_key10hipError_tPCvR6size_tK17KeysInputIteratorK19ValuesInputIteratorK20ValuesOutputIteratorK6size_tK14BinaryFunctionK18KeyCompareFunctionK11hipStream_tKb" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Parallel inclusive scan-by-key primitive for device level. </p>
+<p>inclusive_scan_by_key function performs a device-wide inclusive prefix scan-by-key operation using binary <code class="docutils literal notranslate"><span class="pre">scan_op</span></code> operator.</p>
+<p><dl class="simple">
+<dt><strong>Overview</strong></dt><dd><p><ul class="simple">
+<li><p>Supports non-commutative scan operators. However, a scan operator should be associative. When used with non-associative functions the results may be non-deterministic and/or vary in precision.</p></li>
+<li><p>Returns the required size of <code class="docutils literal notranslate"><span class="pre">temporary_storage</span></code> in <code class="docutils literal notranslate"><span class="pre">storage_size</span></code> if <code class="docutils literal notranslate"><span class="pre">temporary_storage</span></code> in a null pointer.</p></li>
+<li><p>Ranges specified by <code class="docutils literal notranslate"><span class="pre">keys_input</span></code>, <code class="docutils literal notranslate"><span class="pre">values_input</span></code>, and <code class="docutils literal notranslate"><span class="pre">values_output</span></code> must have at least <code class="docutils literal notranslate"><span class="pre">size</span></code> elements.</p></li>
+</ul>
+</p>
+</dd>
+<dt><strong>Example</strong></dt><dd><p><p>In this example a device-level inclusive sum-by-key operation is performed on an array of integer values (<code class="docutils literal notranslate"><span class="pre">short</span></code>s are scanned into <code class="docutils literal notranslate"><span class="pre">int</span></code>s).</p>
+<p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;rocprim/rocprim.hpp&gt;</span><span class="cp"></span>
+
+<span class="c1">// Prepare input and output (declare pointers, allocate device memory etc.)</span>
+<span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">;</span><span class="w">           </span><span class="c1">// e.g., 8</span>
+<span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="w">   </span><span class="n">keys_input</span><span class="p">;</span><span class="w">    </span><span class="c1">// e.g., [1, 1, 2, 2, 3, 3, 3, 5]</span>
+<span class="kt">short</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">values_input</span><span class="p">;</span><span class="w">  </span><span class="c1">// e.g., [1, 2, 3, 4, 5, 6, 7, 8]</span>
+<span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="w">   </span><span class="n">values_output</span><span class="p">;</span><span class="w"> </span><span class="c1">// empty array of 8 elements</span>
+
+<span class="kt">size_t</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">;</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">temporary_storage_ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nullptr</span><span class="p">;</span><span class="w"></span>
+<span class="c1">// Get required size of the temporary storage</span>
+<span class="n">rocprim</span><span class="o">::</span><span class="n">inclusive_scan_by_key</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">temporary_storage_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">keys_input</span><span class="p">,</span><span class="w"> </span><span class="n">values_input</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">values_output</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">rocprim</span><span class="o">::</span><span class="n">plus</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">()</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+
+<span class="c1">// allocate temporary storage</span>
+<span class="n">hipMalloc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">temporary_storage_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">);</span><span class="w"></span>
+
+<span class="c1">// perform scan-by-key</span>
+<span class="n">rocprim</span><span class="o">::</span><span class="n">inclusive_scan_by_key</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">temporary_storage_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">keys_input</span><span class="p">,</span><span class="w"> </span><span class="n">values_input</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">values_output</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">rocprim</span><span class="o">::</span><span class="n">plus</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">()</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+<span class="c1">// values_output: [1, 2, 3, 7, 5, 11, 18, 8]</span>
+</pre></div>
+</div>
+ </p>
+</p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Config</strong> – - [optional] configuration of the primitive. It can be <code class="docutils literal notranslate"><a class="reference internal" href="#structscan__by__key__config"><span class="std std-ref"><span class="pre">scan_by_key_config</span></span></a></code> or a custom class with the same members. </p></li>
+<li><p><strong>KeysInputIterator</strong> – - random-access iterator type of the input range. It can be a simple pointer type. </p></li>
+<li><p><strong>ValuesInputIterator</strong> – - random-access iterator type of the input range. It can be a simple pointer type. </p></li>
+<li><p><strong>ValuesOutputIterator</strong> – - random-access iterator type of the output range. It can be a simple pointer type. </p></li>
+<li><p><strong>BinaryFunction</strong> – - type of binary function used for scan. Default type is <code class="docutils literal notranslate"><span class="pre">rocprim::plus&lt;T&gt;</span></code>, where <code class="docutils literal notranslate"><span class="pre">T</span></code> is a <code class="docutils literal notranslate"><span class="pre">value_type</span></code> of <code class="docutils literal notranslate"><span class="pre">InputIterator</span></code>. </p></li>
+<li><p><strong>KeyCompareFunction</strong> – - type of binary function used to determine keys equality. Default type is <code class="docutils literal notranslate"><span class="pre">rocprim::equal_to&lt;T&gt;</span></code>, where <code class="docutils literal notranslate"><span class="pre">T</span></code> is a <code class="docutils literal notranslate"><span class="pre">value_type</span></code> of <code class="docutils literal notranslate"><span class="pre">KeysInputIterator</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>temporary_storage</strong> – <strong>[in]</strong> - pointer to a device-accessible temporary storage. When a null pointer is passed, the required allocation size (in bytes) is written to <code class="docutils literal notranslate"><span class="pre">storage_size</span></code> and function returns without performing the scan operation. </p></li>
+<li><p><strong>storage_size</strong> – <strong>[inout]</strong> - reference to a size (in bytes) of <code class="docutils literal notranslate"><span class="pre">temporary_storage</span></code>. </p></li>
+<li><p><strong>keys_input</strong> – <strong>[in]</strong> - iterator to the first element in the range of keys. </p></li>
+<li><p><strong>values_input</strong> – <strong>[in]</strong> - iterator to the first element in the range of values to scan. </p></li>
+<li><p><strong>values_output</strong> – <strong>[out]</strong> - iterator to the first element in the output value range. </p></li>
+<li><p><strong>size</strong> – <strong>[in]</strong> - number of element in the input range. </p></li>
+<li><p><strong>scan_op</strong> – <strong>[in]</strong> - binary operation function object that will be used for scanning input values. The signature of the function should be equivalent to the following: <code class="docutils literal notranslate"><span class="pre">T</span> <span class="pre">f(const</span> <span class="pre">T</span> <span class="pre">&amp;a,</span> <span class="pre">const</span> <span class="pre">T</span> <span class="pre">&amp;b);</span></code>. The signature does not need to have <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">&amp;</span></code>, but function object must not modify the objects passed to it. Default is BinaryFunction(). </p></li>
+<li><p><strong>key_compare_op</strong> – <strong>[in]</strong> - binary operation function object that will be used to determine keys equality. The signature of the function should be equivalent to the following: <code class="docutils literal notranslate"><span class="pre">bool</span> <span class="pre">f(const</span> <span class="pre">T</span> <span class="pre">&amp;a,</span> <span class="pre">const</span> <span class="pre">T</span> <span class="pre">&amp;b);</span></code>. The signature does not need to have <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">&amp;</span></code>, but function object must not modify the objects passed to it. Default is KeyCompareFunction(). </p></li>
+<li><p><strong>stream</strong> – <strong>[in]</strong> - [optional] HIP stream object. Default is <code class="docutils literal notranslate"><span class="pre">0</span></code> (default stream). </p></li>
+<li><p><strong>debug_synchronous</strong> – <strong>[in]</strong> - [optional] If true, synchronization after every kernel launch is forced in order to check for errors. Default value is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">hipSuccess</span></code> (<code class="docutils literal notranslate"><span class="pre">0</span></code>) after successful scan; otherwise a HIP runtime error of type <code class="docutils literal notranslate"><span class="pre">hipError_t</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="id5">
+<h3>exclusive<a class="headerlink" href="#id5" title="Permalink to this heading">#</a></h3>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0000000E21exclusive_scan_by_key10hipError_tPCvR6size_tK17KeysInputIteratorK19ValuesInputIteratorK20ValuesOutputIteratorK16InitialValueTypeK6size_tK14BinaryFunctionK18KeyCompareFunctionK11hipStream_tKb">
+<span id="_CPPv3I0000000E21exclusive_scan_by_keyPCvR6size_tK17KeysInputIteratorK19ValuesInputIteratorK20ValuesOutputIteratorK16InitialValueTypeK6size_tK14BinaryFunctionK18KeyCompareFunctionK11hipStream_tKb"></span><span id="_CPPv2I0000000E21exclusive_scan_by_keyPCvR6size_tK17KeysInputIteratorK19ValuesInputIteratorK20ValuesOutputIteratorK16InitialValueTypeK6size_tK14BinaryFunctionK18KeyCompareFunctionK11hipStream_tKb"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Config</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="config.html#_CPPv414default_config" title="default_config"><span class="n"><span class="pre">default_config</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">KeysInputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ValuesInputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ValuesOutputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InitialValueType</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BinaryFunction</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">rocprim</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">plus</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">iterator_traits</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0000000E21exclusive_scan_by_key10hipError_tPCvR6size_tK17KeysInputIteratorK19ValuesInputIteratorK20ValuesOutputIteratorK16InitialValueTypeK6size_tK14BinaryFunctionK18KeyCompareFunctionK11hipStream_tKb" title="exclusive_scan_by_key::ValuesInputIterator"><span class="n"><span class="pre">ValuesInputIterator</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value_type</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">KeyCompareFunction</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">rocprim</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">equal_to</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">iterator_traits</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0000000E21exclusive_scan_by_key10hipError_tPCvR6size_tK17KeysInputIteratorK19ValuesInputIteratorK20ValuesOutputIteratorK16InitialValueTypeK6size_tK14BinaryFunctionK18KeyCompareFunctionK11hipStream_tKb" title="exclusive_scan_by_key::KeysInputIterator"><span class="n"><span class="pre">KeysInputIterator</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value_type</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="group__devicemodule_1ga314555ed4f43bc73cbe8fd4184396691"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">hipError_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">exclusive_scan_by_key</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">temporary_storage</span></span>, </li><li class="desc-parameter"><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">storage_size</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0000000E21exclusive_scan_by_key10hipError_tPCvR6size_tK17KeysInputIteratorK19ValuesInputIteratorK20ValuesOutputIteratorK16InitialValueTypeK6size_tK14BinaryFunctionK18KeyCompareFunctionK11hipStream_tKb" title="exclusive_scan_by_key::KeysInputIterator"><span class="n"><span class="pre">KeysInputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">keys_input</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0000000E21exclusive_scan_by_key10hipError_tPCvR6size_tK17KeysInputIteratorK19ValuesInputIteratorK20ValuesOutputIteratorK16InitialValueTypeK6size_tK14BinaryFunctionK18KeyCompareFunctionK11hipStream_tKb" title="exclusive_scan_by_key::ValuesInputIterator"><span class="n"><span class="pre">ValuesInputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">values_input</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0000000E21exclusive_scan_by_key10hipError_tPCvR6size_tK17KeysInputIteratorK19ValuesInputIteratorK20ValuesOutputIteratorK16InitialValueTypeK6size_tK14BinaryFunctionK18KeyCompareFunctionK11hipStream_tKb" title="exclusive_scan_by_key::ValuesOutputIterator"><span class="n"><span class="pre">ValuesOutputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">values_output</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0000000E21exclusive_scan_by_key10hipError_tPCvR6size_tK17KeysInputIteratorK19ValuesInputIteratorK20ValuesOutputIteratorK16InitialValueTypeK6size_tK14BinaryFunctionK18KeyCompareFunctionK11hipStream_tKb" title="exclusive_scan_by_key::InitialValueType"><span class="n"><span class="pre">InitialValueType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">initial_value</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0000000E21exclusive_scan_by_key10hipError_tPCvR6size_tK17KeysInputIteratorK19ValuesInputIteratorK20ValuesOutputIteratorK16InitialValueTypeK6size_tK14BinaryFunctionK18KeyCompareFunctionK11hipStream_tKb" title="exclusive_scan_by_key::BinaryFunction"><span class="n"><span class="pre">BinaryFunction</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">scan_op</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0000000E21exclusive_scan_by_key10hipError_tPCvR6size_tK17KeysInputIteratorK19ValuesInputIteratorK20ValuesOutputIteratorK16InitialValueTypeK6size_tK14BinaryFunctionK18KeyCompareFunctionK11hipStream_tKb" title="exclusive_scan_by_key::BinaryFunction"><span class="n"><span class="pre">BinaryFunction</span></span></a><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0000000E21exclusive_scan_by_key10hipError_tPCvR6size_tK17KeysInputIteratorK19ValuesInputIteratorK20ValuesOutputIteratorK16InitialValueTypeK6size_tK14BinaryFunctionK18KeyCompareFunctionK11hipStream_tKb" title="exclusive_scan_by_key::KeyCompareFunction"><span class="n"><span class="pre">KeyCompareFunction</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">key_compare_op</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0000000E21exclusive_scan_by_key10hipError_tPCvR6size_tK17KeysInputIteratorK19ValuesInputIteratorK20ValuesOutputIteratorK16InitialValueTypeK6size_tK14BinaryFunctionK18KeyCompareFunctionK11hipStream_tKb" title="exclusive_scan_by_key::KeyCompareFunction"><span class="n"><span class="pre">KeyCompareFunction</span></span></a><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">hipStream_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stream</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">debug_synchronous</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0000000E21exclusive_scan_by_key10hipError_tPCvR6size_tK17KeysInputIteratorK19ValuesInputIteratorK20ValuesOutputIteratorK16InitialValueTypeK6size_tK14BinaryFunctionK18KeyCompareFunctionK11hipStream_tKb" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Parallel exclusive scan-by-key primitive for device level. </p>
+<p>inclusive_scan_by_key function performs a device-wide exclusive prefix scan-by-key operation using binary <code class="docutils literal notranslate"><span class="pre">scan_op</span></code> operator.</p>
+<p><dl class="simple">
+<dt><strong>Overview</strong></dt><dd><p><ul class="simple">
+<li><p>Supports non-commutative scan operators. However, a scan operator should be associative. When used with non-associative functions the results may be non-deterministic and/or vary in precision.</p></li>
+<li><p>Returns the required size of <code class="docutils literal notranslate"><span class="pre">temporary_storage</span></code> in <code class="docutils literal notranslate"><span class="pre">storage_size</span></code> if <code class="docutils literal notranslate"><span class="pre">temporary_storage</span></code> in a null pointer.</p></li>
+<li><p>Ranges specified by <code class="docutils literal notranslate"><span class="pre">keys_input</span></code>, <code class="docutils literal notranslate"><span class="pre">values_input</span></code>, and <code class="docutils literal notranslate"><span class="pre">values_output</span></code> must have at least <code class="docutils literal notranslate"><span class="pre">size</span></code> elements.</p></li>
+</ul>
+</p>
+</dd>
+<dt><strong>Example</strong></dt><dd><p><p>In this example a device-level inclusive sum-by-key operation is performed on an array of integer values (<code class="docutils literal notranslate"><span class="pre">short</span></code>s are scanned into <code class="docutils literal notranslate"><span class="pre">int</span></code>s).</p>
+<p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;rocprim/rocprim.hpp&gt;</span><span class="cp"></span>
+
+<span class="c1">// Prepare input and output (declare pointers, allocate device memory etc.)</span>
+<span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">;</span><span class="w">           </span><span class="c1">// e.g., 8</span>
+<span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="w">   </span><span class="n">keys_input</span><span class="p">;</span><span class="w">    </span><span class="c1">// e.g., [1, 1, 1, 2, 2, 3, 3, 4]</span>
+<span class="kt">short</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">values_input</span><span class="p">;</span><span class="w">  </span><span class="c1">// e.g., [1, 2, 3, 4, 5, 6, 7, 8]</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">start_value</span><span class="p">;</span><span class="w">       </span><span class="c1">// e.g., 9</span>
+<span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="w">   </span><span class="n">values_output</span><span class="p">;</span><span class="w"> </span><span class="c1">// empty array of 8 elements</span>
+
+<span class="kt">size_t</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">;</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">temporary_storage_ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nullptr</span><span class="p">;</span><span class="w"></span>
+<span class="c1">// Get required size of the temporary storage</span>
+<span class="n">rocprim</span><span class="o">::</span><span class="n">exclusive_scan_by_key</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">temporary_storage_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">keys_input</span><span class="p">,</span><span class="w"> </span><span class="n">values_input</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">values_output</span><span class="p">,</span><span class="w"> </span><span class="n">start_value</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">size</span><span class="p">,</span><span class="n">rocprim</span><span class="o">::</span><span class="n">plus</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">()</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+
+<span class="c1">// allocate temporary storage</span>
+<span class="n">hipMalloc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">temporary_storage_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">);</span><span class="w"></span>
+
+<span class="c1">// perform scan-by-key</span>
+<span class="n">rocprim</span><span class="o">::</span><span class="n">exclusive_scan_by_key</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">temporary_storage_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">temporary_storage_size_bytes</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">keys_input</span><span class="p">,</span><span class="w"> </span><span class="n">values_input</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">values_output</span><span class="p">,</span><span class="w"> </span><span class="n">start_value</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">size</span><span class="p">,</span><span class="n">rocprim</span><span class="o">::</span><span class="n">plus</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">()</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+<span class="c1">// values_output: [9, 10, 12, 9, 13, 9, 15, 9]</span>
+</pre></div>
+</div>
+ </p>
+</p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Config</strong> – - [optional] configuration of the primitive. It can be <code class="docutils literal notranslate"><a class="reference internal" href="#structscan__by__key__config"><span class="std std-ref"><span class="pre">scan_by_key_config</span></span></a></code> or a custom class with the same members. </p></li>
+<li><p><strong>KeysInputIterator</strong> – - random-access iterator type of the input range. It can be a simple pointer type. </p></li>
+<li><p><strong>ValuesInputIterator</strong> – - random-access iterator type of the input range. It can be a simple pointer type. </p></li>
+<li><p><strong>ValuesOutputIterator</strong> – - random-access iterator type of the output range. It can be a simple pointer type. </p></li>
+<li><p><strong>InitValueType</strong> – - type of the initial value. </p></li>
+<li><p><strong>BinaryFunction</strong> – - type of binary function used for scan. Default type is <code class="docutils literal notranslate"><span class="pre">rocprim::plus&lt;T&gt;</span></code>, where <code class="docutils literal notranslate"><span class="pre">T</span></code> is a <code class="docutils literal notranslate"><span class="pre">value_type</span></code> of <code class="docutils literal notranslate"><span class="pre">InputIterator</span></code>. </p></li>
+<li><p><strong>KeyCompareFunction</strong> – - type of binary function used to determine keys equality. Default type is <code class="docutils literal notranslate"><span class="pre">rocprim::equal_to&lt;T&gt;</span></code>, where <code class="docutils literal notranslate"><span class="pre">T</span></code> is a <code class="docutils literal notranslate"><span class="pre">value_type</span></code> of <code class="docutils literal notranslate"><span class="pre">KeysInputIterator</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>temporary_storage</strong> – <strong>[in]</strong> - pointer to a device-accessible temporary storage. When a null pointer is passed, the required allocation size (in bytes) is written to <code class="docutils literal notranslate"><span class="pre">storage_size</span></code> and function returns without performing the scan operation. </p></li>
+<li><p><strong>storage_size</strong> – <strong>[inout]</strong> - reference to a size (in bytes) of <code class="docutils literal notranslate"><span class="pre">temporary_storage</span></code>. </p></li>
+<li><p><strong>keys_input</strong> – <strong>[in]</strong> - iterator to the first element in the range of keys. </p></li>
+<li><p><strong>values_input</strong> – <strong>[in]</strong> - iterator to the first element in the range of values to scan. </p></li>
+<li><p><strong>values_output</strong> – <strong>[out]</strong> - iterator to the first element in the output value range. </p></li>
+<li><p><strong>initial_value</strong> – <strong>[in]</strong> - initial value to start the scan. A rocpim::future_value may be passed to use a value that will be later computed. </p></li>
+<li><p><strong>size</strong> – <strong>[in]</strong> - number of element in the input range. </p></li>
+<li><p><strong>scan_op</strong> – <strong>[in]</strong> - binary operation function object that will be used for scanning input values. The signature of the function should be equivalent to the following: <code class="docutils literal notranslate"><span class="pre">T</span> <span class="pre">f(const</span> <span class="pre">T</span> <span class="pre">&amp;a,</span> <span class="pre">const</span> <span class="pre">T</span> <span class="pre">&amp;b);</span></code>. The signature does not need to have <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">&amp;</span></code>, but function object must not modify the objects passed to it. Default is BinaryFunction(). </p></li>
+<li><p><strong>key_compare_op</strong> – <strong>[in]</strong> - binary operation function object that will be used to determine keys equality. The signature of the function should be equivalent to the following: <code class="docutils literal notranslate"><span class="pre">bool</span> <span class="pre">f(const</span> <span class="pre">T</span> <span class="pre">&amp;a,</span> <span class="pre">const</span> <span class="pre">T</span> <span class="pre">&amp;b);</span></code>. The signature does not need to have <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">&amp;</span></code>, but function object must not modify the objects passed to it. Default is KeyCompareFunction(). </p></li>
+<li><p><strong>stream</strong> – <strong>[in]</strong> - [optional] HIP stream object. Default is <code class="docutils literal notranslate"><span class="pre">0</span></code> (default stream). </p></li>
+<li><p><strong>debug_synchronous</strong> – <strong>[in]</strong> - [optional] If true, synchronization after every kernel launch is forced in order to check for errors. Default value is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">hipSuccess</span></code> (<code class="docutils literal notranslate"><span class="pre">0</span></code>) after successful scan; otherwise a HIP runtime error of type <code class="docutils literal notranslate"><span class="pre">hipError_t</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="select.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Select</div>
+              </div>
+              <svg><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="run_length_encoding.html">
+              <svg><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Run Length Encode</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Scan</a><ul>
+<li><a class="reference internal" href="#configuring-the-kernel">Configuring the kernel</a><ul>
+<li><a class="reference internal" href="#id1">scan</a></li>
+<li><a class="reference internal" href="#scan-by-key">scan_by_key</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id2">scan</a><ul>
+<li><a class="reference internal" href="#inclusive">inclusive</a></li>
+<li><a class="reference internal" href="#exclusive">exclusive</a></li>
+<li><a class="reference internal" href="#segmented-inclusive">segmented, inclusive</a></li>
+<li><a class="reference internal" href="#segmented-exclusive">segmented, exclusive</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id3">scan_by_key</a><ul>
+<li><a class="reference internal" href="#id4">inclusive</a></li>
+<li><a class="reference internal" href="#id5">exclusive</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../" id="documentation_options" src="../static/documentation_options.js"></script>
+    <script src="../static/jquery.js"></script>
+    <script src="../static/underscore.js"></script>
+    <script src="../static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../static/doctools.js"></script>
+    <script src="../static/scripts/furo.js"></script>
+    </body>
+</html>

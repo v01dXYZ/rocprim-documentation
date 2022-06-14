@@ -1,0 +1,811 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
+
+    <meta name="generator" content="sphinx-5.1.0+/0aedcc9a9, furo 2022.06.04.1"/>
+        <title>Data movement functions - rocPRIM documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="../../static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../../static/cpp_sig.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #263238;
+  --color-code-foreground: #EEFFFF;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #263238;
+  --color-code-foreground: #EEFFFF;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">rocPRIM  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  
+  <span class="sidebar-brand-text">rocPRIM  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../operations.html">High Level view of the operations</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../devicemodule/index.html">Device-Wide Operations</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/config.html">Configuring the Kernels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/transform.html">Transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/unique.html">Unique</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/sort.html">Sort</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/merge.html">Merge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/partition.html">Partition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/run_length_encoding.html">Run Length Encode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/scan.html">Scan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/select.html">Select</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/reduce.html">Reduce</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/adjacent_difference.html">Adjacent difference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/binary_search.html">Binary Search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/histogram.html">Histogram</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../index.html">Block-Wide Operations</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../ops_classes/index.html">Operation classes</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../ops_classes/load.html">Load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ops_classes/store.html">Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ops_classes/adjacent_difference.html">Adjacent difference</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ops_classes/discontinuity.html">Discontinuity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ops_classes/scan.html">Scan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ops_classes/reduce.html">Reduce</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ops_classes/histogram.html">Histogram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ops_classes/exchange.html">Exchange</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ops_classes/shuffle.html">Shuffle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ops_classes/sort.html">Sort</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../data_mov_funcs.html">Data movement functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../warpmodule.html">Warp-Level Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../threadmodule.html">Thread-Level Operations (Utilities)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../iterators.html">Iterators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intrinsics.html">Intrinsics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="data-movement-functions">
+<h1>Data movement functions<a class="headerlink" href="#data-movement-functions" title="Permalink to this heading">#</a></h1>
+<section id="direct-blocked">
+<h2>Direct Blocked<a class="headerlink" href="#direct-blocked" title="Permalink to this heading">#</a></h2>
+<section id="load">
+<h3>Load<a class="headerlink" href="#load" title="Permalink to this heading">#</a></h3>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00_jE25block_load_direct_blockedvj13InputIteratorRA14ItemsPerThread_1T">
+<span id="_CPPv3I00_jE25block_load_direct_blockedj13InputIteratorRA14ItemsPerThread_1T"></span><span id="_CPPv2I00_jE25block_load_direct_blockedj13InputIteratorRAItemsPerThread_1T"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ItemsPerThread</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="group__blockmodule_1ga18efc27a17759c2e458d589e17e44670"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">block_load_direct_blocked</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">flat_id</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I00_jE25block_load_direct_blockedvj13InputIteratorRA14ItemsPerThread_1T" title="block_load_direct_blocked::InputIterator"><span class="n"><span class="pre">InputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">block_input</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I00_jE25block_load_direct_blockedvj13InputIteratorRA14ItemsPerThread_1T" title="block_load_direct_blocked::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">items</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I00_jE25block_load_direct_blockedvj13InputIteratorRA14ItemsPerThread_1T" title="block_load_direct_blocked::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span></li></ld><span class="sig-paren">)</span></span><br /></dt>
+<dd><p>Loads data from continuous memory into a blocked arrangement of items across the thread block. </p>
+<p>The block arrangement is assumed to be (block-threads * <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code>) items across a thread block. Each thread uses a <code class="docutils literal notranslate"><span class="pre">flat_id</span></code> to load a range of <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code> into <code class="docutils literal notranslate"><span class="pre">items</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>InputIterator</strong> – - [inferred] an iterator type for input (can be a simple pointer </p></li>
+<li><p><strong>T</strong> – - [inferred] the data type </p></li>
+<li><p><strong>ItemsPerThread</strong> – - [inferred] the number of items to be processed by each thread</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>flat_id</strong> – - a local flat 1D thread id in a block (tile) for the calling thread </p></li>
+<li><p><strong>block_input</strong> – - the input iterator from the thread block to load from </p></li>
+<li><p><strong>items</strong> – - array that data is loaded to </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00_jE25block_load_direct_blockedvj13InputIteratorRA14ItemsPerThread_1Tj">
+<span id="_CPPv3I00_jE25block_load_direct_blockedj13InputIteratorRA14ItemsPerThread_1Tj"></span><span id="_CPPv2I00_jE25block_load_direct_blockedj13InputIteratorRAItemsPerThread_1Tj"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ItemsPerThread</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="group__blockmodule_1ga2948d0e1ddc91a9a9b9fbdb49a655a6c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">block_load_direct_blocked</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">flat_id</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I00_jE25block_load_direct_blockedvj13InputIteratorRA14ItemsPerThread_1Tj" title="block_load_direct_blocked::InputIterator"><span class="n"><span class="pre">InputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">block_input</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I00_jE25block_load_direct_blockedvj13InputIteratorRA14ItemsPerThread_1Tj" title="block_load_direct_blocked::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">items</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I00_jE25block_load_direct_blockedvj13InputIteratorRA14ItemsPerThread_1Tj" title="block_load_direct_blocked::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">valid</span></span></li></ld><span class="sig-paren">)</span></span><br /></dt>
+<dd><p>Loads data from continuous memory into a blocked arrangement of items across the thread block, which is guarded by range <code class="docutils literal notranslate"><span class="pre">valid</span></code>. </p>
+<p>The block arrangement is assumed to be (block-threads * <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code>) items across a thread block. Each thread uses a <code class="docutils literal notranslate"><span class="pre">flat_id</span></code> to load a range of <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code> into <code class="docutils literal notranslate"><span class="pre">items</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>InputIterator</strong> – - [inferred] an iterator type for input (can be a simple pointer </p></li>
+<li><p><strong>T</strong> – - [inferred] the data type </p></li>
+<li><p><strong>ItemsPerThread</strong> – - [inferred] the number of items to be processed by each thread</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>flat_id</strong> – - a local flat 1D thread id in a block (tile) for the calling thread </p></li>
+<li><p><strong>block_input</strong> – - the input iterator from the thread block to load from </p></li>
+<li><p><strong>items</strong> – - array that data is loaded to </p></li>
+<li><p><strong>valid</strong> – - maximum range of valid numbers to load </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00_j0E25block_load_direct_blockedvj13InputIteratorRA14ItemsPerThread_1Tj7Default">
+<span id="_CPPv3I00_j0E25block_load_direct_blockedj13InputIteratorRA14ItemsPerThread_1Tj7Default"></span><span id="_CPPv2I00_j0E25block_load_direct_blockedj13InputIteratorRAItemsPerThread_1Tj7Default"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ItemsPerThread</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Default</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="group__blockmodule_1gaf4fbf2232d4493957c078ccc9731872c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">block_load_direct_blocked</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">flat_id</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I00_j0E25block_load_direct_blockedvj13InputIteratorRA14ItemsPerThread_1Tj7Default" title="block_load_direct_blocked::InputIterator"><span class="n"><span class="pre">InputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">block_input</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I00_j0E25block_load_direct_blockedvj13InputIteratorRA14ItemsPerThread_1Tj7Default" title="block_load_direct_blocked::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">items</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I00_j0E25block_load_direct_blockedvj13InputIteratorRA14ItemsPerThread_1Tj7Default" title="block_load_direct_blocked::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">valid</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I00_j0E25block_load_direct_blockedvj13InputIteratorRA14ItemsPerThread_1Tj7Default" title="block_load_direct_blocked::Default"><span class="n"><span class="pre">Default</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">out_of_bounds</span></span></li></ld><span class="sig-paren">)</span></span><br /></dt>
+<dd><p>Loads data from continuous memory into a blocked arrangement of items across the thread block, which is guarded by range with a fall-back value for out-of-bound elements. </p>
+<p>The block arrangement is assumed to be (block-threads * <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code>) items across a thread block. Each thread uses a <code class="docutils literal notranslate"><span class="pre">flat_id</span></code> to load a range of <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code> into <code class="docutils literal notranslate"><span class="pre">items</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>InputIterator</strong> – - [inferred] an iterator type for input (can be a simple pointer </p></li>
+<li><p><strong>T</strong> – - [inferred] the data type </p></li>
+<li><p><strong>ItemsPerThread</strong> – - [inferred] the number of items to be processed by each thread </p></li>
+<li><p><strong>Default</strong> – - [inferred] The data type of the default value</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>flat_id</strong> – - a local flat 1D thread id in a block (tile) for the calling thread </p></li>
+<li><p><strong>block_input</strong> – - the input iterator from the thread block to load from </p></li>
+<li><p><strong>items</strong> – - array that data is loaded to </p></li>
+<li><p><strong>valid</strong> – - maximum range of valid numbers to load </p></li>
+<li><p><strong>out_of_bounds</strong> – - default value assigned to out-of-bound items </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="store">
+<h3>Store<a class="headerlink" href="#store" title="Permalink to this heading">#</a></h3>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00_jE26block_store_direct_blockedvj14OutputIteratorRA14ItemsPerThread_1T">
+<span id="_CPPv3I00_jE26block_store_direct_blockedj14OutputIteratorRA14ItemsPerThread_1T"></span><span id="_CPPv2I00_jE26block_store_direct_blockedj14OutputIteratorRAItemsPerThread_1T"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OutputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ItemsPerThread</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="group__blockmodule_1ga6fe04eeb56ac51961b4c6199f43e892f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">block_store_direct_blocked</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">flat_id</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I00_jE26block_store_direct_blockedvj14OutputIteratorRA14ItemsPerThread_1T" title="block_store_direct_blocked::OutputIterator"><span class="n"><span class="pre">OutputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">block_output</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I00_jE26block_store_direct_blockedvj14OutputIteratorRA14ItemsPerThread_1T" title="block_store_direct_blocked::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">items</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I00_jE26block_store_direct_blockedvj14OutputIteratorRA14ItemsPerThread_1T" title="block_store_direct_blocked::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span></li></ld><span class="sig-paren">)</span></span><br /></dt>
+<dd><p>Stores a blocked arrangement of items from across the thread block into a blocked arrangement on continuous memory. </p>
+<p>The block arrangement is assumed to be (block-threads * <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code>) items across a thread block. Each thread uses a <code class="docutils literal notranslate"><span class="pre">flat_id</span></code> to store a range of <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code> <code class="docutils literal notranslate"><span class="pre">items</span></code> to the thread block.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>OutputIterator</strong> – - [inferred] an iterator type for input (can be a simple pointer </p></li>
+<li><p><strong>T</strong> – - [inferred] the data type </p></li>
+<li><p><strong>ItemsPerThread</strong> – - [inferred] the number of items to be processed by each thread</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>flat_id</strong> – - a local flat 1D thread id in a block (tile) for the calling thread </p></li>
+<li><p><strong>block_output</strong> – - the input iterator from the thread block to store to </p></li>
+<li><p><strong>items</strong> – - array that data is stored to thread block </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00_jE26block_store_direct_blockedvj14OutputIteratorRA14ItemsPerThread_1Tj">
+<span id="_CPPv3I00_jE26block_store_direct_blockedj14OutputIteratorRA14ItemsPerThread_1Tj"></span><span id="_CPPv2I00_jE26block_store_direct_blockedj14OutputIteratorRAItemsPerThread_1Tj"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OutputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ItemsPerThread</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="group__blockmodule_1gaa463a0fb679c2616ce6db1b51a354f68"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">block_store_direct_blocked</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">flat_id</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I00_jE26block_store_direct_blockedvj14OutputIteratorRA14ItemsPerThread_1Tj" title="block_store_direct_blocked::OutputIterator"><span class="n"><span class="pre">OutputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">block_output</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I00_jE26block_store_direct_blockedvj14OutputIteratorRA14ItemsPerThread_1Tj" title="block_store_direct_blocked::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">items</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I00_jE26block_store_direct_blockedvj14OutputIteratorRA14ItemsPerThread_1Tj" title="block_store_direct_blocked::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">valid</span></span></li></ld><span class="sig-paren">)</span></span><br /></dt>
+<dd><p>Stores a blocked arrangement of items from across the thread block into a blocked arrangement on continuous memory, which is guarded by range <code class="docutils literal notranslate"><span class="pre">valid</span></code>. </p>
+<p>The block arrangement is assumed to be (block-threads * <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code>) items across a thread block. Each thread uses a <code class="docutils literal notranslate"><span class="pre">flat_id</span></code> to store a range of <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code> <code class="docutils literal notranslate"><span class="pre">items</span></code> to the thread block.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>OutputIterator</strong> – - [inferred] an iterator type for input (can be a simple pointer </p></li>
+<li><p><strong>T</strong> – - [inferred] the data type </p></li>
+<li><p><strong>ItemsPerThread</strong> – - [inferred] the number of items to be processed by each thread</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>flat_id</strong> – - a local flat 1D thread id in a block (tile) for the calling thread </p></li>
+<li><p><strong>block_output</strong> – - the input iterator from the thread block to store to </p></li>
+<li><p><strong>items</strong> – - array that data is stored to thread block </p></li>
+<li><p><strong>valid</strong> – - maximum range of valid numbers to store </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="direct-blocked-vectorized">
+<h2>Direct Blocked Vectorized<a class="headerlink" href="#direct-blocked-vectorized" title="Permalink to this heading">#</a></h2>
+<section id="id1">
+<h3>Load<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00_jE36block_load_direct_blocked_vectorizedNSt9enable_ifIN6detail15is_vectorizableI1T14ItemsPerThreadE5valueEE4typeEjP1TRA14ItemsPerThread_1U">
+<span id="_CPPv3I00_jE36block_load_direct_blocked_vectorizedjP1TRA14ItemsPerThread_1U"></span><span id="_CPPv2I00_jE36block_load_direct_blocked_vectorizedjP1TRAItemsPerThread_1U"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">U</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ItemsPerThread</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="group__blockmodule_1ga995c931928ef11ccf79104168d3af68a"></span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">block_load_direct_blocked_vectorized</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">flat_id</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I00_jE36block_load_direct_blocked_vectorizedNSt9enable_ifIN6detail15is_vectorizableI1T14ItemsPerThreadE5valueEE4typeEjP1TRA14ItemsPerThread_1U" title="block_load_direct_blocked_vectorized::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">block_input</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I00_jE36block_load_direct_blocked_vectorizedNSt9enable_ifIN6detail15is_vectorizableI1T14ItemsPerThreadE5valueEE4typeEjP1TRA14ItemsPerThread_1U" title="block_load_direct_blocked_vectorized::U"><span class="n"><span class="pre">U</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">items</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I00_jE36block_load_direct_blocked_vectorizedNSt9enable_ifIN6detail15is_vectorizableI1T14ItemsPerThreadE5valueEE4typeEjP1TRA14ItemsPerThread_1U" title="block_load_direct_blocked_vectorized::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span></li></ld><span class="sig-paren">)</span><span class="w"> </span><span class="o"><span class="pre">-&gt;</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">enable_if</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">detail</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">is_vectorizable</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I00_jE36block_load_direct_blocked_vectorizedNSt9enable_ifIN6detail15is_vectorizableI1T14ItemsPerThreadE5valueEE4typeEjP1TRA14ItemsPerThread_1U" title="block_load_direct_blocked_vectorized::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I00_jE36block_load_direct_blocked_vectorizedNSt9enable_ifIN6detail15is_vectorizableI1T14ItemsPerThreadE5valueEE4typeEjP1TRA14ItemsPerThread_1U" title="block_load_direct_blocked_vectorized::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">type</span></span></span><br /></dt>
+<dd><p>Loads data from continuous memory into a blocked arrangement of items across the thread block. </p>
+<p>The block arrangement is assumed to be (block-threads * <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code>) items across a thread block. Each thread uses a <code class="docutils literal notranslate"><span class="pre">flat_id</span></code> to load a range of <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code> into <code class="docutils literal notranslate"><span class="pre">items</span></code>.</p>
+<p>The input offset (<code class="docutils literal notranslate"><span class="pre">block_input</span></code> + offset) must be quad-item aligned.</p>
+<p>The following conditions will prevent vectorization and switch to default block_load_direct_blocked:<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code> is odd.</p></li>
+<li><p>The datatype <code class="docutils literal notranslate"><span class="pre">T</span></code> is not a primitive or a HIP vector type (e.g. int2, int4, etc.</p></li>
+</ul>
+</p>
+<p>
+The type <code class="docutils literal notranslate"><span class="pre">T</span></code> must be such that it can be implicitly converted to <code class="docutils literal notranslate"><span class="pre">U</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>T</strong> – - [inferred] the input data type </p></li>
+<li><p><strong>U</strong> – - [inferred] the output data type </p></li>
+<li><p><strong>ItemsPerThread</strong> – - [inferred] the number of items to be processed by each thread</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>flat_id</strong> – - a local flat 1D thread id in a block (tile) for the calling thread </p></li>
+<li><p><strong>block_input</strong> – - the input iterator from the thread block to load from </p></li>
+<li><p><strong>items</strong> – - array that data is loaded to </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="id2">
+<h3>Store<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h3>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00_jE37block_store_direct_blocked_vectorizedNSt9enable_ifIN6detail15is_vectorizableI1T14ItemsPerThreadE5valueEE4typeEjP1TRA14ItemsPerThread_1U">
+<span id="_CPPv3I00_jE37block_store_direct_blocked_vectorizedjP1TRA14ItemsPerThread_1U"></span><span id="_CPPv2I00_jE37block_store_direct_blocked_vectorizedjP1TRAItemsPerThread_1U"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">U</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ItemsPerThread</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="group__blockmodule_1ga30eb93c88b7e8a8ea1cca7688b7d3b02"></span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">block_store_direct_blocked_vectorized</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">flat_id</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I00_jE37block_store_direct_blocked_vectorizedNSt9enable_ifIN6detail15is_vectorizableI1T14ItemsPerThreadE5valueEE4typeEjP1TRA14ItemsPerThread_1U" title="block_store_direct_blocked_vectorized::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">block_output</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I00_jE37block_store_direct_blocked_vectorizedNSt9enable_ifIN6detail15is_vectorizableI1T14ItemsPerThreadE5valueEE4typeEjP1TRA14ItemsPerThread_1U" title="block_store_direct_blocked_vectorized::U"><span class="n"><span class="pre">U</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">items</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I00_jE37block_store_direct_blocked_vectorizedNSt9enable_ifIN6detail15is_vectorizableI1T14ItemsPerThreadE5valueEE4typeEjP1TRA14ItemsPerThread_1U" title="block_store_direct_blocked_vectorized::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span></li></ld><span class="sig-paren">)</span><span class="w"> </span><span class="o"><span class="pre">-&gt;</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">enable_if</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">detail</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">is_vectorizable</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I00_jE37block_store_direct_blocked_vectorizedNSt9enable_ifIN6detail15is_vectorizableI1T14ItemsPerThreadE5valueEE4typeEjP1TRA14ItemsPerThread_1U" title="block_store_direct_blocked_vectorized::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I00_jE37block_store_direct_blocked_vectorizedNSt9enable_ifIN6detail15is_vectorizableI1T14ItemsPerThreadE5valueEE4typeEjP1TRA14ItemsPerThread_1U" title="block_store_direct_blocked_vectorized::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">type</span></span></span><br /></dt>
+<dd><p>Stores a blocked arrangement of items from across the thread block into a blocked arrangement on continuous memory. </p>
+<p>The block arrangement is assumed to be (block-threads * <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code>) items across a thread block. Each thread uses a <code class="docutils literal notranslate"><span class="pre">flat_id</span></code> to store a range of <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code> <code class="docutils literal notranslate"><span class="pre">items</span></code> to the thread block.</p>
+<p>The input offset (<code class="docutils literal notranslate"><span class="pre">block_output</span></code> + offset) must be quad-item aligned.</p>
+<p>The following conditions will prevent vectorization and switch to default block_load_direct_blocked:<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code> is odd.</p></li>
+<li><p>The datatype <code class="docutils literal notranslate"><span class="pre">T</span></code> is not a primitive or a HIP vector type (e.g. int2, int4, etc.</p></li>
+</ul>
+</p>
+<p>
+The type <code class="docutils literal notranslate"><span class="pre">U</span></code> must be such that it can be implicitly converted to <code class="docutils literal notranslate"><span class="pre">T</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>T</strong> – - [inferred] the output data type </p></li>
+<li><p><strong>U</strong> – - [inferred] the input data type </p></li>
+<li><p><strong>ItemsPerThread</strong> – - [inferred] the number of items to be processed by each thread</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>flat_id</strong> – - a local flat 1D thread id in a block (tile) for the calling thread </p></li>
+<li><p><strong>block_output</strong> – - the input iterator from the thread block to load from </p></li>
+<li><p><strong>items</strong> – - array that data is loaded to </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="direct-striped">
+<h2>Direct Striped<a class="headerlink" href="#direct-striped" title="Permalink to this heading">#</a></h2>
+<section id="id3">
+<h3>Load<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h3>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I_j00_jE25block_load_direct_stripedvj13InputIteratorRA14ItemsPerThread_1T">
+<span id="_CPPv3I_j00_jE25block_load_direct_stripedj13InputIteratorRA14ItemsPerThread_1T"></span><span id="_CPPv2I_j00_jE25block_load_direct_stripedj13InputIteratorRAItemsPerThread_1T"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockSize</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ItemsPerThread</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="group__blockmodule_1ga3b771e3762f489694b1b6ccffbb50d01"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">block_load_direct_striped</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">flat_id</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_jE25block_load_direct_stripedvj13InputIteratorRA14ItemsPerThread_1T" title="block_load_direct_striped::InputIterator"><span class="n"><span class="pre">InputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">block_input</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_jE25block_load_direct_stripedvj13InputIteratorRA14ItemsPerThread_1T" title="block_load_direct_striped::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">items</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_jE25block_load_direct_stripedvj13InputIteratorRA14ItemsPerThread_1T" title="block_load_direct_striped::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span></li></ld><span class="sig-paren">)</span></span><br /></dt>
+<dd><p>Loads data from continuous memory into a striped arrangement of items across the thread block. </p>
+<p>The striped arrangement is assumed to be (<code class="docutils literal notranslate"><span class="pre">BlockSize</span></code> * <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code>) items across a thread block. Each thread uses a <code class="docutils literal notranslate"><span class="pre">flat_id</span></code> to load a range of <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code> into <code class="docutils literal notranslate"><span class="pre">items</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>BlockSize</strong> – - the number of threads in a block </p></li>
+<li><p><strong>InputIterator</strong> – - [inferred] an iterator type for input (can be a simple pointer </p></li>
+<li><p><strong>T</strong> – - [inferred] the data type </p></li>
+<li><p><strong>ItemsPerThread</strong> – - [inferred] the number of items to be processed by each thread</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>flat_id</strong> – - a local flat 1D thread id in a block (tile) for the calling thread </p></li>
+<li><p><strong>block_input</strong> – - the input iterator from the thread block to load from </p></li>
+<li><p><strong>items</strong> – - array that data is loaded to </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I_j00_jE25block_load_direct_stripedvj13InputIteratorRA14ItemsPerThread_1Tj">
+<span id="_CPPv3I_j00_jE25block_load_direct_stripedj13InputIteratorRA14ItemsPerThread_1Tj"></span><span id="_CPPv2I_j00_jE25block_load_direct_stripedj13InputIteratorRAItemsPerThread_1Tj"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockSize</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ItemsPerThread</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="group__blockmodule_1ga068747511aea4f6f141cff5634a4669a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">block_load_direct_striped</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">flat_id</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_jE25block_load_direct_stripedvj13InputIteratorRA14ItemsPerThread_1Tj" title="block_load_direct_striped::InputIterator"><span class="n"><span class="pre">InputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">block_input</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_jE25block_load_direct_stripedvj13InputIteratorRA14ItemsPerThread_1Tj" title="block_load_direct_striped::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">items</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_jE25block_load_direct_stripedvj13InputIteratorRA14ItemsPerThread_1Tj" title="block_load_direct_striped::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">valid</span></span></li></ld><span class="sig-paren">)</span></span><br /></dt>
+<dd><p>Loads data from continuous memory into a striped arrangement of items across the thread block, which is guarded by range <code class="docutils literal notranslate"><span class="pre">valid</span></code>. </p>
+<p>The striped arrangement is assumed to be (<code class="docutils literal notranslate"><span class="pre">BlockSize</span></code> * <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code>) items across a thread block. Each thread uses a <code class="docutils literal notranslate"><span class="pre">flat_id</span></code> to load a range of <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code> into <code class="docutils literal notranslate"><span class="pre">items</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>BlockSize</strong> – - the number of threads in a block </p></li>
+<li><p><strong>InputIterator</strong> – - [inferred] an iterator type for input (can be a simple pointer </p></li>
+<li><p><strong>T</strong> – - [inferred] the data type </p></li>
+<li><p><strong>ItemsPerThread</strong> – - [inferred] the number of items to be processed by each thread</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>flat_id</strong> – - a local flat 1D thread id in a block (tile) for the calling thread </p></li>
+<li><p><strong>block_input</strong> – - the input iterator from the thread block to load from </p></li>
+<li><p><strong>items</strong> – - array that data is loaded to </p></li>
+<li><p><strong>valid</strong> – - maximum range of valid numbers to load </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I_j00_j0E25block_load_direct_stripedvj13InputIteratorRA14ItemsPerThread_1Tj7Default">
+<span id="_CPPv3I_j00_j0E25block_load_direct_stripedj13InputIteratorRA14ItemsPerThread_1Tj7Default"></span><span id="_CPPv2I_j00_j0E25block_load_direct_stripedj13InputIteratorRAItemsPerThread_1Tj7Default"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockSize</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ItemsPerThread</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Default</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="group__blockmodule_1gaeb31f57302ea9675b7d58d5058801c38"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">block_load_direct_striped</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">flat_id</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_j0E25block_load_direct_stripedvj13InputIteratorRA14ItemsPerThread_1Tj7Default" title="block_load_direct_striped::InputIterator"><span class="n"><span class="pre">InputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">block_input</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_j0E25block_load_direct_stripedvj13InputIteratorRA14ItemsPerThread_1Tj7Default" title="block_load_direct_striped::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">items</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_j0E25block_load_direct_stripedvj13InputIteratorRA14ItemsPerThread_1Tj7Default" title="block_load_direct_striped::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">valid</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_j0E25block_load_direct_stripedvj13InputIteratorRA14ItemsPerThread_1Tj7Default" title="block_load_direct_striped::Default"><span class="n"><span class="pre">Default</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">out_of_bounds</span></span></li></ld><span class="sig-paren">)</span></span><br /></dt>
+<dd><p>Loads data from continuous memory into a striped arrangement of items across the thread block, which is guarded by range with a fall-back value for out-of-bound elements. </p>
+<p>The striped arrangement is assumed to be (<code class="docutils literal notranslate"><span class="pre">BlockSize</span></code> * <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code>) items across a thread block. Each thread uses a <code class="docutils literal notranslate"><span class="pre">flat_id</span></code> to load a range of <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code> into <code class="docutils literal notranslate"><span class="pre">items</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>BlockSize</strong> – - the number of threads in a block </p></li>
+<li><p><strong>InputIterator</strong> – - [inferred] an iterator type for input (can be a simple pointer </p></li>
+<li><p><strong>T</strong> – - [inferred] the data type </p></li>
+<li><p><strong>ItemsPerThread</strong> – - [inferred] the number of items to be processed by each thread </p></li>
+<li><p><strong>Default</strong> – - [inferred] The data type of the default value</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>flat_id</strong> – - a local flat 1D thread id in a block (tile) for the calling thread </p></li>
+<li><p><strong>block_input</strong> – - the input iterator from the thread block to load from </p></li>
+<li><p><strong>items</strong> – - array that data is loaded to </p></li>
+<li><p><strong>valid</strong> – - maximum range of valid numbers to load </p></li>
+<li><p><strong>out_of_bounds</strong> – - default value assigned to out-of-bound items </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="id4">
+<h3>Store<a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h3>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I_j00_jE26block_store_direct_stripedvj14OutputIteratorRA14ItemsPerThread_1T">
+<span id="_CPPv3I_j00_jE26block_store_direct_stripedj14OutputIteratorRA14ItemsPerThread_1T"></span><span id="_CPPv2I_j00_jE26block_store_direct_stripedj14OutputIteratorRAItemsPerThread_1T"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockSize</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OutputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ItemsPerThread</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="group__blockmodule_1ga3414245183930558e7a120cbb43f78c9"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">block_store_direct_striped</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">flat_id</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_jE26block_store_direct_stripedvj14OutputIteratorRA14ItemsPerThread_1T" title="block_store_direct_striped::OutputIterator"><span class="n"><span class="pre">OutputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">block_output</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_jE26block_store_direct_stripedvj14OutputIteratorRA14ItemsPerThread_1T" title="block_store_direct_striped::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">items</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_jE26block_store_direct_stripedvj14OutputIteratorRA14ItemsPerThread_1T" title="block_store_direct_striped::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span></li></ld><span class="sig-paren">)</span></span><br /></dt>
+<dd><p>Stores a striped arrangement of items from across the thread block into a blocked arrangement on continuous memory. </p>
+<p>The striped arrangement is assumed to be (<code class="docutils literal notranslate"><span class="pre">BlockSize</span></code> * <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code>) items across a thread block. Each thread uses a <code class="docutils literal notranslate"><span class="pre">flat_id</span></code> to store a range of <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code> <code class="docutils literal notranslate"><span class="pre">items</span></code> to the thread block.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>BlockSize</strong> – - the number of threads in a block </p></li>
+<li><p><strong>OutputIterator</strong> – - [inferred] an iterator type for input (can be a simple pointer </p></li>
+<li><p><strong>T</strong> – - [inferred] the data type </p></li>
+<li><p><strong>ItemsPerThread</strong> – - [inferred] the number of items to be processed by each thread</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>flat_id</strong> – - a local flat 1D thread id in a block (tile) for the calling thread </p></li>
+<li><p><strong>block_output</strong> – - the input iterator from the thread block to store to </p></li>
+<li><p><strong>items</strong> – - array that data is stored to thread block </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I_j00_jE26block_store_direct_stripedvj14OutputIteratorRA14ItemsPerThread_1Tj">
+<span id="_CPPv3I_j00_jE26block_store_direct_stripedj14OutputIteratorRA14ItemsPerThread_1Tj"></span><span id="_CPPv2I_j00_jE26block_store_direct_stripedj14OutputIteratorRAItemsPerThread_1Tj"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockSize</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OutputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ItemsPerThread</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="group__blockmodule_1ga530de3c70ad4c7b4935c5660e77eba8d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">block_store_direct_striped</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">flat_id</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_jE26block_store_direct_stripedvj14OutputIteratorRA14ItemsPerThread_1Tj" title="block_store_direct_striped::OutputIterator"><span class="n"><span class="pre">OutputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">block_output</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_jE26block_store_direct_stripedvj14OutputIteratorRA14ItemsPerThread_1Tj" title="block_store_direct_striped::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">items</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_jE26block_store_direct_stripedvj14OutputIteratorRA14ItemsPerThread_1Tj" title="block_store_direct_striped::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">valid</span></span></li></ld><span class="sig-paren">)</span></span><br /></dt>
+<dd><p>Stores a striped arrangement of items from across the thread block into a blocked arrangement on continuous memory, which is guarded by range <code class="docutils literal notranslate"><span class="pre">valid</span></code>. </p>
+<p>The striped arrangement is assumed to be (<code class="docutils literal notranslate"><span class="pre">BlockSize</span></code> * <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code>) items across a thread block. Each thread uses a <code class="docutils literal notranslate"><span class="pre">flat_id</span></code> to store a range of <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code> <code class="docutils literal notranslate"><span class="pre">items</span></code> to the thread block.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>BlockSize</strong> – - the number of threads in a block </p></li>
+<li><p><strong>OutputIterator</strong> – - [inferred] an iterator type for input (can be a simple pointer </p></li>
+<li><p><strong>T</strong> – - [inferred] the data type </p></li>
+<li><p><strong>ItemsPerThread</strong> – - [inferred] the number of items to be processed by each thread</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>flat_id</strong> – - a local flat 1D thread id in a block (tile) for the calling thread </p></li>
+<li><p><strong>block_output</strong> – - the input iterator from the thread block to store to </p></li>
+<li><p><strong>items</strong> – - array that data is stored to thread block </p></li>
+<li><p><strong>valid</strong> – - maximum range of valid numbers to store </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="direct-warp-striped">
+<h2>Direct Warp Striped<a class="headerlink" href="#direct-warp-striped" title="Permalink to this heading">#</a></h2>
+<section id="id5">
+<h3>Load<a class="headerlink" href="#id5" title="Permalink to this heading">#</a></h3>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I_j00_jE30block_load_direct_warp_stripedvj13InputIteratorRA14ItemsPerThread_1T">
+<span id="_CPPv3I_j00_jE30block_load_direct_warp_stripedj13InputIteratorRA14ItemsPerThread_1T"></span><span id="_CPPv2I_j00_jE30block_load_direct_warp_stripedj13InputIteratorRAItemsPerThread_1T"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">WarpSize</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="../../intrinsics.html#_CPPv416device_warp_sizev" title="device_warp_size"><span class="n"><span class="pre">device_warp_size</span></span></a><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ItemsPerThread</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="group__blockmodule_1ga742e4b4463d1da01fc0dc18b7be6de95"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">block_load_direct_warp_striped</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">flat_id</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_jE30block_load_direct_warp_stripedvj13InputIteratorRA14ItemsPerThread_1T" title="block_load_direct_warp_striped::InputIterator"><span class="n"><span class="pre">InputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">block_input</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_jE30block_load_direct_warp_stripedvj13InputIteratorRA14ItemsPerThread_1T" title="block_load_direct_warp_striped::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">items</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_jE30block_load_direct_warp_stripedvj13InputIteratorRA14ItemsPerThread_1T" title="block_load_direct_warp_striped::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span></li></ld><span class="sig-paren">)</span></span><br /></dt>
+<dd><p>Loads data from continuous memory into a warp-striped arrangement of items across the thread block. </p>
+<p>The warp-striped arrangement is assumed to be (<code class="docutils literal notranslate"><span class="pre">WarpSize</span></code> * <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code>) items across a thread block. Each thread uses a <code class="docutils literal notranslate"><span class="pre">flat_id</span></code> to load a range of <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code> into <code class="docutils literal notranslate"><span class="pre">items</span></code>.</p>
+<p><ul class="simple">
+<li><p>The number of threads in the block must be a multiple of <code class="docutils literal notranslate"><span class="pre">WarpSize</span></code>.</p></li>
+<li><p>The default <code class="docutils literal notranslate"><span class="pre">WarpSize</span></code> is a hardware warpsize and is an optimal value.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">WarpSize</span></code> must be a power of two and equal or less than the size of hardware warp.</p></li>
+<li><p>Using <code class="docutils literal notranslate"><span class="pre">WarpSize</span></code> smaller than hardware warpsize could result in lower performance.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>WarpSize</strong> – - [optional] the number of threads in a warp </p></li>
+<li><p><strong>InputIterator</strong> – - [inferred] an iterator type for input (can be a simple pointer </p></li>
+<li><p><strong>T</strong> – - [inferred] the data type </p></li>
+<li><p><strong>ItemsPerThread</strong> – - [inferred] the number of items to be processed by each thread</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>flat_id</strong> – - a local flat 1D thread id in a block (tile) for the calling thread </p></li>
+<li><p><strong>block_input</strong> – - the input iterator from the thread block to load from </p></li>
+<li><p><strong>items</strong> – - array that data is loaded to </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I_j00_jE30block_load_direct_warp_stripedvj13InputIteratorRA14ItemsPerThread_1Tj">
+<span id="_CPPv3I_j00_jE30block_load_direct_warp_stripedj13InputIteratorRA14ItemsPerThread_1Tj"></span><span id="_CPPv2I_j00_jE30block_load_direct_warp_stripedj13InputIteratorRAItemsPerThread_1Tj"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">WarpSize</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="../../intrinsics.html#_CPPv416device_warp_sizev" title="device_warp_size"><span class="n"><span class="pre">device_warp_size</span></span></a><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ItemsPerThread</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="group__blockmodule_1gaf77e37cee9bffb786a9a4e52045afe15"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">block_load_direct_warp_striped</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">flat_id</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_jE30block_load_direct_warp_stripedvj13InputIteratorRA14ItemsPerThread_1Tj" title="block_load_direct_warp_striped::InputIterator"><span class="n"><span class="pre">InputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">block_input</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_jE30block_load_direct_warp_stripedvj13InputIteratorRA14ItemsPerThread_1Tj" title="block_load_direct_warp_striped::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">items</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_jE30block_load_direct_warp_stripedvj13InputIteratorRA14ItemsPerThread_1Tj" title="block_load_direct_warp_striped::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">valid</span></span></li></ld><span class="sig-paren">)</span></span><br /></dt>
+<dd><p>Loads data from continuous memory into a warp-striped arrangement of items across the thread block, which is guarded by range <code class="docutils literal notranslate"><span class="pre">valid</span></code>. </p>
+<p>The warp-striped arrangement is assumed to be (<code class="docutils literal notranslate"><span class="pre">WarpSize</span></code> * <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code>) items across a thread block. Each thread uses a <code class="docutils literal notranslate"><span class="pre">flat_id</span></code> to load a range of <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code> into <code class="docutils literal notranslate"><span class="pre">items</span></code>.</p>
+<p><ul class="simple">
+<li><p>The number of threads in the block must be a multiple of <code class="docutils literal notranslate"><span class="pre">WarpSize</span></code>.</p></li>
+<li><p>The default <code class="docutils literal notranslate"><span class="pre">WarpSize</span></code> is a hardware warpsize and is an optimal value.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">WarpSize</span></code> must be a power of two and equal or less than the size of hardware warp.</p></li>
+<li><p>Using <code class="docutils literal notranslate"><span class="pre">WarpSize</span></code> smaller than hardware warpsize could result in lower performance.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>WarpSize</strong> – - [optional] the number of threads in a warp </p></li>
+<li><p><strong>InputIterator</strong> – - [inferred] an iterator type for input (can be a simple pointer </p></li>
+<li><p><strong>T</strong> – - [inferred] the data type </p></li>
+<li><p><strong>ItemsPerThread</strong> – - [inferred] the number of items to be processed by each thread</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>flat_id</strong> – - a local flat 1D thread id in a block (tile) for the calling thread </p></li>
+<li><p><strong>block_input</strong> – - the input iterator from the thread block to load from </p></li>
+<li><p><strong>items</strong> – - array that data is loaded to </p></li>
+<li><p><strong>valid</strong> – - maximum range of valid numbers to load </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I_j00_j0E30block_load_direct_warp_stripedvj13InputIteratorRA14ItemsPerThread_1Tj7Default">
+<span id="_CPPv3I_j00_j0E30block_load_direct_warp_stripedj13InputIteratorRA14ItemsPerThread_1Tj7Default"></span><span id="_CPPv2I_j00_j0E30block_load_direct_warp_stripedj13InputIteratorRAItemsPerThread_1Tj7Default"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">WarpSize</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="../../intrinsics.html#_CPPv416device_warp_sizev" title="device_warp_size"><span class="n"><span class="pre">device_warp_size</span></span></a><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ItemsPerThread</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Default</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="group__blockmodule_1ga1db811bc03ef1028b3e51cf22dc5e2ed"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">block_load_direct_warp_striped</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">flat_id</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_j0E30block_load_direct_warp_stripedvj13InputIteratorRA14ItemsPerThread_1Tj7Default" title="block_load_direct_warp_striped::InputIterator"><span class="n"><span class="pre">InputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">block_input</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_j0E30block_load_direct_warp_stripedvj13InputIteratorRA14ItemsPerThread_1Tj7Default" title="block_load_direct_warp_striped::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">items</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_j0E30block_load_direct_warp_stripedvj13InputIteratorRA14ItemsPerThread_1Tj7Default" title="block_load_direct_warp_striped::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">valid</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_j0E30block_load_direct_warp_stripedvj13InputIteratorRA14ItemsPerThread_1Tj7Default" title="block_load_direct_warp_striped::Default"><span class="n"><span class="pre">Default</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">out_of_bounds</span></span></li></ld><span class="sig-paren">)</span></span><br /></dt>
+<dd><p>Loads data from continuous memory into a warp-striped arrangement of items across the thread block, which is guarded by range with a fall-back value for out-of-bound elements. </p>
+<p>The warp-striped arrangement is assumed to be (<code class="docutils literal notranslate"><span class="pre">WarpSize</span></code> * <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code>) items across a thread block. Each thread uses a <code class="docutils literal notranslate"><span class="pre">flat_id</span></code> to load a range of <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code> into <code class="docutils literal notranslate"><span class="pre">items</span></code>.</p>
+<p><ul class="simple">
+<li><p>The number of threads in the block must be a multiple of <code class="docutils literal notranslate"><span class="pre">WarpSize</span></code>.</p></li>
+<li><p>The default <code class="docutils literal notranslate"><span class="pre">WarpSize</span></code> is a hardware warpsize and is an optimal value.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">WarpSize</span></code> must be a power of two and equal or less than the size of hardware warp.</p></li>
+<li><p>Using <code class="docutils literal notranslate"><span class="pre">WarpSize</span></code> smaller than hardware warpsize could result in lower performance.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>WarpSize</strong> – - [optional] the number of threads in a warp </p></li>
+<li><p><strong>InputIterator</strong> – - [inferred] an iterator type for input (can be a simple pointer </p></li>
+<li><p><strong>T</strong> – - [inferred] the data type </p></li>
+<li><p><strong>ItemsPerThread</strong> – - [inferred] the number of items to be processed by each thread </p></li>
+<li><p><strong>Default</strong> – - [inferred] The data type of the default value</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>flat_id</strong> – - a local flat 1D thread id in a block (tile) for the calling thread </p></li>
+<li><p><strong>block_input</strong> – - the input iterator from the thread block to load from </p></li>
+<li><p><strong>items</strong> – - array that data is loaded to </p></li>
+<li><p><strong>valid</strong> – - maximum range of valid numbers to load </p></li>
+<li><p><strong>out_of_bounds</strong> – - default value assigned to out-of-bound items </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="id6">
+<h3>Store<a class="headerlink" href="#id6" title="Permalink to this heading">#</a></h3>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I_j00_jE31block_store_direct_warp_stripedvj14OutputIteratorRA14ItemsPerThread_1T">
+<span id="_CPPv3I_j00_jE31block_store_direct_warp_stripedj14OutputIteratorRA14ItemsPerThread_1T"></span><span id="_CPPv2I_j00_jE31block_store_direct_warp_stripedj14OutputIteratorRAItemsPerThread_1T"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">WarpSize</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="../../intrinsics.html#_CPPv416device_warp_sizev" title="device_warp_size"><span class="n"><span class="pre">device_warp_size</span></span></a><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OutputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ItemsPerThread</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="group__blockmodule_1gaee4f4243849fcd666139aaf52cc11845"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">block_store_direct_warp_striped</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">flat_id</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_jE31block_store_direct_warp_stripedvj14OutputIteratorRA14ItemsPerThread_1T" title="block_store_direct_warp_striped::OutputIterator"><span class="n"><span class="pre">OutputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">block_output</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_jE31block_store_direct_warp_stripedvj14OutputIteratorRA14ItemsPerThread_1T" title="block_store_direct_warp_striped::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">items</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_jE31block_store_direct_warp_stripedvj14OutputIteratorRA14ItemsPerThread_1T" title="block_store_direct_warp_striped::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span></li></ld><span class="sig-paren">)</span></span><br /></dt>
+<dd><p>Stores a warp-striped arrangement of items from across the thread block into a blocked arrangement on continuous memory. </p>
+<p>The warp-striped arrangement is assumed to be (<code class="docutils literal notranslate"><span class="pre">WarpSize</span></code> * <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code>) items across a thread block. Each thread uses a <code class="docutils literal notranslate"><span class="pre">flat_id</span></code> to store a range of <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code> <code class="docutils literal notranslate"><span class="pre">items</span></code> to the thread block.</p>
+<p><ul class="simple">
+<li><p>The number of threads in the block must be a multiple of <code class="docutils literal notranslate"><span class="pre">WarpSize</span></code>.</p></li>
+<li><p>The default <code class="docutils literal notranslate"><span class="pre">WarpSize</span></code> is a hardware warpsize and is an optimal value.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">WarpSize</span></code> must be a power of two and equal or less than the size of hardware warp.</p></li>
+<li><p>Using <code class="docutils literal notranslate"><span class="pre">WarpSize</span></code> smaller than hardware warpsize could result in lower performance.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>WarpSize</strong> – - [optional] the number of threads in a warp </p></li>
+<li><p><strong>OutputIterator</strong> – - [inferred] an iterator type for input (can be a simple pointer </p></li>
+<li><p><strong>T</strong> – - [inferred] the data type </p></li>
+<li><p><strong>ItemsPerThread</strong> – - [inferred] the number of items to be processed by each thread</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>flat_id</strong> – - a local flat 1D thread id in a block (tile) for the calling thread </p></li>
+<li><p><strong>block_output</strong> – - the input iterator from the thread block to store to </p></li>
+<li><p><strong>items</strong> – - array that data is stored to thread block </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I_j00_jE31block_store_direct_warp_stripedvj14OutputIteratorRA14ItemsPerThread_1Tj">
+<span id="_CPPv3I_j00_jE31block_store_direct_warp_stripedj14OutputIteratorRA14ItemsPerThread_1Tj"></span><span id="_CPPv2I_j00_jE31block_store_direct_warp_stripedj14OutputIteratorRAItemsPerThread_1Tj"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">WarpSize</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="../../intrinsics.html#_CPPv416device_warp_sizev" title="device_warp_size"><span class="n"><span class="pre">device_warp_size</span></span></a><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OutputIterator</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ItemsPerThread</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="group__blockmodule_1ga196a7640240a8932470f577160c0afbb"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">block_store_direct_warp_striped</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">flat_id</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_jE31block_store_direct_warp_stripedvj14OutputIteratorRA14ItemsPerThread_1Tj" title="block_store_direct_warp_striped::OutputIterator"><span class="n"><span class="pre">OutputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">block_output</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_jE31block_store_direct_warp_stripedvj14OutputIteratorRA14ItemsPerThread_1Tj" title="block_store_direct_warp_striped::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">items</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../data_mov_funcs.html#_CPPv4I_j00_jE31block_store_direct_warp_stripedvj14OutputIteratorRA14ItemsPerThread_1Tj" title="block_store_direct_warp_striped::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">valid</span></span></li></ld><span class="sig-paren">)</span></span><br /></dt>
+<dd><p>Stores a warp-striped arrangement of items from across the thread block into a blocked arrangement on continuous memory, which is guarded by range <code class="docutils literal notranslate"><span class="pre">valid</span></code>. </p>
+<p>The warp-striped arrangement is assumed to be (<code class="docutils literal notranslate"><span class="pre">WarpSize</span></code> * <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code>) items across a thread block. Each thread uses a <code class="docutils literal notranslate"><span class="pre">flat_id</span></code> to store a range of <code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code> <code class="docutils literal notranslate"><span class="pre">items</span></code> to the thread block.</p>
+<p><ul class="simple">
+<li><p>The number of threads in the block must be a multiple of <code class="docutils literal notranslate"><span class="pre">WarpSize</span></code>.</p></li>
+<li><p>The default <code class="docutils literal notranslate"><span class="pre">WarpSize</span></code> is a hardware warpsize and is an optimal value.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">WarpSize</span></code> must be a power of two and equal or less than the size of hardware warp.</p></li>
+<li><p>Using <code class="docutils literal notranslate"><span class="pre">WarpSize</span></code> smaller than hardware warpsize could result in lower performance.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>WarpSize</strong> – - [optional] the number of threads in a warp </p></li>
+<li><p><strong>OutputIterator</strong> – - [inferred] an iterator type for input (can be a simple pointer </p></li>
+<li><p><strong>T</strong> – - [inferred] the data type </p></li>
+<li><p><strong>ItemsPerThread</strong> – - [inferred] the number of items to be processed by each thread</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>flat_id</strong> – - a local flat 1D thread id in a block (tile) for the calling thread </p></li>
+<li><p><strong>block_output</strong> – - the input iterator from the thread block to store to </p></li>
+<li><p><strong>items</strong> – - array that data is stored to thread block </p></li>
+<li><p><strong>valid</strong> – - maximum range of valid numbers to store </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Data movement functions</a><ul>
+<li><a class="reference internal" href="#direct-blocked">Direct Blocked</a><ul>
+<li><a class="reference internal" href="#load">Load</a></li>
+<li><a class="reference internal" href="#store">Store</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#direct-blocked-vectorized">Direct Blocked Vectorized</a><ul>
+<li><a class="reference internal" href="#id1">Load</a></li>
+<li><a class="reference internal" href="#id2">Store</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#direct-striped">Direct Striped</a><ul>
+<li><a class="reference internal" href="#id3">Load</a></li>
+<li><a class="reference internal" href="#id4">Store</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#direct-warp-striped">Direct Warp Striped</a><ul>
+<li><a class="reference internal" href="#id5">Load</a></li>
+<li><a class="reference internal" href="#id6">Store</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../" id="documentation_options" src="../../static/documentation_options.js"></script>
+    <script src="../../static/jquery.js"></script>
+    <script src="../../static/underscore.js"></script>
+    <script src="../../static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../static/doctools.js"></script>
+    <script src="../../static/scripts/furo.js"></script>
+    </body>
+</html>

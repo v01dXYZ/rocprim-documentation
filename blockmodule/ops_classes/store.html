@@ -1,0 +1,594 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Adjacent difference" href="adjacent_difference.html" /><link rel="prev" title="Load" href="load.html" />
+
+    <meta name="generator" content="sphinx-5.1.0+/0aedcc9a9, furo 2022.06.04.1"/>
+        <title>Store - rocPRIM documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="../../static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../../static/cpp_sig.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #263238;
+  --color-code-foreground: #EEFFFF;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #263238;
+  --color-code-foreground: #EEFFFF;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">rocPRIM  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  
+  <span class="sidebar-brand-text">rocPRIM  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../operations.html">High Level view of the operations</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../devicemodule/index.html">Device-Wide Operations</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/config.html">Configuring the Kernels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/transform.html">Transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/unique.html">Unique</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/sort.html">Sort</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/merge.html">Merge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/partition.html">Partition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/run_length_encoding.html">Run Length Encode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/scan.html">Scan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/select.html">Select</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/reduce.html">Reduce</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/adjacent_difference.html">Adjacent difference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/binary_search.html">Binary Search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/histogram.html">Histogram</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">Block-Wide Operations</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 current has-children"><a class="reference internal" href="index.html">Operation classes</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="load.html">Load</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adjacent_difference.html">Adjacent difference</a></li>
+<li class="toctree-l3"><a class="reference internal" href="discontinuity.html">Discontinuity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="scan.html">Scan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reduce.html">Reduce</a></li>
+<li class="toctree-l3"><a class="reference internal" href="histogram.html">Histogram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="exchange.html">Exchange</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shuffle.html">Shuffle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sort.html">Sort</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../data_mov_funcs.html">Data movement functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../warpmodule.html">Warp-Level Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../threadmodule.html">Thread-Level Operations (Utilities)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../iterators.html">Iterators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intrinsics.html">Intrinsics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="store">
+<h1>Store<a class="headerlink" href="#store" title="Permalink to this heading">#</a></h1>
+<section id="class">
+<h2>Class<a class="headerlink" href="#class" title="Permalink to this heading">#</a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4I0_j_j_18block_store_method_j_jE11block_store">
+<span id="_CPPv3I0_j_j_18block_store_method_j_jE11block_store"></span><span id="_CPPv2I0_j_j_18block_store_method_j_jE11block_store"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockSizeX</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ItemsPerThread</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv418block_store_method" title="block_store_method"><span class="n"><span class="pre">block_store_method</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Method</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv418block_store_method" title="block_store_method"><span class="n"><span class="pre">block_store_method</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N18block_store_method18block_store_directE" title="block_store_method::block_store_direct"><span class="n"><span class="pre">block_store_direct</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockSizeY</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockSizeZ</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1</span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classblock__store"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">block_store</span></span></span></span><br /></dt>
+<dd><p>The <code class="docutils literal notranslate"><a class="reference internal" href="#classblock__store"><span class="std std-ref"><span class="pre">block_store</span></span></a></code> class is a block level parallel primitive which provides methods for storing an arrangement of items into a blocked/striped arrangement on continous memory. </p>
+<p><dl class="simple">
+<dt><strong>Overview</strong></dt><dd><p><ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><a class="reference internal" href="#classblock__store"><span class="std std-ref"><span class="pre">block_store</span></span></a></code> class has a number of different methods to store data:<ul>
+<li><p><code class="docutils literal notranslate"><a class="reference internal" href="#group__blockmodule_1gga291bf9e78872f48d811d22a4999b013aa70ee4a8febb59eca324f008745dfe7bd"><span class="std std-ref"><span class="pre">block_store_method::block_store_direct</span></span></a></code> </p></li>
+<li><p><code class="docutils literal notranslate"><a class="reference internal" href="#group__blockmodule_1gga291bf9e78872f48d811d22a4999b013aa3e74c95584b61e94d5d511c9a5a5c34b"><span class="std std-ref"><span class="pre">block_store_method::block_store_striped</span></span></a></code> </p></li>
+<li><p><code class="docutils literal notranslate"><a class="reference internal" href="#group__blockmodule_1gga291bf9e78872f48d811d22a4999b013aa4bc81c2c06e1714283e397aff4754b97"><span class="std std-ref"><span class="pre">block_store_method::block_store_vectorize</span></span></a></code> </p></li>
+<li><p><code class="docutils literal notranslate"><a class="reference internal" href="#group__blockmodule_1gga291bf9e78872f48d811d22a4999b013aaa53a43b2614775bf4e6958eadf6c7843"><span class="std std-ref"><span class="pre">block_store_method::block_store_transpose</span></span></a></code> </p></li>
+<li><p><code class="docutils literal notranslate"><a class="reference internal" href="#group__blockmodule_1gga291bf9e78872f48d811d22a4999b013aa4041909947545b4db39c510bae94419d"><span class="std std-ref"><span class="pre">block_store_method::block_store_warp_transpose</span></span></a></code> </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+<dt><strong>Example:</strong></dt><dd><p><p>In the examples store operation is performed on block of 128 threads, using type <code class="docutils literal notranslate"><span class="pre">int</span></code> and 8 items per thread.</p>
+<p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">kernel</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">output</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">offset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">blockIdx</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">128</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">items</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="n">rocprim</span><span class="o">::</span><span class="n">block_store</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="n">store_method</span><span class="o">&gt;</span><span class="w"> </span><span class="n">blockstore</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">blockstore</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">output</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">offset</span><span class="p">,</span><span class="w"> </span><span class="n">items</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+ </p>
+</p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>T</strong> – - the output/output type. </p></li>
+<li><p><strong>BlockSize</strong> – - the number of threads in a block. </p></li>
+<li><p><strong>ItemsPerThread</strong> – - the number of items to be processed by each thread. </p></li>
+<li><p><strong>Method</strong> – - the method to store data.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N11block_store12storage_typeE">
+<span id="_CPPv3N11block_store12storage_typeE"></span><span id="_CPPv2N11block_store12storage_typeE"></span><span class="declarator"><span class="target" id="classblock__store_1a1a019693a1d68f808827d08a2892c46a"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">storage_type</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">storage_type_</span></span></span><br /></dt>
+<dd><p>Struct used to allocate a temporary memory that is required for thread communication during operations provided by related parallel primitive. </p>
+<p>Depending on the implemention the operations exposed by parallel primitive may require a temporary storage for thread communication. The storage should be allocated using keywords <code class="docutils literal notranslate"><span class="pre">__shared__</span></code>. It can be aliased to an externally allocated memory, or be a part of a union with other storage types to increase shared memory reusability. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN11block_store5storeEv14OutputIteratorRA14ItemsPerThread_1T">
+<span id="_CPPv3I0EN11block_store5storeE14OutputIteratorRA14ItemsPerThread_1T"></span><span id="_CPPv2I0EN11block_store5storeE14OutputIteratorRAItemsPerThread_1T"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OutputIterator</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classblock__store_1ae193f1c589686e4dfb0e817712906626"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">store</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><a class="reference internal" href="data_mov.html#_CPPv4I0EN11block_store5storeEv14OutputIteratorRA14ItemsPerThread_1T" title="block_store::store::OutputIterator"><span class="n"><span class="pre">OutputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">block_output</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="data_mov.html#_CPPv4I0_j_j_18block_store_method_j_jE11block_store" title="block_store::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">items</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="data_mov.html#_CPPv4I0_j_j_18block_store_method_j_jE11block_store" title="block_store::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span></li></ld><span class="sig-paren">)</span></span><br /></dt>
+<dd><p>Stores an arrangement of items from across the thread block into an arrangement on continuous memory. </p>
+<p><dl class="simple">
+<dt><strong>Overview</strong></dt><dd><p><ul class="simple">
+<li><p>The type <code class="docutils literal notranslate"><span class="pre">T</span></code> must be such that an object of type <code class="docutils literal notranslate"><span class="pre">InputIterator</span></code> can be dereferenced and then implicitly converted to <code class="docutils literal notranslate"><span class="pre">T</span></code>. </p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><p><strong>OutputIterator</strong> – - [inferred] an iterator type for output (can be a simple pointer.</p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>block_output</strong> – <strong>[out]</strong> - the output iterator from the thread block to store to. </p></li>
+<li><p><strong>items</strong> – <strong>[in]</strong> - array that data is read from.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN11block_store5storeEv14OutputIteratorRA14ItemsPerThread_1Tj">
+<span id="_CPPv3I0EN11block_store5storeE14OutputIteratorRA14ItemsPerThread_1Tj"></span><span id="_CPPv2I0EN11block_store5storeE14OutputIteratorRAItemsPerThread_1Tj"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OutputIterator</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classblock__store_1a6b4c1e563e263ae4b5a323862187ec34"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">store</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><a class="reference internal" href="data_mov.html#_CPPv4I0EN11block_store5storeEv14OutputIteratorRA14ItemsPerThread_1Tj" title="block_store::store::OutputIterator"><span class="n"><span class="pre">OutputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">block_output</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="data_mov.html#_CPPv4I0_j_j_18block_store_method_j_jE11block_store" title="block_store::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">items</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="data_mov.html#_CPPv4I0_j_j_18block_store_method_j_jE11block_store" title="block_store::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">valid</span></span></li></ld><span class="sig-paren">)</span></span><br /></dt>
+<dd><p>Stores an arrangement of items from across the thread block into an arrangement on continuous memory, which is guarded by range <code class="docutils literal notranslate"><span class="pre">valid</span></code>. </p>
+<p><dl class="simple">
+<dt><strong>Overview</strong></dt><dd><p><ul class="simple">
+<li><p>The type <code class="docutils literal notranslate"><span class="pre">T</span></code> must be such that an object of type <code class="docutils literal notranslate"><span class="pre">InputIterator</span></code> can be dereferenced and then implicitly converted to <code class="docutils literal notranslate"><span class="pre">T</span></code>. </p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><p><strong>OutputIterator</strong> – - [inferred] an iterator type for output (can be a simple pointer.</p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>block_output</strong> – <strong>[out]</strong> - the output iterator from the thread block to store to. </p></li>
+<li><p><strong>items</strong> – <strong>[in]</strong> - array that data is read from. </p></li>
+<li><p><strong>valid</strong> – <strong>[in]</strong> - maximum range of valid numbers to read.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN11block_store5storeEv14OutputIteratorRA14ItemsPerThread_1TR12storage_type">
+<span id="_CPPv3I0EN11block_store5storeE14OutputIteratorRA14ItemsPerThread_1TR12storage_type"></span><span id="_CPPv2I0EN11block_store5storeE14OutputIteratorRAItemsPerThread_1TR12storage_type"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OutputIterator</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classblock__store_1a5e0d22bf09e7f220056151f55174db54"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">store</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><a class="reference internal" href="data_mov.html#_CPPv4I0EN11block_store5storeEv14OutputIteratorRA14ItemsPerThread_1TR12storage_type" title="block_store::store::OutputIterator"><span class="n"><span class="pre">OutputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">block_output</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="data_mov.html#_CPPv4I0_j_j_18block_store_method_j_jE11block_store" title="block_store::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">items</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="data_mov.html#_CPPv4I0_j_j_18block_store_method_j_jE11block_store" title="block_store::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="data_mov.html#_CPPv4N11block_store12storage_typeE" title="block_store::storage_type"><span class="n"><span class="pre">storage_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">storage</span></span></li></ld><span class="sig-paren">)</span></span><br /></dt>
+<dd><p>Stores an arrangement of items from across the thread block into an arrangement on continuous memory, using temporary storage. </p>
+<p><dl class="simple">
+<dt><strong>Overview</strong></dt><dd><p><ul class="simple">
+<li><p>The type <code class="docutils literal notranslate"><span class="pre">T</span></code> must be such that an object of type <code class="docutils literal notranslate"><span class="pre">InputIterator</span></code> can be dereferenced and then implicitly converted to <code class="docutils literal notranslate"><span class="pre">T</span></code>.</p></li>
+</ul>
+</p>
+</dd>
+<dt><strong>Storage reusage</strong></dt><dd><p>Synchronization barrier should be placed before <code class="docutils literal notranslate"><span class="pre">storage</span></code> is reused or repurposed: <code class="docutils literal notranslate"><span class="pre">__syncthreads()</span></code> or <code class="docutils literal notranslate"><span class="pre">rocprim::syncthreads()</span></code>.</p>
+</dd>
+<dt><strong>Example.</strong></dt><dd><p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">kernel</span><span class="p">(...)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">items</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="n">using</span><span class="w"> </span><span class="n">block_store_int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rocprim</span><span class="o">::</span><span class="n">block_store</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">block_store_int</span><span class="w"> </span><span class="n">bstore</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">__shared__</span><span class="w"> </span><span class="n">typename</span><span class="w"> </span><span class="n">block_store_int</span><span class="o">::</span><span class="n">storage_type</span><span class="w"> </span><span class="n">storage</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">bstore</span><span class="p">.</span><span class="n">store</span><span class="p">(...,</span><span class="w"> </span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="n">storage</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+ </p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><p><strong>OutputIterator</strong> – - [inferred] an iterator type for output (can be a simple pointer.</p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>block_output</strong> – <strong>[out]</strong> - the output iterator from the thread block to store to. </p></li>
+<li><p><strong>items</strong> – <strong>[in]</strong> - array that data is read from. </p></li>
+<li><p><strong>storage</strong> – <strong>[in]</strong> - temporary storage for outputs.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN11block_store5storeEv14OutputIteratorRA14ItemsPerThread_1TjR12storage_type">
+<span id="_CPPv3I0EN11block_store5storeE14OutputIteratorRA14ItemsPerThread_1TjR12storage_type"></span><span id="_CPPv2I0EN11block_store5storeE14OutputIteratorRAItemsPerThread_1TjR12storage_type"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OutputIterator</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classblock__store_1adb888f608fb8ec29c3cfeeffd882fb59"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">store</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><a class="reference internal" href="data_mov.html#_CPPv4I0EN11block_store5storeEv14OutputIteratorRA14ItemsPerThread_1TjR12storage_type" title="block_store::store::OutputIterator"><span class="n"><span class="pre">OutputIterator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">block_output</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="data_mov.html#_CPPv4I0_j_j_18block_store_method_j_jE11block_store" title="block_store::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">items</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="data_mov.html#_CPPv4I0_j_j_18block_store_method_j_jE11block_store" title="block_store::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">valid</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="data_mov.html#_CPPv4N11block_store12storage_typeE" title="block_store::storage_type"><span class="n"><span class="pre">storage_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">storage</span></span></li></ld><span class="sig-paren">)</span></span><br /></dt>
+<dd><p>Stores an arrangement of items from across the thread block into an arrangement on continuous memory, which is guarded by range <code class="docutils literal notranslate"><span class="pre">valid</span></code>, using temporary storage. </p>
+<p><dl class="simple">
+<dt><strong>Overview</strong></dt><dd><p><ul class="simple">
+<li><p>The type <code class="docutils literal notranslate"><span class="pre">T</span></code> must be such that an object of type <code class="docutils literal notranslate"><span class="pre">InputIterator</span></code> can be dereferenced and then implicitly converted to <code class="docutils literal notranslate"><span class="pre">T</span></code>.</p></li>
+</ul>
+</p>
+</dd>
+<dt><strong>Storage reusage</strong></dt><dd><p>Synchronization barrier should be placed before <code class="docutils literal notranslate"><span class="pre">storage</span></code> is reused or repurposed: <code class="docutils literal notranslate"><span class="pre">__syncthreads()</span></code> or <code class="docutils literal notranslate"><span class="pre">rocprim::syncthreads()</span></code>.</p>
+</dd>
+<dt><strong>Example.</strong></dt><dd><p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">kernel</span><span class="p">(...)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">items</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="n">using</span><span class="w"> </span><span class="n">block_store_int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rocprim</span><span class="o">::</span><span class="n">block_store</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">block_store_int</span><span class="w"> </span><span class="n">bstore</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">__shared__</span><span class="w"> </span><span class="n">typename</span><span class="w"> </span><span class="n">block_store_int</span><span class="o">::</span><span class="n">storage_type</span><span class="w"> </span><span class="n">storage</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">bstore</span><span class="p">.</span><span class="n">store</span><span class="p">(...,</span><span class="w"> </span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="n">valid</span><span class="p">,</span><span class="w"> </span><span class="n">storage</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+ </p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><p><strong>OutputIterator</strong> – - [inferred] an iterator type for output (can be a simple pointer.</p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>block_output</strong> – <strong>[out]</strong> - the output iterator from the thread block to store to. </p></li>
+<li><p><strong>items</strong> – <strong>[in]</strong> - array that data is read from. </p></li>
+<li><p><strong>valid</strong> – <strong>[in]</strong> - maximum range of valid numbers to read. </p></li>
+<li><p><strong>storage</strong> – <strong>[in]</strong> - temporary storage for outputs.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="algorithms">
+<h2>Algorithms<a class="headerlink" href="#algorithms" title="Permalink to this heading">#</a></h2>
+<dl class="cpp enum-class">
+<dt class="sig sig-object cpp" id="_CPPv418block_store_method">
+<span id="_CPPv318block_store_method"></span><span id="_CPPv218block_store_method"></span><span class="declarator"><span class="target" id="group__blockmodule_1ga291bf9e78872f48d811d22a4999b013a"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">block_store_method</span></span></span><a class="headerlink" href="#_CPPv418block_store_method" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">block_store_method</span></code> enumerates the methods available to store a striped arrangement of items into a blocked/striped arrangement on continuous memory </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18block_store_method18block_store_directE">
+<span id="_CPPv3N18block_store_method18block_store_directE"></span><span id="_CPPv2N18block_store_method18block_store_directE"></span><span class="declarator"><span class="target" id="group__blockmodule_1gga291bf9e78872f48d811d22a4999b013aa70ee4a8febb59eca324f008745dfe7bd"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">block_store_direct</span></span></span><a class="headerlink" href="#_CPPv4N18block_store_method18block_store_directE" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>A blocked arrangement of items is stored into a blocked arrangement on continuous memory. <dl class="simple">
+<dt><strong>Performance Notes:</strong></dt><dd><p><ul class="simple">
+<li><p>Performance decreases with increasing number of items per thread (stride between reads), because of reduced memory coalescing. </p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18block_store_method19block_store_stripedE">
+<span id="_CPPv3N18block_store_method19block_store_stripedE"></span><span id="_CPPv2N18block_store_method19block_store_stripedE"></span><span class="declarator"><span class="target" id="group__blockmodule_1gga291bf9e78872f48d811d22a4999b013aa3e74c95584b61e94d5d511c9a5a5c34b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">block_store_striped</span></span></span><a class="headerlink" href="#_CPPv4N18block_store_method19block_store_stripedE" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>A striped arrangement of items is stored into a blocked arrangement on continuous memory. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18block_store_method21block_store_vectorizeE">
+<span id="_CPPv3N18block_store_method21block_store_vectorizeE"></span><span id="_CPPv2N18block_store_method21block_store_vectorizeE"></span><span class="declarator"><span class="target" id="group__blockmodule_1gga291bf9e78872f48d811d22a4999b013aa4bc81c2c06e1714283e397aff4754b97"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">block_store_vectorize</span></span></span><a class="headerlink" href="#_CPPv4N18block_store_method21block_store_vectorizeE" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>A blocked arrangement of items is stored into a blocked arrangement on continuous memory using vectorization as an optimization. <dl class="simple">
+<dt><strong>Performance Notes:</strong></dt><dd><p><ul class="simple">
+<li><p>Performance remains high due to increased memory coalescing, provided that vectorization requirements are fulfilled. Otherwise, performance will default to <code class="docutils literal notranslate"><span class="pre">block_store_direct</span></code>. </p></li>
+</ul>
+</p>
+</dd>
+<dt><strong>Requirements:</strong></dt><dd><p><ul class="simple">
+<li><p>The output offset (<code class="docutils literal notranslate"><span class="pre">block_output</span></code>) must be quad-item aligned.</p></li>
+<li><p>The following conditions will prevent vectorization and switch to default <code class="docutils literal notranslate"><span class="pre">block_store_direct:</span></code> <ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code> is odd.</p></li>
+<li><p>The datatype <code class="docutils literal notranslate"><span class="pre">T</span></code> is not a primitive or a HIP vector type (e.g. int2, int4, etc. </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18block_store_method21block_store_transposeE">
+<span id="_CPPv3N18block_store_method21block_store_transposeE"></span><span id="_CPPv2N18block_store_method21block_store_transposeE"></span><span class="declarator"><span class="target" id="group__blockmodule_1gga291bf9e78872f48d811d22a4999b013aaa53a43b2614775bf4e6958eadf6c7843"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">block_store_transpose</span></span></span><a class="headerlink" href="#_CPPv4N18block_store_method21block_store_transposeE" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>A blocked arrangement of items is locally transposed and stored as a striped arrangement of data on continuous memory. <dl class="simple">
+<dt><strong>Performance Notes:</strong></dt><dd><p><ul class="simple">
+<li><p>Performance remains high due to increased memory coalescing, regardless of the number of items per thread.</p></li>
+<li><p>Performance may be better compared to <code class="docutils literal notranslate"><span class="pre">block_store_direct</span></code> and <code class="docutils literal notranslate"><span class="pre">block_store_vectorize</span></code> due to reordering on local memory. </p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18block_store_method26block_store_warp_transposeE">
+<span id="_CPPv3N18block_store_method26block_store_warp_transposeE"></span><span id="_CPPv2N18block_store_method26block_store_warp_transposeE"></span><span class="declarator"><span class="target" id="group__blockmodule_1gga291bf9e78872f48d811d22a4999b013aa4041909947545b4db39c510bae94419d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">block_store_warp_transpose</span></span></span><a class="headerlink" href="#_CPPv4N18block_store_method26block_store_warp_transposeE" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>A blocked arrangement of items is locally transposed and stored as a warp-striped arrangement of data on continuous memory. <dl class="simple">
+<dt><strong>Requirements:</strong></dt><dd><p><ul class="simple">
+<li><p>The number of threads in the block must be a multiple of the size of hardware warp. </p></li>
+</ul>
+</p>
+</dd>
+<dt><strong>Performance Notes:</strong></dt><dd><p><ul class="simple">
+<li><p>Performance remains high due to increased memory coalescing, regardless of the number of items per thread.</p></li>
+<li><p>Performance may be better compared to <code class="docutils literal notranslate"><span class="pre">block_store_direct</span></code> and <code class="docutils literal notranslate"><span class="pre">block_store_vectorize</span></code> due to reordering on local memory. </p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18block_store_method14default_methodE">
+<span id="_CPPv3N18block_store_method14default_methodE"></span><span id="_CPPv2N18block_store_method14default_methodE"></span><span class="declarator"><span class="target" id="group__blockmodule_1gga291bf9e78872f48d811d22a4999b013aa46ff7dd33f68e2e4e44bf3c5d5d226bf"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">default_method</span></span></span><a class="headerlink" href="#_CPPv4N18block_store_method14default_methodE" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Defaults to <code class="docutils literal notranslate"><span class="pre">block_store_direct</span></code>. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="adjacent_difference.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Adjacent difference</div>
+              </div>
+              <svg><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="load.html">
+              <svg><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Load</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Store</a><ul>
+<li><a class="reference internal" href="#class">Class</a></li>
+<li><a class="reference internal" href="#algorithms">Algorithms</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../" id="documentation_options" src="../../static/documentation_options.js"></script>
+    <script src="../../static/jquery.js"></script>
+    <script src="../../static/underscore.js"></script>
+    <script src="../../static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../static/doctools.js"></script>
+    <script src="../../static/scripts/furo.js"></script>
+    </body>
+</html>

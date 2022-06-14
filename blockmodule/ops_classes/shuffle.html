@@ -1,0 +1,528 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Sort" href="sort.html" /><link rel="prev" title="Exchange" href="exchange.html" />
+
+    <meta name="generator" content="sphinx-5.1.0+/0aedcc9a9, furo 2022.06.04.1"/>
+        <title>Shuffle - rocPRIM documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="../../static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../../static/cpp_sig.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #263238;
+  --color-code-foreground: #EEFFFF;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #263238;
+  --color-code-foreground: #EEFFFF;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">rocPRIM  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  
+  <span class="sidebar-brand-text">rocPRIM  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../operations.html">High Level view of the operations</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../devicemodule/index.html">Device-Wide Operations</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/config.html">Configuring the Kernels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/transform.html">Transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/unique.html">Unique</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/sort.html">Sort</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/merge.html">Merge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/partition.html">Partition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/run_length_encoding.html">Run Length Encode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/scan.html">Scan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/select.html">Select</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/reduce.html">Reduce</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/adjacent_difference.html">Adjacent difference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/binary_search.html">Binary Search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/histogram.html">Histogram</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">Block-Wide Operations</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 current has-children"><a class="reference internal" href="index.html">Operation classes</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="load.html">Load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="store.html">Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adjacent_difference.html">Adjacent difference</a></li>
+<li class="toctree-l3"><a class="reference internal" href="discontinuity.html">Discontinuity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="scan.html">Scan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reduce.html">Reduce</a></li>
+<li class="toctree-l3"><a class="reference internal" href="histogram.html">Histogram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="exchange.html">Exchange</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Shuffle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sort.html">Sort</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../data_mov_funcs.html">Data movement functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../warpmodule.html">Warp-Level Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../threadmodule.html">Thread-Level Operations (Utilities)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../iterators.html">Iterators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intrinsics.html">Intrinsics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="shuffle">
+<h1>Shuffle<a class="headerlink" href="#shuffle" title="Permalink to this heading">#</a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4I0_j_j_jE13block_shuffle">
+<span id="_CPPv3I0_j_j_jE13block_shuffle"></span><span id="_CPPv2I0_j_j_jE13block_shuffle"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockSizeX</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockSizeY</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockSizeZ</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1</span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classblock__shuffle"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">block_shuffle</span></span></span></span><br /></dt>
+<dd><p>The <a class="reference internal" href="#classblock__shuffle"><span class="std std-ref">block_shuffle</span></a> class is a block level parallel primitive which provides methods for shuffling data partitioned across a block. </p>
+<p><dl class="simple">
+<dt><strong>Overview</strong></dt><dd><p>It is commonplace for blocks of threads to rearrange data items between threads. The BlockShuffle abstraction allows threads to efficiently shift items either (a) up to their successor or (b) down to their predecessor.<ul class="simple">
+<li><p>Computation can more efficient when:<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code> is greater than one,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">T</span></code> is an arithmetic type,</p></li>
+<li><p>the number of threads in the block is a multiple of the hardware warp size (see rocprim::warp_size()).</p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+<dt><strong>Examples</strong></dt><dd><p><p>In the examples shuffle operation is performed on block of 192 threads, each provides one <code class="docutils literal notranslate"><span class="pre">int</span></code> value, result is returned using the same variable as for input.</p>
+<p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">example_kernel</span><span class="p">(...)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// specialize block__shuffle_int for int and logical warp of 192 threads</span>
+<span class="w">    </span><span class="n">using</span><span class="w"> </span><span class="n">block__shuffle_int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rocprim</span><span class="o">::</span><span class="n">block_shuffle</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">192</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// allocate storage in shared memory</span>
+<span class="w">    </span><span class="n">__shared__</span><span class="w"> </span><span class="n">block_shuffle</span><span class="o">::</span><span class="n">storage_type</span><span class="w"> </span><span class="n">storage</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...;</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// execute block shuffle</span>
+<span class="w">    </span><span class="n">block__shuffle_int</span><span class="p">().</span><span class="n">inclusive_up</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="c1">// input</span>
+<span class="w">        </span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="c1">// output</span>
+<span class="w">        </span><span class="n">storage</span><span class="w"></span>
+<span class="w">    </span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+ </p>
+</p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>T</strong> – - the input/output type. </p></li>
+<li><p><strong>BlockSizeX</strong> – - the number of threads in a block’s x dimension, it has no defaults value. </p></li>
+<li><p><strong>BlockSizeY</strong> – - the number of threads in a block’s y dimension, defaults to 1. </p></li>
+<li><p><strong>BlockSizeZ</strong> – - the number of threads in a block’s z dimension, defaults to 1.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N13block_shuffle12storage_typeE">
+<span id="_CPPv3N13block_shuffle12storage_typeE"></span><span id="_CPPv2N13block_shuffle12storage_typeE"></span><span class="declarator"><span class="target" id="classblock__shuffle_1ada1446903b0da812beeeaefa8e57a235"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">storage_type</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">storage_type_</span></span></span><br /></dt>
+<dd><p>Struct used to allocate a temporary memory that is required for thread communication during operations provided by related parallel primitive. </p>
+<p>Depending on the implemention the operations exposed by parallel primitive may require a temporary storage for thread communication. The storage should be allocated using keywords <code class="docutils literal notranslate"></code>. It can be aliased to an externally allocated memory, or be a part of a union type with other storage types to increase shared memory reusability. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13block_shuffle6offsetE1TR1Ti">
+<span id="_CPPv3N13block_shuffle6offsetE1TR1Ti"></span><span id="_CPPv2N13block_shuffle6offsetE1TR1Ti"></span><span id="block_shuffle::offset__T.TR.i"></span><span class="declarator"><span class="target" id="classblock__shuffle_1ae9dc3bc6d3a79aa8453750a43526384d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">offset</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><a class="reference internal" href="rearrangement.html#_CPPv4I0_j_j_jE13block_shuffle" title="block_shuffle::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">input</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="rearrangement.html#_CPPv4I0_j_j_jE13block_shuffle" title="block_shuffle::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">output</span></span>, </li><li class="desc-parameter"><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">distance</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1</span></span></li></ld><span class="sig-paren">)</span></span><br /></dt>
+<dd><p>Shuffles data across threads in a block, offseted by the distance value. </p>
+<p><dl class="simple">
+<dt><strong>A thread with threadId i receives data from a thread with threadIdx (i-distance), whre distance may be a negative value.</strong></dt><dd><p>allocated by the method itself. </p>
+</dd>
+<dt><strong>Any shuffle operation with invalid input or output threadIds are not carried out, i.e. threadId &lt; 0 || threadId &gt;= BlockSize.</strong></dt><dd><p></p>
+</dd>
+<dt><strong>Example.</strong></dt><dd><p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">example_kernel</span><span class="p">(...)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// specialize block__shuffle_int for int and logical warp of 192 threads</span>
+<span class="w">    </span><span class="n">using</span><span class="w"> </span><span class="n">block__shuffle_int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rocprim</span><span class="o">::</span><span class="n">block_shuffle</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">192</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...;</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// execute block shuffle</span>
+<span class="w">    </span><span class="n">block__shuffle_int</span><span class="p">().</span><span class="n">offset</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="c1">// input</span>
+<span class="w">        </span><span class="n">value</span><span class="w">  </span><span class="c1">// output</span>
+<span class="w">    </span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+ </p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> – <strong>[in]</strong> - input data to be shuffled to another thread. </p></li>
+<li><p><strong>output</strong> – <strong>[out]</strong> - reference to a output value, that receives data from another thread </p></li>
+<li><p><strong>distance</strong> – <strong>[in]</strong> - The input threadId + distance = output threadId.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13block_shuffle6rotateE1TR1Tj">
+<span id="_CPPv3N13block_shuffle6rotateE1TR1Tj"></span><span id="_CPPv2N13block_shuffle6rotateE1TR1Tj"></span><span id="block_shuffle::rotate__T.TR.unsigned-i"></span><span class="declarator"><span class="target" id="classblock__shuffle_1a715eba39fdd653db5fbcfbb40750821e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rotate</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><a class="reference internal" href="rearrangement.html#_CPPv4I0_j_j_jE13block_shuffle" title="block_shuffle::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">input</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="rearrangement.html#_CPPv4I0_j_j_jE13block_shuffle" title="block_shuffle::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">output</span></span>, </li><li class="desc-parameter"><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">distance</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1</span></span></li></ld><span class="sig-paren">)</span></span><br /></dt>
+<dd><p>Shuffles data across threads in a block, offseted by the distance value. </p>
+<p><dl class="simple">
+<dt><strong>A thread with threadId i receives data from a thread with threadIdx (i-distance)BlockSize, whre distance may be a negative value.</strong></dt><dd><p>allocated by the method itself. </p>
+</dd>
+<dt><strong>Data is rotated around the block, using (input_threadId + distance) modulous BlockSize to ensure valid threadIds.</strong></dt><dd><p></p>
+</dd>
+<dt><strong>Example.</strong></dt><dd><p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">example_kernel</span><span class="p">(...)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// specialize block__shuffle_int for int and logical warp of 192 threads</span>
+<span class="w">    </span><span class="n">using</span><span class="w"> </span><span class="n">block__shuffle_int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rocprim</span><span class="o">::</span><span class="n">block_shuffle</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">192</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...;</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// execute block shuffle</span>
+<span class="w">    </span><span class="n">block__shuffle_int</span><span class="p">().</span><span class="n">rotate</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="c1">// input</span>
+<span class="w">        </span><span class="n">value</span><span class="w">  </span><span class="c1">// output</span>
+<span class="w">    </span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+ </p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> – <strong>[in]</strong> - input data to be shuffled to another thread. </p></li>
+<li><p><strong>output</strong> – <strong>[out]</strong> - reference to a output value, that receives data from another thread </p></li>
+<li><p><strong>distance</strong> – <strong>[in]</strong> - The input threadId + distance = output threadId.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I_jEN13block_shuffle2upEvRA14ItemsPerThread_1TRA14ItemsPerThread_1T">
+<span id="_CPPv3I_jEN13block_shuffle2upERA14ItemsPerThread_1TRA14ItemsPerThread_1T"></span><span id="_CPPv2I_jEN13block_shuffle2upERAItemsPerThread_1TRAItemsPerThread_1T"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ItemsPerThread</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classblock__shuffle_1ac72441ab15b57e7c2a039a5ebb6cdceb"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">up</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><a class="reference internal" href="rearrangement.html#_CPPv4I0_j_j_jE13block_shuffle" title="block_shuffle::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="rearrangement.html#_CPPv4I_jEN13block_shuffle2upEvRA14ItemsPerThread_1TRA14ItemsPerThread_1T" title="block_shuffle::up::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="rearrangement.html#_CPPv4I0_j_j_jE13block_shuffle" title="block_shuffle::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">prev</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="rearrangement.html#_CPPv4I_jEN13block_shuffle2upEvRA14ItemsPerThread_1TRA14ItemsPerThread_1T" title="block_shuffle::up::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span></li></ld><span class="sig-paren">)</span></span><br /></dt>
+<dd><p>The thread block rotates a blocked arrange of input items, shifting it up by one item. </p>
+<p><dl class="simple">
+<dt><strong>Example.</strong></dt><dd><p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">example_kernel</span><span class="p">(...)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// specialize block__shuffle_int for int and logical warp of 192 threads</span>
+<span class="w">    </span><span class="n">using</span><span class="w"> </span><span class="n">block__shuffle_int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rocprim</span><span class="o">::</span><span class="n">block_shuffle</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">192</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...;</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// execute block shuffle</span>
+<span class="w">    </span><span class="n">block__shuffle_int</span><span class="p">().</span><span class="n">up</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="c1">// input</span>
+<span class="w">        </span><span class="n">value</span><span class="w">  </span><span class="c1">// output</span>
+<span class="w">    </span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+ </p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> – <strong>[in]</strong> - The calling thread’s input items </p></li>
+<li><p><strong>prev</strong> – <strong>[out]</strong> - The corresponding predecessor items (may be aliased to <code class="docutils literal notranslate"><span class="pre">input</span></code>). The item <code class="docutils literal notranslate"><span class="pre">prev</span></code>[0] is not updated for <em>thread</em><sub>0</sub>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I_jEN13block_shuffle2upEvRA14ItemsPerThread_1TRA14ItemsPerThread_1TR1T">
+<span id="_CPPv3I_jEN13block_shuffle2upERA14ItemsPerThread_1TRA14ItemsPerThread_1TR1T"></span><span id="_CPPv2I_jEN13block_shuffle2upERAItemsPerThread_1TRAItemsPerThread_1TR1T"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ItemsPerThread</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classblock__shuffle_1a3882e41fe3426faea41573f1e4ab5658"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">up</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><a class="reference internal" href="rearrangement.html#_CPPv4I0_j_j_jE13block_shuffle" title="block_shuffle::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="rearrangement.html#_CPPv4I_jEN13block_shuffle2upEvRA14ItemsPerThread_1TRA14ItemsPerThread_1TR1T" title="block_shuffle::up::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="rearrangement.html#_CPPv4I0_j_j_jE13block_shuffle" title="block_shuffle::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">prev</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="rearrangement.html#_CPPv4I_jEN13block_shuffle2upEvRA14ItemsPerThread_1TRA14ItemsPerThread_1TR1T" title="block_shuffle::up::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="rearrangement.html#_CPPv4I0_j_j_jE13block_shuffle" title="block_shuffle::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">block_suffix</span></span></li></ld><span class="sig-paren">)</span></span><br /></dt>
+<dd><p>The thread block rotates a blocked arrange of input items, shifting it up by one item. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> – <strong>[in]</strong> - The calling thread’s input items </p></li>
+<li><p><strong>prev</strong> – <strong>[out]</strong> - The corresponding predecessor items (may be aliased to <code class="docutils literal notranslate"><span class="pre">input</span></code>). The item <code class="docutils literal notranslate"><span class="pre">prev</span></code>[0] is not updated for <em>thread</em><sub>0</sub>. </p></li>
+<li><p><strong>block_suffix</strong> – <strong>[out]</strong> - The item <code class="docutils literal notranslate"><span class="pre">input</span></code>[ItemsPerThread-1] from <em>thread</em><sub></sub>, provided to all threads </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I_jEN13block_shuffle4downEvRA14ItemsPerThread_1TRA14ItemsPerThread_1T">
+<span id="_CPPv3I_jEN13block_shuffle4downERA14ItemsPerThread_1TRA14ItemsPerThread_1T"></span><span id="_CPPv2I_jEN13block_shuffle4downERAItemsPerThread_1TRAItemsPerThread_1T"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ItemsPerThread</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classblock__shuffle_1a9d11784693148f2ebcca3074afd2f009"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">down</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><a class="reference internal" href="rearrangement.html#_CPPv4I0_j_j_jE13block_shuffle" title="block_shuffle::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="rearrangement.html#_CPPv4I_jEN13block_shuffle4downEvRA14ItemsPerThread_1TRA14ItemsPerThread_1T" title="block_shuffle::down::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="rearrangement.html#_CPPv4I0_j_j_jE13block_shuffle" title="block_shuffle::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">next</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="rearrangement.html#_CPPv4I_jEN13block_shuffle4downEvRA14ItemsPerThread_1TRA14ItemsPerThread_1T" title="block_shuffle::down::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span></li></ld><span class="sig-paren">)</span></span><br /></dt>
+<dd><p>The thread block rotates a blocked arrange of input items, shifting it down by one item. </p>
+<p><dl class="simple">
+<dt><strong>Example.</strong></dt><dd><p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">example_kernel</span><span class="p">(...)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// specialize block__shuffle_int for int and logical warp of 192 threads</span>
+<span class="w">    </span><span class="n">using</span><span class="w"> </span><span class="n">block__shuffle_int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rocprim</span><span class="o">::</span><span class="n">block_shuffle</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">192</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...;</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// execute block shuffle</span>
+<span class="w">    </span><span class="n">block__shuffle_int</span><span class="p">().</span><span class="n">down</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="c1">// input</span>
+<span class="w">        </span><span class="n">value</span><span class="w">  </span><span class="c1">// output</span>
+<span class="w">    </span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+ </p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> – <strong>[in]</strong> - The calling thread’s input items </p></li>
+<li><p><strong>next</strong> – <strong>[out]</strong> - The corresponding successor items (may be aliased to <code class="docutils literal notranslate"><span class="pre">input</span></code>). The item <code class="docutils literal notranslate"><span class="pre">prev</span></code>[0] is not updated for <em>thread</em><sub>BlockSize - 1</sub>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I_jEN13block_shuffle4downEvRA14ItemsPerThread_1TRA14ItemsPerThread_1TR1T">
+<span id="_CPPv3I_jEN13block_shuffle4downERA14ItemsPerThread_1TRA14ItemsPerThread_1TR1T"></span><span id="_CPPv2I_jEN13block_shuffle4downERAItemsPerThread_1TRAItemsPerThread_1TR1T"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ItemsPerThread</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classblock__shuffle_1a72f5c58fa6373253eb0edc24b2e17d8b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">down</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><a class="reference internal" href="rearrangement.html#_CPPv4I0_j_j_jE13block_shuffle" title="block_shuffle::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="rearrangement.html#_CPPv4I_jEN13block_shuffle4downEvRA14ItemsPerThread_1TRA14ItemsPerThread_1TR1T" title="block_shuffle::down::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="rearrangement.html#_CPPv4I0_j_j_jE13block_shuffle" title="block_shuffle::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">next</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="rearrangement.html#_CPPv4I_jEN13block_shuffle4downEvRA14ItemsPerThread_1TRA14ItemsPerThread_1TR1T" title="block_shuffle::down::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="rearrangement.html#_CPPv4I0_j_j_jE13block_shuffle" title="block_shuffle::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">block_prefix</span></span></li></ld><span class="sig-paren">)</span></span><br /></dt>
+<dd><p>The thread block rotates a blocked arrange of input items, shifting it down by one item. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> – <strong>[in]</strong> - The calling thread’s input items </p></li>
+<li><p><strong>next</strong> – <strong>[out]</strong> - The corresponding successor items (may be aliased to <code class="docutils literal notranslate"><span class="pre">input</span></code>). The item <code class="docutils literal notranslate"><span class="pre">prev</span></code>[0] is not updated for <em>thread</em><sub>BlockSize - 1</sub>. </p></li>
+<li><p><strong>block_prefix</strong> – <strong>[out]</strong> - The item <code class="docutils literal notranslate"><span class="pre">input</span></code>[0] from <em>thread</em><sub></sub>, provided to all threads </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="sort.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Sort</div>
+              </div>
+              <svg><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="exchange.html">
+              <svg><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Exchange</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../" id="documentation_options" src="../../static/documentation_options.js"></script>
+    <script src="../../static/jquery.js"></script>
+    <script src="../../static/underscore.js"></script>
+    <script src="../../static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../static/doctools.js"></script>
+    <script src="../../static/scripts/furo.js"></script>
+    </body>
+</html>

@@ -1,0 +1,913 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Thread-Level Operations (Utilities)" href="threadmodule.html" /><link rel="prev" title="Data movement functions" href="blockmodule/data_mov_funcs.html" />
+
+    <meta name="generator" content="sphinx-5.1.0+/0aedcc9a9, furo 2022.06.04.1"/>
+        <title>Warp-Level Operations - rocPRIM documentation</title>
+      <link rel="stylesheet" type="text/css" href="static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="static/cpp_sig.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #263238;
+  --color-code-foreground: #EEFFFF;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #263238;
+  --color-code-foreground: #EEFFFF;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">rocPRIM  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  
+  <span class="sidebar-brand-text">rocPRIM  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="operations.html">High Level view of the operations</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="devicemodule/index.html">Device-Wide Operations</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/config.html">Configuring the Kernels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/transform.html">Transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/unique.html">Unique</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/sort.html">Sort</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/merge.html">Merge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/partition.html">Partition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/run_length_encoding.html">Run Length Encode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/scan.html">Scan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/select.html">Select</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/reduce.html">Reduce</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/adjacent_difference.html">Adjacent difference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/binary_search.html">Binary Search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicemodule/histogram.html">Histogram</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="blockmodule/index.html">Block-Wide Operations</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="blockmodule/ops_classes/index.html">Operation classes</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="blockmodule/ops_classes/load.html">Load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blockmodule/ops_classes/store.html">Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blockmodule/ops_classes/adjacent_difference.html">Adjacent difference</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blockmodule/ops_classes/discontinuity.html">Discontinuity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blockmodule/ops_classes/scan.html">Scan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blockmodule/ops_classes/reduce.html">Reduce</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blockmodule/ops_classes/histogram.html">Histogram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blockmodule/ops_classes/exchange.html">Exchange</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blockmodule/ops_classes/shuffle.html">Shuffle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blockmodule/ops_classes/sort.html">Sort</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="blockmodule/data_mov_funcs.html">Data movement functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Warp-Level Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="threadmodule.html">Thread-Level Operations (Utilities)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="iterators.html">Iterators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intrinsics.html">Intrinsics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="warp-level-operations">
+<h1>Warp-Level Operations<a class="headerlink" href="#warp-level-operations" title="Permalink to this heading">#</a></h1>
+<section id="exchange">
+<h2>Exchange<a class="headerlink" href="#exchange" title="Permalink to this heading">#</a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4I0_j_jE13warp_exchange">
+<span id="_CPPv3I0_j_jE13warp_exchange"></span><span id="_CPPv2I0_j_jE13warp_exchange"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ItemsPerThread</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">WarpSize</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">rocprim</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">device_warp_size</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classwarp__exchange"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">warp_exchange</span></span></span><a class="headerlink" href="#_CPPv4I0_j_jE13warp_exchange" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>The <code class="docutils literal notranslate"><a class="reference internal" href="#classwarp__exchange"><span class="std std-ref"><span class="pre">warp_exchange</span></span></a></code> class is a warp level parallel primitive which provides methods for rearranging items partitioned across threads in a warp. </p>
+<p><dl class="simple">
+<dt><strong>Overview</strong></dt><dd><p><ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><a class="reference internal" href="#classwarp__exchange"><span class="std std-ref"><span class="pre">warp_exchange</span></span></a></code> class supports the following rearrangement methods:<ul>
+<li><p>Transposing a blocked arrangement to a striped arrangement.</p></li>
+<li><p>Transposing a striped arrangement to a blocked arrangement.</p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+<dt><strong>Examples</strong></dt><dd><p><p>In the example an exchange operation is performed on a warp of 8 threads, using type <code class="docutils literal notranslate"><span class="pre">int</span></code> with 4 items per thread.</p>
+<p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">example_kernel</span><span class="p">(...)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">constexpr</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">threads_per_block</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">128</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">constexpr</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">threads_per_warp</span><span class="w">  </span><span class="o">=</span><span class="w">   </span><span class="mi">8</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">constexpr</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">items_per_thread</span><span class="w">  </span><span class="o">=</span><span class="w">   </span><span class="mi">4</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">constexpr</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">warps_per_block</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">threads_per_block</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">threads_per_warp</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">warp_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hipThreadIdx_x</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">threads_per_warp</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// specialize warp_exchange for int, warp of 8 threads and 4 items per thread</span>
+<span class="w">    </span><span class="n">using</span><span class="w"> </span><span class="n">warp_exchange_int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rocprim</span><span class="o">::</span><span class="n">warp_exchange</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="n">items_per_thread</span><span class="p">,</span><span class="w"> </span><span class="n">threads_per_warp</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// allocate storage in shared memory</span>
+<span class="w">    </span><span class="n">__shared__</span><span class="w"> </span><span class="n">warp_exchange_int</span><span class="o">::</span><span class="n">storage_type</span><span class="w"> </span><span class="n">storage</span><span class="p">[</span><span class="n">warps_per_block</span><span class="p">];</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">items</span><span class="p">[</span><span class="n">items_per_thread</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="w">    </span><span class="n">warp_exchange_int</span><span class="w"> </span><span class="n">w_exchange</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">w_exchange</span><span class="p">.</span><span class="n">blocked_to_striped</span><span class="p">(</span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="n">storage</span><span class="p">[</span><span class="n">warp_id</span><span class="p">]);</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+ </p>
+</p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>T</strong> – - the input type. </p></li>
+<li><p><strong>ItemsPerThread</strong> – - the number of items contributed by each thread. </p></li>
+<li><p><strong>WarpSize</strong> – - the number of threads in a warp.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="load">
+<h2>Load<a class="headerlink" href="#load" title="Permalink to this heading">#</a></h2>
+<section id="class">
+<h3>Class<a class="headerlink" href="#class" title="Permalink to this heading">#</a></h3>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4I0_j_j_16warp_load_methodE9warp_load">
+<span id="_CPPv3I0_j_j_16warp_load_methodE9warp_load"></span><span id="_CPPv2I0_j_j_16warp_load_methodE9warp_load"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ItemsPerThread</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">WarpSize</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">rocprim</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">device_warp_size</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv416warp_load_method" title="warp_load_method"><span class="n"><span class="pre">warp_load_method</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Method</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv416warp_load_method" title="warp_load_method"><span class="n"><span class="pre">warp_load_method</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N16warp_load_method16warp_load_directE" title="warp_load_method::warp_load_direct"><span class="n"><span class="pre">warp_load_direct</span></span></a><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classwarp__load"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">warp_load</span></span></span><a class="headerlink" href="#_CPPv4I0_j_j_16warp_load_methodE9warp_load" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>The <code class="docutils literal notranslate"><a class="reference internal" href="#classwarp__load"><span class="std std-ref"><span class="pre">warp_load</span></span></a></code> class is a warp level parallel primitive which provides methods for loading data from continuous memory into a blocked arrangement of items across a warp. </p>
+<p><dl class="simple">
+<dt><strong>Overview</strong></dt><dd><p><ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><a class="reference internal" href="#classwarp__load"><span class="std std-ref"><span class="pre">warp_load</span></span></a></code> class has a number of different methods to load data:<ul>
+<li><p><a class="reference internal" href="#group__warpmodule_1gga89808c1e21dccf25a9aa0a6e1c676f6ca4447f0248e3c63acd205d7781560b5c5"><span class="std std-ref">warp_load_direct</span></a></p></li>
+<li><p><a class="reference internal" href="#group__warpmodule_1gga89808c1e21dccf25a9aa0a6e1c676f6ca02038badfb649529a408a712c0ade7ce"><span class="std std-ref">warp_load_striped</span></a></p></li>
+<li><p><a class="reference internal" href="#group__warpmodule_1gga89808c1e21dccf25a9aa0a6e1c676f6ca5985341eafe2e1b4f77370a315cf0faa"><span class="std std-ref">warp_load_vectorize</span></a></p></li>
+<li><p><a class="reference internal" href="#group__warpmodule_1gga89808c1e21dccf25a9aa0a6e1c676f6ca80e28601e95756292305f7d8ee66ee60"><span class="std std-ref">warp_load_transpose</span></a></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+<dt><strong>Example:</strong></dt><dd><p><p>In the example a load operation is performed on a warp of 8 threads, using type <code class="docutils literal notranslate"><span class="pre">int</span></code> and 4 items per thread.</p>
+<p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">example_kernel</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="p">...)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">constexpr</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">threads_per_block</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">128</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">constexpr</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">threads_per_warp</span><span class="w">  </span><span class="o">=</span><span class="w">   </span><span class="mi">8</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">constexpr</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">items_per_thread</span><span class="w">  </span><span class="o">=</span><span class="w">   </span><span class="mi">4</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">constexpr</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">warps_per_block</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">threads_per_block</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">threads_per_warp</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">warp_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hipThreadIdx_x</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">threads_per_warp</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">offset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">blockIdx</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">threads_per_block</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">items_per_thread</span><span class="w"></span>
+<span class="w">        </span><span class="o">+</span><span class="w"> </span><span class="n">warp_id</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">threads_per_warp</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">items_per_thread</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">items</span><span class="p">[</span><span class="n">items_per_thread</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="n">rocprim</span><span class="o">::</span><span class="n">warp_load</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="n">items_per_thread</span><span class="p">,</span><span class="w"> </span><span class="n">threads_per_warp</span><span class="p">,</span><span class="w"> </span><span class="n">load_method</span><span class="o">&gt;</span><span class="w"> </span><span class="n">warp_load</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">warp_load</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">input</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">offset</span><span class="p">,</span><span class="w"> </span><span class="n">items</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+ </p>
+</p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>T</strong> – - the input/output type. </p></li>
+<li><p><strong>ItemsPerThread</strong> – - the number of items to be processed by each thread. </p></li>
+<li><p><strong>WarpSize</strong> – - the number of threads in the warp. It must be a divisor of the kernel block size. </p></li>
+<li><p><strong>Method</strong> – - the method to load data.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="algorithms">
+<h3>Algorithms<a class="headerlink" href="#algorithms" title="Permalink to this heading">#</a></h3>
+<dl class="cpp enum-class">
+<dt class="sig sig-object cpp" id="_CPPv416warp_load_method">
+<span id="_CPPv316warp_load_method"></span><span id="_CPPv216warp_load_method"></span><span class="declarator"><span class="target" id="group__warpmodule_1ga89808c1e21dccf25a9aa0a6e1c676f6c"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">warp_load_method</span></span></span><a class="headerlink" href="#_CPPv416warp_load_method" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">warp_load_method</span></code> enumerates the methods available to load data from continuous memory into a blocked/striped arrangement of items across the warp </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N16warp_load_method16warp_load_directE">
+<span id="_CPPv3N16warp_load_method16warp_load_directE"></span><span id="_CPPv2N16warp_load_method16warp_load_directE"></span><span class="declarator"><span class="target" id="group__warpmodule_1gga89808c1e21dccf25a9aa0a6e1c676f6ca4447f0248e3c63acd205d7781560b5c5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">warp_load_direct</span></span></span><a class="headerlink" href="#_CPPv4N16warp_load_method16warp_load_directE" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Data from continuous memory is loaded into a blocked arrangement of items. <dl class="simple">
+<dt><strong>Performance Notes:</strong></dt><dd><p><ul class="simple">
+<li><p>Performance decreases with increasing number of items per thread (stride between reads), because of reduced memory coalescing. </p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N16warp_load_method17warp_load_stripedE">
+<span id="_CPPv3N16warp_load_method17warp_load_stripedE"></span><span id="_CPPv2N16warp_load_method17warp_load_stripedE"></span><span class="declarator"><span class="target" id="group__warpmodule_1gga89808c1e21dccf25a9aa0a6e1c676f6ca02038badfb649529a408a712c0ade7ce"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">warp_load_striped</span></span></span><a class="headerlink" href="#_CPPv4N16warp_load_method17warp_load_stripedE" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>A striped arrangement of data is read directly from memory. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N16warp_load_method19warp_load_vectorizeE">
+<span id="_CPPv3N16warp_load_method19warp_load_vectorizeE"></span><span id="_CPPv2N16warp_load_method19warp_load_vectorizeE"></span><span class="declarator"><span class="target" id="group__warpmodule_1gga89808c1e21dccf25a9aa0a6e1c676f6ca5985341eafe2e1b4f77370a315cf0faa"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">warp_load_vectorize</span></span></span><a class="headerlink" href="#_CPPv4N16warp_load_method19warp_load_vectorizeE" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Data from continuous memory is loaded into a blocked arrangement of items using vectorization as an optimization. <dl class="simple">
+<dt><strong>Performance Notes:</strong></dt><dd><p><ul class="simple">
+<li><p>Performance remains high due to increased memory coalescing, provided that vectorization requirements are fulfilled. Otherwise, performance will default to <code class="docutils literal notranslate"><span class="pre">warp_load_direct</span></code>. </p></li>
+</ul>
+</p>
+</dd>
+<dt><strong>Requirements:</strong></dt><dd><p><ul class="simple">
+<li><p>The input offset (<code class="docutils literal notranslate"><span class="pre">block_input</span></code>) must be quad-item aligned.</p></li>
+<li><p>The following conditions will prevent vectorization and switch to default <code class="docutils literal notranslate"><span class="pre">warp_load_direct:</span></code> <ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code> is odd.</p></li>
+<li><p>The datatype <code class="docutils literal notranslate"><span class="pre">T</span></code> is not a primitive or a HIP vector type (e.g. int2, int4, etc. </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N16warp_load_method19warp_load_transposeE">
+<span id="_CPPv3N16warp_load_method19warp_load_transposeE"></span><span id="_CPPv2N16warp_load_method19warp_load_transposeE"></span><span class="declarator"><span class="target" id="group__warpmodule_1gga89808c1e21dccf25a9aa0a6e1c676f6ca80e28601e95756292305f7d8ee66ee60"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">warp_load_transpose</span></span></span><a class="headerlink" href="#_CPPv4N16warp_load_method19warp_load_transposeE" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>A striped arrangement of data from continuous memory is locally transposed into a blocked arrangement of items. <dl class="simple">
+<dt><strong>Performance Notes:</strong></dt><dd><p><ul class="simple">
+<li><p>Performance remains high due to increased memory coalescing, regardless of the number of items per thread.</p></li>
+<li><p>Performance may be better compared to <code class="docutils literal notranslate"><span class="pre">warp_load_direct</span></code> and <code class="docutils literal notranslate"><span class="pre">warp_load_vectorize</span></code> due to reordering on local memory. </p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N16warp_load_method14default_methodE">
+<span id="_CPPv3N16warp_load_method14default_methodE"></span><span id="_CPPv2N16warp_load_method14default_methodE"></span><span class="declarator"><span class="target" id="group__warpmodule_1gga89808c1e21dccf25a9aa0a6e1c676f6ca46ff7dd33f68e2e4e44bf3c5d5d226bf"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">default_method</span></span></span><a class="headerlink" href="#_CPPv4N16warp_load_method14default_methodE" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Defaults to <code class="docutils literal notranslate"><span class="pre">warp_load_direct</span></code>. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="store">
+<h2>Store<a class="headerlink" href="#store" title="Permalink to this heading">#</a></h2>
+<section id="id1">
+<h3>Class<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4I0_j_j_17warp_store_methodE10warp_store">
+<span id="_CPPv3I0_j_j_17warp_store_methodE10warp_store"></span><span id="_CPPv2I0_j_j_17warp_store_methodE10warp_store"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ItemsPerThread</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">WarpSize</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">rocprim</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">device_warp_size</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv417warp_store_method" title="warp_store_method"><span class="n"><span class="pre">warp_store_method</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Method</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv417warp_store_method" title="warp_store_method"><span class="n"><span class="pre">warp_store_method</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N17warp_store_method17warp_store_directE" title="warp_store_method::warp_store_direct"><span class="n"><span class="pre">warp_store_direct</span></span></a><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classwarp__store"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">warp_store</span></span></span><a class="headerlink" href="#_CPPv4I0_j_j_17warp_store_methodE10warp_store" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>The <code class="docutils literal notranslate"><a class="reference internal" href="#classwarp__store"><span class="std std-ref"><span class="pre">warp_store</span></span></a></code> class is a warp level parallel primitive which provides methods for storing an arrangement of items into a blocked/striped arrangement on continous memory. </p>
+<p><dl class="simple">
+<dt><strong>Overview</strong></dt><dd><p><ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><a class="reference internal" href="#classwarp__store"><span class="std std-ref"><span class="pre">warp_store</span></span></a></code> class has a number of different methods to store data:<ul>
+<li><p><a class="reference internal" href="#group__warpmodule_1gga8cb97965a0259bf65e354dd86e3da6d8a8858104d047865d2e2cf80a8ccae1eba"><span class="std std-ref">warp_store_direct</span></a></p></li>
+<li><p><a class="reference internal" href="#group__warpmodule_1gga8cb97965a0259bf65e354dd86e3da6d8aeeb9627d06f3d9d06214d82ab7e9ce5d"><span class="std std-ref">warp_store_striped</span></a></p></li>
+<li><p><a class="reference internal" href="#group__warpmodule_1gga8cb97965a0259bf65e354dd86e3da6d8a96c66e62316cae639ed0e4131ad1aba8"><span class="std std-ref">warp_store_vectorize</span></a></p></li>
+<li><p><a class="reference internal" href="#group__warpmodule_1gga8cb97965a0259bf65e354dd86e3da6d8a0635f6d4a0c42cee1f7900d0f2500195"><span class="std std-ref">warp_store_transpose</span></a></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+<dt><strong>Example:</strong></dt><dd><p><p>In the example a store operation is performed on a warp of 8 threads, using type <code class="docutils literal notranslate"><span class="pre">int</span></code> and 4 items per thread.</p>
+<p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">example_kernel</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">output</span><span class="p">,</span><span class="w"> </span><span class="p">...)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">constexpr</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">threads_per_block</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">128</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">constexpr</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">threads_per_warp</span><span class="w">  </span><span class="o">=</span><span class="w">   </span><span class="mi">8</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">constexpr</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">items_per_thread</span><span class="w">  </span><span class="o">=</span><span class="w">   </span><span class="mi">4</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">constexpr</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">warps_per_block</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">threads_per_block</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">threads_per_warp</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">warp_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hipThreadIdx_x</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">threads_per_warp</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">offset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">blockIdx</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">threads_per_block</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">items_per_thread</span><span class="w"></span>
+<span class="w">        </span><span class="o">+</span><span class="w"> </span><span class="n">warp_id</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">threads_per_warp</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">items_per_thread</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">items</span><span class="p">[</span><span class="n">items_per_thread</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="n">rocprim</span><span class="o">::</span><span class="n">warp_store</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="n">items_per_thread</span><span class="p">,</span><span class="w"> </span><span class="n">threads_per_warp</span><span class="p">,</span><span class="w"> </span><span class="n">load_method</span><span class="o">&gt;</span><span class="w"> </span><span class="n">warp_store</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">warp_store</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">output</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">offset</span><span class="p">,</span><span class="w"> </span><span class="n">items</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+ </p>
+</p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>T</strong> – - the output/output type. </p></li>
+<li><p><strong>ItemsPerThread</strong> – - the number of items to be processed by each thread. </p></li>
+<li><p><strong>WarpSize</strong> – - the number of threads in a warp. It must be a divisor of the kernel block size. </p></li>
+<li><p><strong>Method</strong> – - the method to store data.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="id2">
+<h3>Algorithms<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h3>
+<dl class="cpp enum-class">
+<dt class="sig sig-object cpp" id="_CPPv417warp_store_method">
+<span id="_CPPv317warp_store_method"></span><span id="_CPPv217warp_store_method"></span><span class="declarator"><span class="target" id="group__warpmodule_1ga8cb97965a0259bf65e354dd86e3da6d8"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">warp_store_method</span></span></span><a class="headerlink" href="#_CPPv417warp_store_method" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">warp_store_method</span></code> enumerates the methods available to store a blocked/striped arrangement of items into a blocked/striped arrangement in continuous memory </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N17warp_store_method17warp_store_directE">
+<span id="_CPPv3N17warp_store_method17warp_store_directE"></span><span id="_CPPv2N17warp_store_method17warp_store_directE"></span><span class="declarator"><span class="target" id="group__warpmodule_1gga8cb97965a0259bf65e354dd86e3da6d8a8858104d047865d2e2cf80a8ccae1eba"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">warp_store_direct</span></span></span><a class="headerlink" href="#_CPPv4N17warp_store_method17warp_store_directE" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>A blocked arrangement of items is stored into a blocked arrangement on continuous memory. <dl class="simple">
+<dt><strong>Performance Notes:</strong></dt><dd><p><ul class="simple">
+<li><p>Performance decreases with increasing number of items per thread (stride between reads), because of reduced memory coalescing. </p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N17warp_store_method18warp_store_stripedE">
+<span id="_CPPv3N17warp_store_method18warp_store_stripedE"></span><span id="_CPPv2N17warp_store_method18warp_store_stripedE"></span><span class="declarator"><span class="target" id="group__warpmodule_1gga8cb97965a0259bf65e354dd86e3da6d8aeeb9627d06f3d9d06214d82ab7e9ce5d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">warp_store_striped</span></span></span><a class="headerlink" href="#_CPPv4N17warp_store_method18warp_store_stripedE" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>A striped arrangement of items is stored into a blocked arrangement on continuous memory. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N17warp_store_method20warp_store_vectorizeE">
+<span id="_CPPv3N17warp_store_method20warp_store_vectorizeE"></span><span id="_CPPv2N17warp_store_method20warp_store_vectorizeE"></span><span class="declarator"><span class="target" id="group__warpmodule_1gga8cb97965a0259bf65e354dd86e3da6d8a96c66e62316cae639ed0e4131ad1aba8"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">warp_store_vectorize</span></span></span><a class="headerlink" href="#_CPPv4N17warp_store_method20warp_store_vectorizeE" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>A blocked arrangement of items is stored into a blocked arrangement on continuous memory using vectorization as an optimization. <dl class="simple">
+<dt><strong>Performance Notes:</strong></dt><dd><p><ul class="simple">
+<li><p>Performance remains high due to increased memory coalescing, provided that vectorization requirements are fulfilled. Otherwise, performance will default to <code class="docutils literal notranslate"><span class="pre">warp_store_direct</span></code>. </p></li>
+</ul>
+</p>
+</dd>
+<dt><strong>Requirements:</strong></dt><dd><p><ul class="simple">
+<li><p>The output offset (<code class="docutils literal notranslate"><span class="pre">block_output</span></code>) must be quad-item aligned.</p></li>
+<li><p>The following conditions will prevent vectorization and switch to default <code class="docutils literal notranslate"><span class="pre">warp_store_direct:</span></code> <ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">ItemsPerThread</span></code> is odd.</p></li>
+<li><p>The datatype <code class="docutils literal notranslate"><span class="pre">T</span></code> is not a primitive or a HIP vector type (e.g. int2, int4, etc. </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N17warp_store_method20warp_store_transposeE">
+<span id="_CPPv3N17warp_store_method20warp_store_transposeE"></span><span id="_CPPv2N17warp_store_method20warp_store_transposeE"></span><span class="declarator"><span class="target" id="group__warpmodule_1gga8cb97965a0259bf65e354dd86e3da6d8a0635f6d4a0c42cee1f7900d0f2500195"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">warp_store_transpose</span></span></span><a class="headerlink" href="#_CPPv4N17warp_store_method20warp_store_transposeE" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>A blocked arrangement of items is locally transposed and stored as a striped arrangement of data on continuous memory. <dl class="simple">
+<dt><strong>Performance Notes:</strong></dt><dd><p><ul class="simple">
+<li><p>Performance remains high due to increased memory coalescing, regardless of the number of items per thread.</p></li>
+<li><p>Performance may be better compared to <code class="docutils literal notranslate"><span class="pre">warp_store_direct</span></code> and <code class="docutils literal notranslate"><span class="pre">warp_store_vectorize</span></code> due to reordering on local memory. </p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N17warp_store_method14default_methodE">
+<span id="_CPPv3N17warp_store_method14default_methodE"></span><span id="_CPPv2N17warp_store_method14default_methodE"></span><span class="declarator"><span class="target" id="group__warpmodule_1gga8cb97965a0259bf65e354dd86e3da6d8a46ff7dd33f68e2e4e44bf3c5d5d226bf"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">default_method</span></span></span><a class="headerlink" href="#_CPPv4N17warp_store_method14default_methodE" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Defaults to <code class="docutils literal notranslate"><span class="pre">warp_store_direct</span></code>. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="reduce">
+<h2>Reduce<a class="headerlink" href="#reduce" title="Permalink to this heading">#</a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4I0_j_bE11warp_reduce">
+<span id="_CPPv3I0_j_bE11warp_reduce"></span><span id="_CPPv2I0_j_bE11warp_reduce"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">WarpSize</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="intrinsics.html#_CPPv416device_warp_sizev" title="device_warp_size"><span class="n"><span class="pre">device_warp_size</span></span></a><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UseAllReduce</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classwarp__reduce"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">warp_reduce</span></span></span><a class="headerlink" href="#_CPPv4I0_j_bE11warp_reduce" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>The <a class="reference internal" href="#classwarp__reduce"><span class="std std-ref">warp_reduce</span></a> class is a warp level parallel primitive which provides methods for performing reduction operations on items partitioned across threads in a hardware warp. </p>
+<p><dl class="simple">
+<dt><strong>Overview</strong></dt><dd><p><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">WarpSize</span></code><p>must be equal to or less than the size of hardware warp (see rocprim::device_warp_size()). If it is less, reduce is performed separately within groups determined by WarpSize.</p>
+<p>For example, if</p>
+<code class="docutils literal notranslate"><span class="pre">WarpSize</span></code> is 4, hardware warp is 64, reduction will be performed in logical warps grouped like this: <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">{0,</span> <span class="pre">1,</span> <span class="pre">2,</span> <span class="pre">3},</span> <span class="pre">{4,</span> <span class="pre">5,</span> <span class="pre">6,</span> <span class="pre">7</span> <span class="pre">},</span> <span class="pre">...,</span> <span class="pre">{60,</span> <span class="pre">61,</span> <span class="pre">62,</span> <span class="pre">63}</span> <span class="pre">}</span></code> (thread is represented here by its id within hardware warp).</p></li>
+<li><p>Logical warp is a group of <code class="docutils literal notranslate"><span class="pre">WarpSize</span></code> consecutive threads from the same hardware warp.</p></li>
+<li><p>Supports non-commutative reduce operators. However, a reduce operator should be associative. When used with non-associative functions the results may be non-deterministic and/or vary in precision.</p></li>
+<li><p>Number of threads executing <a class="reference internal" href="#classwarp__reduce"><span class="std std-ref">warp_reduce</span></a>’s function must be a multiple of <code class="docutils literal notranslate"><span class="pre">WarpSize</span></code>;</p></li>
+<li><p>All threads from a logical warp must be in the same hardware warp.</p></li>
+</ul>
+</p>
+</dd>
+<dt><strong>Examples</strong></dt><dd><p><p>In the examples reduce operation is performed on groups of 16 threads, each provides one <code class="docutils literal notranslate"><span class="pre">int</span></code> value, result is returned using the same variable as for input. Hardware warp size is 64. Block (tile) size is 64.</p>
+<p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">example_kernel</span><span class="p">(...)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// specialize warp_reduce for int and logical warp of 16 threads</span>
+<span class="w">    </span><span class="n">using</span><span class="w"> </span><span class="n">warp_reduce_int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rocprim</span><span class="o">::</span><span class="n">warp_reduce</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">16</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// allocate storage in shared memory</span>
+<span class="w">    </span><span class="n">__shared__</span><span class="w"> </span><span class="n">warp_reduce_int</span><span class="o">::</span><span class="n">storage_type</span><span class="w"> </span><span class="n">temp</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">logical_warp_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">threadIdx</span><span class="p">.</span><span class="n">x</span><span class="o">/</span><span class="mi">16</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...;</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// execute reduce</span>
+<span class="w">    </span><span class="n">warp_reduce_int</span><span class="p">().</span><span class="n">reduce</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="c1">// input</span>
+<span class="w">        </span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="c1">// output</span>
+<span class="w">        </span><span class="n">temp</span><span class="p">[</span><span class="n">logical_warp_id</span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+ </p>
+</p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>T</strong> – - the input/output type. </p></li>
+<li><p><strong>WarpSize</strong> – - the size of logical warp size, which can be equal to or less than the size of hardware warp (see rocprim::device_warp_size()). Reduce operations are performed separately within groups determined by WarpSize. </p></li>
+<li><p><strong>UseAllReduce</strong> – - input parameter to determine whether to broadcast final reduction value to all threads (default is false).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="scan">
+<h2>Scan<a class="headerlink" href="#scan" title="Permalink to this heading">#</a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4I0_jE9warp_scan">
+<span id="_CPPv3I0_jE9warp_scan"></span><span id="_CPPv2I0_jE9warp_scan"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">WarpSize</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="intrinsics.html#_CPPv416device_warp_sizev" title="device_warp_size"><span class="n"><span class="pre">device_warp_size</span></span></a><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classwarp__scan"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">warp_scan</span></span></span><a class="headerlink" href="#_CPPv4I0_jE9warp_scan" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>The <a class="reference internal" href="#classwarp__scan"><span class="std std-ref">warp_scan</span></a> class is a warp level parallel primitive which provides methods for performing inclusive and exclusive scan operations of items partitioned across threads in a hardware warp. </p>
+<p><dl class="simple">
+<dt><strong>Overview</strong></dt><dd><p><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">WarpSize</span></code><p>must be equal to or less than the size of hardware warp (see rocprim::device_warp_size()). If it is less, scan is performed separately within groups determined by WarpSize.</p>
+<p>For example, if</p>
+<code class="docutils literal notranslate"><span class="pre">WarpSize</span></code> is 4, hardware warp is 64, scan will be performed in logical warps grouped like this: <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">{0,</span> <span class="pre">1,</span> <span class="pre">2,</span> <span class="pre">3},</span> <span class="pre">{4,</span> <span class="pre">5,</span> <span class="pre">6,</span> <span class="pre">7</span> <span class="pre">},</span> <span class="pre">...,</span> <span class="pre">{60,</span> <span class="pre">61,</span> <span class="pre">62,</span> <span class="pre">63}</span> <span class="pre">}</span></code> (thread is represented here by its id within hardware warp).</p></li>
+<li><p>Logical warp is a group of <code class="docutils literal notranslate"><span class="pre">WarpSize</span></code> consecutive threads from the same hardware warp.</p></li>
+<li><p>Supports non-commutative scan operators. However, a scan operator should be associative. When used with non-associative functions the results may be non-deterministic and/or vary in precision.</p></li>
+<li><p>Number of threads executing <a class="reference internal" href="#classwarp__scan"><span class="std std-ref">warp_scan</span></a>’s function must be a multiple of <code class="docutils literal notranslate"><span class="pre">WarpSize</span></code>;</p></li>
+<li><p>All threads from a logical warp must be in the same hardware warp.</p></li>
+</ul>
+</p>
+</dd>
+<dt><strong>Examples</strong></dt><dd><p><p>In the examples scan operation is performed on groups of 16 threads, each provides one <code class="docutils literal notranslate"><span class="pre">int</span></code> value, result is returned using the same variable as for input. Hardware warp size is 64. Block (tile) size is 64.</p>
+<p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">example_kernel</span><span class="p">(...)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// specialize warp_scan for int and logical warp of 16 threads</span>
+<span class="w">    </span><span class="n">using</span><span class="w"> </span><span class="n">warp_scan_int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rocprim</span><span class="o">::</span><span class="n">warp_scan</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">16</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// allocate storage in shared memory</span>
+<span class="w">    </span><span class="n">__shared__</span><span class="w"> </span><span class="n">warp_scan_int</span><span class="o">::</span><span class="n">storage_type</span><span class="w"> </span><span class="n">temp</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">logical_warp_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">threadIdx</span><span class="p">.</span><span class="n">x</span><span class="o">/</span><span class="mi">16</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...;</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// execute inclusive scan</span>
+<span class="w">    </span><span class="n">warp_scan_int</span><span class="p">().</span><span class="n">inclusive_scan</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="c1">// input</span>
+<span class="w">        </span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="c1">// output</span>
+<span class="w">        </span><span class="n">temp</span><span class="p">[</span><span class="n">logical_warp_id</span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+ </p>
+</p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>T</strong> – - the input/output type. </p></li>
+<li><p><strong>WarpSize</strong> – - the size of logical warp size, which can be equal to or less than the size of hardware warp (see rocprim::device_warp_size()). Scan operations are performed separately within groups determined by WarpSize.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="sort">
+<h2>Sort<a class="headerlink" href="#sort" title="Permalink to this heading">#</a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4I0_j0E9warp_sort">
+<span id="_CPPv3I0_j0E9warp_sort"></span><span id="_CPPv2I0_j0E9warp_sort"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Key</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">WarpSize</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="intrinsics.html#_CPPv416device_warp_sizev" title="device_warp_size"><span class="n"><span class="pre">device_warp_size</span></span></a><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">empty_type</span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classwarp__sort"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">warp_sort</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">private</span></span><span class="w"> </span><span class="n"><span class="pre">detail</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">warp_sort_shuffle</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0_j0E9warp_sort" title="warp_sort::Key"><span class="n"><span class="pre">Key</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="intrinsics.html#_CPPv416device_warp_sizev" title="device_warp_size"><span class="n"><span class="pre">device_warp_size</span></span></a><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">empty_type</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I0_j0E9warp_sort" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>The warp_sort class provides warp-wide methods for computing a parallel sort of items across thread warps. This class currently implements parallel bitonic sort, and only accepts warp sizes that are powers of two. </p>
+<p><dl class="simple">
+<dt><strong>Overview</strong></dt><dd><p><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">WarpSize</span></code> must be power of two.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">WarpSize</span></code> must be equal to or less than the size of hardware warp (see rocprim::device_warp_size()). If it is less, sort is performed separately within groups determined by WarpSize. For example, if <code class="docutils literal notranslate"><span class="pre">WarpSize</span></code> is 4, hardware warp is 64, sort will be performed in logical warps grouped like this: <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">{0,</span> <span class="pre">1,</span> <span class="pre">2,</span> <span class="pre">3},</span> <span class="pre">{4,</span> <span class="pre">5,</span> <span class="pre">6,</span> <span class="pre">7</span> <span class="pre">},</span> <span class="pre">...,</span> <span class="pre">{60,</span> <span class="pre">61,</span> <span class="pre">62,</span> <span class="pre">63}</span> <span class="pre">}</span></code> (thread is represented here by its id within hardware warp).</p></li>
+<li><p>Accepts custom compare_functions for sorting across a warp.</p></li>
+<li><p>Number of threads executing warp_sort’s function must be a multiple of <code class="docutils literal notranslate"><span class="pre">WarpSize</span></code>.</p></li>
+</ul>
+</p>
+</dd>
+<dt><strong>Example:</strong></dt><dd><p><p>Every thread within the warp uses the warp_sort class by first specializing the warp_sort type, and instantiating an object that will be used to invoke a member function.</p>
+<p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">example_kernel</span><span class="p">(...)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">blockIdx</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">blockDim</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">threadIdx</span><span class="p">.</span><span class="n">x</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="n">rocprim</span><span class="o">::</span><span class="n">warp_sort</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">64</span><span class="o">&gt;</span><span class="w"> </span><span class="n">wsort</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">wsort</span><span class="p">.</span><span class="n">sort</span><span class="p">(</span><span class="n">value</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</p>
+<p>Below is a snippet demonstrating how to pass a custom compare function: <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">__device__</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">customCompare</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="o">&amp;</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="o">&amp;</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+<span class="n">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">example_kernel</span><span class="p">(...)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">blockIdx</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">blockDim</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">threadIdx</span><span class="p">.</span><span class="n">x</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="n">rocprim</span><span class="o">::</span><span class="n">warp_sort</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">64</span><span class="o">&gt;</span><span class="w"> </span><span class="n">wsort</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">wsort</span><span class="p">.</span><span class="n">sort</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="n">customCompare</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+ </p>
+</p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Key</strong> – Data type for parameter Key </p></li>
+<li><p><strong>WarpSize</strong> – [optional] The number of threads in a warp </p></li>
+<li><p><strong>Value</strong> – [optional] Data type for parameter Value. By default, it’s empty_type</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp class">
+<dt class="sig sig-object cpp">
+<span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Key</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">WarpSize</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="intrinsics.html#_CPPv416device_warp_sizev" title="device_warp_size"><span class="n"><span class="pre">device_warp_size</span></span></a><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">empty_type</span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classwarp__sort"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">warp_sort</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">private</span></span><span class="w"> </span><span class="n"><span class="pre">detail</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">warp_sort_shuffle</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0_j0E9warp_sort" title="warp_sort::Key"><span class="n"><span class="pre">Key</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="intrinsics.html#_CPPv416device_warp_sizev" title="device_warp_size"><span class="n"><span class="pre">device_warp_size</span></span></a><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">empty_type</span></span><span class="p"><span class="pre">&gt;</span></span></span><br /></dt>
+<dd><p>The warp_sort class provides warp-wide methods for computing a parallel sort of items across thread warps. This class currently implements parallel bitonic sort, and only accepts warp sizes that are powers of two. </p>
+<p><dl class="simple">
+<dt><strong>Overview</strong></dt><dd><p><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">WarpSize</span></code> must be power of two.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">WarpSize</span></code> must be equal to or less than the size of hardware warp (see rocprim::device_warp_size()). If it is less, sort is performed separately within groups determined by WarpSize. For example, if <code class="docutils literal notranslate"><span class="pre">WarpSize</span></code> is 4, hardware warp is 64, sort will be performed in logical warps grouped like this: <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">{0,</span> <span class="pre">1,</span> <span class="pre">2,</span> <span class="pre">3},</span> <span class="pre">{4,</span> <span class="pre">5,</span> <span class="pre">6,</span> <span class="pre">7</span> <span class="pre">},</span> <span class="pre">...,</span> <span class="pre">{60,</span> <span class="pre">61,</span> <span class="pre">62,</span> <span class="pre">63}</span> <span class="pre">}</span></code> (thread is represented here by its id within hardware warp).</p></li>
+<li><p>Accepts custom compare_functions for sorting across a warp.</p></li>
+<li><p>Number of threads executing warp_sort’s function must be a multiple of <code class="docutils literal notranslate"><span class="pre">WarpSize</span></code>.</p></li>
+</ul>
+</p>
+</dd>
+<dt><strong>Example:</strong></dt><dd><p><p>Every thread within the warp uses the warp_sort class by first specializing the warp_sort type, and instantiating an object that will be used to invoke a member function.</p>
+<p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">example_kernel</span><span class="p">(...)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">blockIdx</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">blockDim</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">threadIdx</span><span class="p">.</span><span class="n">x</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="n">rocprim</span><span class="o">::</span><span class="n">warp_sort</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">64</span><span class="o">&gt;</span><span class="w"> </span><span class="n">wsort</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">wsort</span><span class="p">.</span><span class="n">sort</span><span class="p">(</span><span class="n">value</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</p>
+<p>Below is a snippet demonstrating how to pass a custom compare function: <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">__device__</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">customCompare</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="o">&amp;</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="o">&amp;</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+<span class="n">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">example_kernel</span><span class="p">(...)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">blockIdx</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">blockDim</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">threadIdx</span><span class="p">.</span><span class="n">x</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="n">rocprim</span><span class="o">::</span><span class="n">warp_sort</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">64</span><span class="o">&gt;</span><span class="w"> </span><span class="n">wsort</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">wsort</span><span class="p">.</span><span class="n">sort</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="n">customCompare</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+ </p>
+</p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Key</strong> – Data type for parameter Key </p></li>
+<li><p><strong>WarpSize</strong> – [optional] The number of threads in a warp </p></li>
+<li><p><strong>Value</strong> – [optional] Data type for parameter Value. By default, it’s empty_type</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="shuffle">
+<h2>Shuffle<a class="headerlink" href="#shuffle" title="Permalink to this heading">#</a></h2>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0E12warp_shuffle1TRK1TKiKi">
+<span id="_CPPv3I0E12warp_shuffleRK1TKiKi"></span><span id="_CPPv2I0E12warp_shuffleRK1TKiKi"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="group__warpmodule_1gad6dfb1c8bd293e27f42545f520902e39"></span><a class="reference internal" href="#_CPPv4I0E12warp_shuffle1TRK1TKiKi" title="warp_shuffle::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">warp_shuffle</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0E12warp_shuffle1TRK1TKiKi" title="warp_shuffle::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">src_lane</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">width</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="intrinsics.html#_CPPv416device_warp_sizev" title="device_warp_size"><span class="n"><span class="pre">device_warp_size</span></span></a><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0E12warp_shuffle1TRK1TKiKi" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Shuffle for any data type. </p>
+<p>Each thread in warp obtains <code class="docutils literal notranslate"><span class="pre">input</span></code> from <code class="docutils literal notranslate"><span class="pre">src_lane</span></code>-th thread in warp. If <code class="docutils literal notranslate"><span class="pre">width</span></code> is less than <a class="reference internal" href="intrinsics.html#group__intrinsicsmodule_1ga79ec729e34744dd2875ea8333ea78837"><span class="std std-ref">device_warp_size()</span></a> then each subsection of the warp behaves as a separate entity with a starting logical lane id of 0. If <code class="docutils literal notranslate"><span class="pre">src_lane</span></code> is not in [0; <code class="docutils literal notranslate"><span class="pre">width</span></code>) range, the returned value is equal to <code class="docutils literal notranslate"><span class="pre">input</span></code> passed by the <code class="docutils literal notranslate"><span class="pre">src_lane</span> <span class="pre">modulo</span> <span class="pre">width</span></code> thread.</p>
+<p>Note: The optional <code class="docutils literal notranslate"><span class="pre">width</span></code> parameter must be a power of 2; results are undefined if it is not a power of 2, or it is greater than <a class="reference internal" href="intrinsics.html#group__intrinsicsmodule_1ga79ec729e34744dd2875ea8333ea78837"><span class="std std-ref">device_warp_size()</span></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> – - input to pass to other threads </p></li>
+<li><p><strong>src_lane</strong> – - warp if of a thread whose <code class="docutils literal notranslate"><span class="pre">input</span></code> should be returned </p></li>
+<li><p><strong>width</strong> – - logical warp width </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0E17warp_shuffle_down1TRK1TKjKi">
+<span id="_CPPv3I0E17warp_shuffle_downRK1TKjKi"></span><span id="_CPPv2I0E17warp_shuffle_downRK1TKjKi"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="group__warpmodule_1ga7a429e8f3b368dda65098b9bf90753ed"></span><a class="reference internal" href="#_CPPv4I0E17warp_shuffle_down1TRK1TKjKi" title="warp_shuffle_down::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">warp_shuffle_down</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0E17warp_shuffle_down1TRK1TKjKi" title="warp_shuffle_down::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">delta</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">width</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="intrinsics.html#_CPPv416device_warp_sizev" title="device_warp_size"><span class="n"><span class="pre">device_warp_size</span></span></a><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0E17warp_shuffle_down1TRK1TKjKi" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Shuffle down for any data type. </p>
+<p><code class="docutils literal notranslate"><span class="pre">i</span></code>-th thread in warp obtains <code class="docutils literal notranslate"><span class="pre">input</span></code> from <code class="docutils literal notranslate"><span class="pre">i+delta</span></code>-th thread in warp. If <code class="docutils literal notranslate"></code> is not in [0; <code class="docutils literal notranslate"><span class="pre">width</span></code>) range, thread’s own <code class="docutils literal notranslate"><span class="pre">input</span></code> is returned.</p>
+<p>Note: The optional <code class="docutils literal notranslate"><span class="pre">width</span></code> parameter must be a power of 2; results are undefined if it is not a power of 2, or it is greater than <a class="reference internal" href="intrinsics.html#group__intrinsicsmodule_1ga79ec729e34744dd2875ea8333ea78837"><span class="std std-ref">device_warp_size()</span></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> – - input to pass to other threads </p></li>
+<li><p><strong>delta</strong> – - offset for calculating source lane id </p></li>
+<li><p><strong>width</strong> – - logical warp width </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0E16warp_shuffle_xor1TRK1TKiKi">
+<span id="_CPPv3I0E16warp_shuffle_xorRK1TKiKi"></span><span id="_CPPv2I0E16warp_shuffle_xorRK1TKiKi"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="group__warpmodule_1gae8d29977e0328731f5b3f70bc456c969"></span><a class="reference internal" href="#_CPPv4I0E16warp_shuffle_xor1TRK1TKiKi" title="warp_shuffle_xor::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">warp_shuffle_xor</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0E16warp_shuffle_xor1TRK1TKiKi" title="warp_shuffle_xor::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">lane_mask</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">width</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="intrinsics.html#_CPPv416device_warp_sizev" title="device_warp_size"><span class="n"><span class="pre">device_warp_size</span></span></a><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0E16warp_shuffle_xor1TRK1TKiKi" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Shuffle XOR for any data type. </p>
+<p><code class="docutils literal notranslate"><span class="pre">i</span></code>-th thread in warp obtains <code class="docutils literal notranslate"><span class="pre">input</span></code> from <code class="docutils literal notranslate"><span class="pre">i^lane_mask</span></code>-th thread in warp.</p>
+<p>Note: The optional <code class="docutils literal notranslate"><span class="pre">width</span></code> parameter must be a power of 2; results are undefined if it is not a power of 2, or it is greater than <a class="reference internal" href="intrinsics.html#group__intrinsicsmodule_1ga79ec729e34744dd2875ea8333ea78837"><span class="std std-ref">device_warp_size()</span></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> – - input to pass to other threads </p></li>
+<li><p><strong>lane_mask</strong> – - mask used for calculating source lane id </p></li>
+<li><p><strong>width</strong> – - logical warp width </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="threadmodule.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Thread-Level Operations (Utilities)</div>
+              </div>
+              <svg><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="blockmodule/data_mov_funcs.html">
+              <svg><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Data movement functions</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Warp-Level Operations</a><ul>
+<li><a class="reference internal" href="#exchange">Exchange</a></li>
+<li><a class="reference internal" href="#load">Load</a><ul>
+<li><a class="reference internal" href="#class">Class</a></li>
+<li><a class="reference internal" href="#algorithms">Algorithms</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#store">Store</a><ul>
+<li><a class="reference internal" href="#id1">Class</a></li>
+<li><a class="reference internal" href="#id2">Algorithms</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#reduce">Reduce</a></li>
+<li><a class="reference internal" href="#scan">Scan</a></li>
+<li><a class="reference internal" href="#sort">Sort</a></li>
+<li><a class="reference internal" href="#shuffle">Shuffle</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="./" id="documentation_options" src="static/documentation_options.js"></script>
+    <script src="static/jquery.js"></script>
+    <script src="static/underscore.js"></script>
+    <script src="static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="static/doctools.js"></script>
+    <script src="static/scripts/furo.js"></script>
+    </body>
+</html>

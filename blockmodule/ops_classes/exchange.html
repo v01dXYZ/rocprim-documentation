@@ -1,0 +1,862 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Shuffle" href="shuffle.html" /><link rel="prev" title="Histogram" href="histogram.html" />
+
+    <meta name="generator" content="sphinx-5.1.0+/0aedcc9a9, furo 2022.06.04.1"/>
+        <title>Exchange - rocPRIM documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="../../static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../../static/cpp_sig.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #263238;
+  --color-code-foreground: #EEFFFF;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #263238;
+  --color-code-foreground: #EEFFFF;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">rocPRIM  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  
+  <span class="sidebar-brand-text">rocPRIM  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../operations.html">High Level view of the operations</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../devicemodule/index.html">Device-Wide Operations</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/config.html">Configuring the Kernels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/transform.html">Transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/unique.html">Unique</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/sort.html">Sort</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/merge.html">Merge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/partition.html">Partition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/run_length_encoding.html">Run Length Encode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/scan.html">Scan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/select.html">Select</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/reduce.html">Reduce</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/adjacent_difference.html">Adjacent difference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/binary_search.html">Binary Search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../devicemodule/histogram.html">Histogram</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">Block-Wide Operations</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 current has-children"><a class="reference internal" href="index.html">Operation classes</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="load.html">Load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="store.html">Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adjacent_difference.html">Adjacent difference</a></li>
+<li class="toctree-l3"><a class="reference internal" href="discontinuity.html">Discontinuity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="scan.html">Scan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reduce.html">Reduce</a></li>
+<li class="toctree-l3"><a class="reference internal" href="histogram.html">Histogram</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Exchange</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shuffle.html">Shuffle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sort.html">Sort</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../data_mov_funcs.html">Data movement functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../warpmodule.html">Warp-Level Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../threadmodule.html">Thread-Level Operations (Utilities)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../iterators.html">Iterators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intrinsics.html">Intrinsics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="exchange">
+<h1>Exchange<a class="headerlink" href="#exchange" title="Permalink to this heading">#</a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4I0_j_j_j_jE14block_exchange">
+<span id="_CPPv3I0_j_j_j_jE14block_exchange"></span><span id="_CPPv2I0_j_j_j_jE14block_exchange"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockSizeX</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ItemsPerThread</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockSizeY</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BlockSizeZ</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1</span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classblock__exchange"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">block_exchange</span></span></span><a class="headerlink" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>The <code class="docutils literal notranslate"><a class="reference internal" href="rearrangement.html#classblock__exchange"><span class="std std-ref"><span class="pre">block_exchange</span></span></a></code> class is a block level parallel primitive which provides methods for rearranging items partitioned across threads in a block. </p>
+<p><dl class="simple">
+<dt><strong>Overview</strong></dt><dd><p><ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><a class="reference internal" href="rearrangement.html#classblock__exchange"><span class="std std-ref"><span class="pre">block_exchange</span></span></a></code> class supports the following rearrangement methods:<ul>
+<li><p>Transposing a blocked arrangement to a striped arrangement.</p></li>
+<li><p>Transposing a striped arrangement to a blocked arrangement.</p></li>
+<li><p>Transposing a blocked arrangement to a warp-striped arrangement.</p></li>
+<li><p>Transposing a warp-striped arrangement to a blocked arrangement.</p></li>
+<li><p>Scattering items to a blocked arrangement.</p></li>
+<li><p>Scattering items to a striped arrangement.</p></li>
+</ul>
+</p></li>
+<li><p>Data is automatically be padded to ensure zero bank conflicts.</p></li>
+</ul>
+</p>
+</dd>
+<dt><strong>Examples</strong></dt><dd><p><p>In the examples exchange operation is performed on block of 128 threads, using type <code class="docutils literal notranslate"><span class="pre">int</span></code> with 8 items per thread.</p>
+<p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">example_kernel</span><span class="p">(...)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// specialize block_exchange for int, block of 128 threads and 8 items per thread</span>
+<span class="w">    </span><span class="n">using</span><span class="w"> </span><span class="n">block_exchange_int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rocprim</span><span class="o">::</span><span class="n">block_exchange</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// allocate storage in shared memory</span>
+<span class="w">    </span><span class="n">__shared__</span><span class="w"> </span><span class="n">block_exchange_int</span><span class="o">::</span><span class="n">storage_type</span><span class="w"> </span><span class="n">storage</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">items</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="w">    </span><span class="n">block_exchange_int</span><span class="w"> </span><span class="n">b_exchange</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">b_exchange</span><span class="p">.</span><span class="n">blocked_to_striped</span><span class="p">(</span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="n">storage</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+ </p>
+</p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>T</strong> – - the input type. </p></li>
+<li><p><strong>BlockSize</strong> – - the number of threads in a block. </p></li>
+<li><p><strong>ItemsPerThread</strong> – - the number of items contributed by each thread.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N14block_exchange12storage_typeE">
+<span id="_CPPv3N14block_exchange12storage_typeE"></span><span id="_CPPv2N14block_exchange12storage_typeE"></span><span class="declarator"><span class="target" id="classblock__exchange_1ae397f35a8c25022b6dc0264c91c55689"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">storage_type</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">storage_type_</span></span><a class="headerlink" href="#_CPPv4N14block_exchange12storage_typeE" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Struct used to allocate a temporary memory that is required for thread communication during operations provided by related parallel primitive. </p>
+<p>Depending on the implemention the operations exposed by parallel primitive may require a temporary storage for thread communication. The storage should be allocated using keywords <code class="docutils literal notranslate"></code>. It can be aliased to an externally allocated memory, or be a part of a union type with other storage types to increase shared memory reusability. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN14block_exchange18blocked_to_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1U">
+<span id="_CPPv3I0EN14block_exchange18blocked_to_stripedERA14ItemsPerThread_K1TRA14ItemsPerThread_1U"></span><span id="_CPPv2I0EN14block_exchange18blocked_to_stripedERAItemsPerThread_K1TRAItemsPerThread_1U"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">U</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classblock__exchange_1a48049dc0e94d0eae98a059e6d77e36a7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">blocked_to_striped</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I0EN14block_exchange18blocked_to_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1U" title="block_exchange::blocked_to_striped::U"><span class="n"><span class="pre">U</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">output</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN14block_exchange18blocked_to_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1U" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Transposes a blocked arrangement of items to a striped arrangement across the thread block. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><p><strong>U</strong> – - [inferred] the output type.</p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>input</strong> – <strong>[in]</strong> - array that data is loaded from. </p></li>
+<li><p><strong>output</strong> – <strong>[out]</strong> - array that data is loaded to. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN14block_exchange18blocked_to_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1UR12storage_type">
+<span id="_CPPv3I0EN14block_exchange18blocked_to_stripedERA14ItemsPerThread_K1TRA14ItemsPerThread_1UR12storage_type"></span><span id="_CPPv2I0EN14block_exchange18blocked_to_stripedERAItemsPerThread_K1TRAItemsPerThread_1UR12storage_type"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">U</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classblock__exchange_1a4786477c61a529bd9ef0d3f3ef7d6c7b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">blocked_to_striped</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I0EN14block_exchange18blocked_to_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1UR12storage_type" title="block_exchange::blocked_to_striped::U"><span class="n"><span class="pre">U</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">output</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4N14block_exchange12storage_typeE" title="block_exchange::storage_type"><span class="n"><span class="pre">storage_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">storage</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN14block_exchange18blocked_to_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1UR12storage_type" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Transposes a blocked arrangement of items to a striped arrangement across the thread block, using temporary storage. </p>
+<p><dl class="simple">
+<dt><strong>Storage reusage</strong></dt><dd><p>Synchronization barrier should be placed before <code class="docutils literal notranslate"><span class="pre">storage</span></code> is reused or repurposed: <code class="docutils literal notranslate"><span class="pre">__syncthreads()</span></code> or <code class="docutils literal notranslate"><span class="pre">rocprim::syncthreads()</span></code>.</p>
+</dd>
+<dt><strong>Example.</strong></dt><dd><p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">example_kernel</span><span class="p">(...)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// specialize block_exchange for int, block of 128 threads and 8 items per thread</span>
+<span class="w">    </span><span class="n">using</span><span class="w"> </span><span class="n">block_exchange_int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rocprim</span><span class="o">::</span><span class="n">block_exchange</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// allocate storage in shared memory</span>
+<span class="w">    </span><span class="n">__shared__</span><span class="w"> </span><span class="n">block_exchange_int</span><span class="o">::</span><span class="n">storage_type</span><span class="w"> </span><span class="n">storage</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">items</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="w">    </span><span class="n">block_exchange_int</span><span class="w"> </span><span class="n">b_exchange</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">b_exchange</span><span class="p">.</span><span class="n">blocked_to_striped</span><span class="p">(</span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="n">storage</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+ </p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><p><strong>U</strong> – - [inferred] the output type.</p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>input</strong> – <strong>[in]</strong> - array that data is loaded from. </p></li>
+<li><p><strong>output</strong> – <strong>[out]</strong> - array that data is loaded to. </p></li>
+<li><p><strong>storage</strong> – <strong>[in]</strong> - reference to a temporary storage object of type storage_type.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN14block_exchange18striped_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1U">
+<span id="_CPPv3I0EN14block_exchange18striped_to_blockedERA14ItemsPerThread_K1TRA14ItemsPerThread_1U"></span><span id="_CPPv2I0EN14block_exchange18striped_to_blockedERAItemsPerThread_K1TRAItemsPerThread_1U"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">U</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classblock__exchange_1a00e3b07b810d9112b93cfac7af41f1ac"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">striped_to_blocked</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I0EN14block_exchange18striped_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1U" title="block_exchange::striped_to_blocked::U"><span class="n"><span class="pre">U</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">output</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN14block_exchange18striped_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1U" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Transposes a striped arrangement of items to a blocked arrangement across the thread block. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><p><strong>U</strong> – - [inferred] the output type.</p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>input</strong> – <strong>[in]</strong> - array that data is loaded from. </p></li>
+<li><p><strong>output</strong> – <strong>[out]</strong> - array that data is loaded to. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN14block_exchange18striped_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1UR12storage_type">
+<span id="_CPPv3I0EN14block_exchange18striped_to_blockedERA14ItemsPerThread_K1TRA14ItemsPerThread_1UR12storage_type"></span><span id="_CPPv2I0EN14block_exchange18striped_to_blockedERAItemsPerThread_K1TRAItemsPerThread_1UR12storage_type"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">U</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classblock__exchange_1aded6b4566a78e5ade4f26ec2dddc3aaa"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">striped_to_blocked</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I0EN14block_exchange18striped_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1UR12storage_type" title="block_exchange::striped_to_blocked::U"><span class="n"><span class="pre">U</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">output</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4N14block_exchange12storage_typeE" title="block_exchange::storage_type"><span class="n"><span class="pre">storage_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">storage</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN14block_exchange18striped_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1UR12storage_type" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Transposes a striped arrangement of items to a blocked arrangement across the thread block, using temporary storage. </p>
+<p><dl class="simple">
+<dt><strong>Storage reusage</strong></dt><dd><p>Synchronization barrier should be placed before <code class="docutils literal notranslate"><span class="pre">storage</span></code> is reused or repurposed: <code class="docutils literal notranslate"><span class="pre">__syncthreads()</span></code> or <code class="docutils literal notranslate"><span class="pre">rocprim::syncthreads()</span></code>.</p>
+</dd>
+<dt><strong>Example.</strong></dt><dd><p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">example_kernel</span><span class="p">(...)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// specialize block_exchange for int, block of 128 threads and 8 items per thread</span>
+<span class="w">    </span><span class="n">using</span><span class="w"> </span><span class="n">block_exchange_int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rocprim</span><span class="o">::</span><span class="n">block_exchange</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// allocate storage in shared memory</span>
+<span class="w">    </span><span class="n">__shared__</span><span class="w"> </span><span class="n">block_exchange_int</span><span class="o">::</span><span class="n">storage_type</span><span class="w"> </span><span class="n">storage</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">items</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="w">    </span><span class="n">block_exchange_int</span><span class="w"> </span><span class="n">b_exchange</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">b_exchange</span><span class="p">.</span><span class="n">striped_to_blocked</span><span class="p">(</span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="n">storage</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+ </p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><p><strong>U</strong> – - [inferred] the output type.</p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>input</strong> – <strong>[in]</strong> - array that data is loaded from. </p></li>
+<li><p><strong>output</strong> – <strong>[out]</strong> - array that data is loaded to. </p></li>
+<li><p><strong>storage</strong> – <strong>[in]</strong> - reference to a temporary storage object of type storage_type.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN14block_exchange23blocked_to_warp_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1U">
+<span id="_CPPv3I0EN14block_exchange23blocked_to_warp_stripedERA14ItemsPerThread_K1TRA14ItemsPerThread_1U"></span><span id="_CPPv2I0EN14block_exchange23blocked_to_warp_stripedERAItemsPerThread_K1TRAItemsPerThread_1U"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">U</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classblock__exchange_1af68fe4e45d416d70b524addeb8d2e27b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">blocked_to_warp_striped</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I0EN14block_exchange23blocked_to_warp_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1U" title="block_exchange::blocked_to_warp_striped::U"><span class="n"><span class="pre">U</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">output</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN14block_exchange23blocked_to_warp_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1U" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Transposes a blocked arrangement of items to a warp-striped arrangement across the thread block. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><p><strong>U</strong> – - [inferred] the output type.</p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>input</strong> – <strong>[in]</strong> - array that data is loaded from. </p></li>
+<li><p><strong>output</strong> – <strong>[out]</strong> - array that data is loaded to. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN14block_exchange23blocked_to_warp_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1UR12storage_type">
+<span id="_CPPv3I0EN14block_exchange23blocked_to_warp_stripedERA14ItemsPerThread_K1TRA14ItemsPerThread_1UR12storage_type"></span><span id="_CPPv2I0EN14block_exchange23blocked_to_warp_stripedERAItemsPerThread_K1TRAItemsPerThread_1UR12storage_type"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">U</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classblock__exchange_1a5fda2718b4a69019d578d206d9a9fca8"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">blocked_to_warp_striped</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I0EN14block_exchange23blocked_to_warp_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1UR12storage_type" title="block_exchange::blocked_to_warp_striped::U"><span class="n"><span class="pre">U</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">output</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4N14block_exchange12storage_typeE" title="block_exchange::storage_type"><span class="n"><span class="pre">storage_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">storage</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN14block_exchange23blocked_to_warp_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1UR12storage_type" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Transposes a blocked arrangement of items to a warp-striped arrangement across the thread block, using temporary storage. </p>
+<p><dl class="simple">
+<dt><strong>Storage reusage</strong></dt><dd><p>Synchronization barrier should be placed before <code class="docutils literal notranslate"><span class="pre">storage</span></code> is reused or repurposed: <code class="docutils literal notranslate"><span class="pre">__syncthreads()</span></code> or <code class="docutils literal notranslate"><span class="pre">rocprim::syncthreads()</span></code>.</p>
+</dd>
+<dt><strong>Example.</strong></dt><dd><p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">example_kernel</span><span class="p">(...)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// specialize block_exchange for int, block of 128 threads and 8 items per thread</span>
+<span class="w">    </span><span class="n">using</span><span class="w"> </span><span class="n">block_exchange_int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rocprim</span><span class="o">::</span><span class="n">block_exchange</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// allocate storage in shared memory</span>
+<span class="w">    </span><span class="n">__shared__</span><span class="w"> </span><span class="n">block_exchange_int</span><span class="o">::</span><span class="n">storage_type</span><span class="w"> </span><span class="n">storage</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">items</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="w">    </span><span class="n">block_exchange_int</span><span class="w"> </span><span class="n">b_exchange</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">b_exchange</span><span class="p">.</span><span class="n">blocked_to_warp_striped</span><span class="p">(</span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="n">storage</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+ </p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><p><strong>U</strong> – - [inferred] the output type.</p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>input</strong> – <strong>[in]</strong> - array that data is loaded from. </p></li>
+<li><p><strong>output</strong> – <strong>[out]</strong> - array that data is loaded to. </p></li>
+<li><p><strong>storage</strong> – <strong>[in]</strong> - reference to a temporary storage object of type storage_type.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN14block_exchange23warp_striped_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1U">
+<span id="_CPPv3I0EN14block_exchange23warp_striped_to_blockedERA14ItemsPerThread_K1TRA14ItemsPerThread_1U"></span><span id="_CPPv2I0EN14block_exchange23warp_striped_to_blockedERAItemsPerThread_K1TRAItemsPerThread_1U"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">U</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classblock__exchange_1ad947358e13550ab523dbcdda1ed38a2f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">warp_striped_to_blocked</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I0EN14block_exchange23warp_striped_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1U" title="block_exchange::warp_striped_to_blocked::U"><span class="n"><span class="pre">U</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">output</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN14block_exchange23warp_striped_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1U" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Transposes a warp-striped arrangement of items to a blocked arrangement across the thread block. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><p><strong>U</strong> – - [inferred] the output type.</p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>input</strong> – <strong>[in]</strong> - array that data is loaded from. </p></li>
+<li><p><strong>output</strong> – <strong>[out]</strong> - array that data is loaded to. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN14block_exchange23warp_striped_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1UR12storage_type">
+<span id="_CPPv3I0EN14block_exchange23warp_striped_to_blockedERA14ItemsPerThread_K1TRA14ItemsPerThread_1UR12storage_type"></span><span id="_CPPv2I0EN14block_exchange23warp_striped_to_blockedERAItemsPerThread_K1TRAItemsPerThread_1UR12storage_type"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">U</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classblock__exchange_1a87f497974bc81ba6a621eb5d93444f86"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">warp_striped_to_blocked</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I0EN14block_exchange23warp_striped_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1UR12storage_type" title="block_exchange::warp_striped_to_blocked::U"><span class="n"><span class="pre">U</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">output</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4N14block_exchange12storage_typeE" title="block_exchange::storage_type"><span class="n"><span class="pre">storage_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">storage</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN14block_exchange23warp_striped_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1UR12storage_type" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Transposes a warp-striped arrangement of items to a blocked arrangement across the thread block, using temporary storage. </p>
+<p><dl class="simple">
+<dt><strong>Storage reusage</strong></dt><dd><p>Synchronization barrier should be placed before <code class="docutils literal notranslate"><span class="pre">storage</span></code> is reused or repurposed: <code class="docutils literal notranslate"><span class="pre">__syncthreads()</span></code> or <code class="docutils literal notranslate"><span class="pre">rocprim::syncthreads()</span></code>.</p>
+</dd>
+<dt><strong>Example.</strong></dt><dd><p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">example_kernel</span><span class="p">(...)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// specialize block_exchange for int, block of 128 threads and 8 items per thread</span>
+<span class="w">    </span><span class="n">using</span><span class="w"> </span><span class="n">block_exchange_int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rocprim</span><span class="o">::</span><span class="n">block_exchange</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// allocate storage in shared memory</span>
+<span class="w">    </span><span class="n">__shared__</span><span class="w"> </span><span class="n">block_exchange_int</span><span class="o">::</span><span class="n">storage_type</span><span class="w"> </span><span class="n">storage</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">items</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="w">    </span><span class="n">block_exchange_int</span><span class="w"> </span><span class="n">b_exchange</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">b_exchange</span><span class="p">.</span><span class="n">warp_striped_to_blocked</span><span class="p">(</span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="n">storage</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+ </p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><p><strong>U</strong> – - [inferred] the output type.</p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>input</strong> – <strong>[in]</strong> - array that data is loaded from. </p></li>
+<li><p><strong>output</strong> – <strong>[out]</strong> - array that data is loaded to. </p></li>
+<li><p><strong>storage</strong> – <strong>[in]</strong> - reference to a temporary storage object of type storage_type.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN14block_exchange18scatter_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6Offset">
+<span id="_CPPv3I00EN14block_exchange18scatter_to_blockedERA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6Offset"></span><span id="_CPPv2I00EN14block_exchange18scatter_to_blockedERAItemsPerThread_K1TRAItemsPerThread_1URAItemsPerThread_K6Offset"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">U</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Offset</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classblock__exchange_1a3cfae4eb1b00cf18e2b68219d59edf84"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">scatter_to_blocked</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I00EN14block_exchange18scatter_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6Offset" title="block_exchange::scatter_to_blocked::U"><span class="n"><span class="pre">U</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">output</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN14block_exchange18scatter_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6Offset" title="block_exchange::scatter_to_blocked::Offset"><span class="n"><span class="pre">Offset</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ranks</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00EN14block_exchange18scatter_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6Offset" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Scatters items to a blocked arrangement based on their ranks across the thread block. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>U</strong> – - [inferred] the output type. </p></li>
+<li><p><strong>Offset</strong> – - [inferred] the rank type.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>input</strong> – <strong>[in]</strong> - array that data is loaded from. </p></li>
+<li><p><strong>output</strong> – <strong>[out]</strong> - array that data is loaded to. </p></li>
+<li><p><strong>ranks</strong> – <strong>[out]</strong> - array that has rank of data. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN14block_exchange18scatter_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetR12storage_type">
+<span id="_CPPv3I00EN14block_exchange18scatter_to_blockedERA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetR12storage_type"></span><span id="_CPPv2I00EN14block_exchange18scatter_to_blockedERAItemsPerThread_K1TRAItemsPerThread_1URAItemsPerThread_K6OffsetR12storage_type"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">U</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Offset</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classblock__exchange_1abcb105ed4901c9e93467db2c4743a28f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">scatter_to_blocked</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I00EN14block_exchange18scatter_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetR12storage_type" title="block_exchange::scatter_to_blocked::U"><span class="n"><span class="pre">U</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">output</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN14block_exchange18scatter_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetR12storage_type" title="block_exchange::scatter_to_blocked::Offset"><span class="n"><span class="pre">Offset</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ranks</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4N14block_exchange12storage_typeE" title="block_exchange::storage_type"><span class="n"><span class="pre">storage_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">storage</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00EN14block_exchange18scatter_to_blockedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetR12storage_type" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Scatters items to a blocked arrangement based on their ranks across the thread block, using temporary storage. </p>
+<p><dl class="simple">
+<dt><strong>Storage reusage</strong></dt><dd><p>Synchronization barrier should be placed before <code class="docutils literal notranslate"><span class="pre">storage</span></code> is reused or repurposed: <code class="docutils literal notranslate"><span class="pre">__syncthreads()</span></code> or <code class="docutils literal notranslate"><span class="pre">rocprim::syncthreads()</span></code>.</p>
+</dd>
+<dt><strong>Example.</strong></dt><dd><p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">example_kernel</span><span class="p">(...)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// specialize block_exchange for int, block of 128 threads and 8 items per thread</span>
+<span class="w">    </span><span class="n">using</span><span class="w"> </span><span class="n">block_exchange_int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rocprim</span><span class="o">::</span><span class="n">block_exchange</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// allocate storage in shared memory</span>
+<span class="w">    </span><span class="n">__shared__</span><span class="w"> </span><span class="n">block_exchange_int</span><span class="o">::</span><span class="n">storage_type</span><span class="w"> </span><span class="n">storage</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">items</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">ranks</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="w">    </span><span class="n">block_exchange_int</span><span class="w"> </span><span class="n">b_exchange</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">b_exchange</span><span class="p">.</span><span class="n">scatter_to_blocked</span><span class="p">(</span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="n">ranks</span><span class="p">,</span><span class="w"> </span><span class="n">storage</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+ </p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>U</strong> – - [inferred] the output type. </p></li>
+<li><p><strong>Offset</strong> – - [inferred] the rank type.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>input</strong> – <strong>[in]</strong> - array that data is loaded from. </p></li>
+<li><p><strong>output</strong> – <strong>[out]</strong> - array that data is loaded to. </p></li>
+<li><p><strong>ranks</strong> – <strong>[out]</strong> - array that has rank of data. </p></li>
+<li><p><strong>storage</strong> – <strong>[in]</strong> - reference to a temporary storage object of type storage_type.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN14block_exchange18scatter_to_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6Offset">
+<span id="_CPPv3I00EN14block_exchange18scatter_to_stripedERA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6Offset"></span><span id="_CPPv2I00EN14block_exchange18scatter_to_stripedERAItemsPerThread_K1TRAItemsPerThread_1URAItemsPerThread_K6Offset"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">U</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Offset</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classblock__exchange_1a52c644d514bd0f0f243771e86f5b358e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">scatter_to_striped</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I00EN14block_exchange18scatter_to_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6Offset" title="block_exchange::scatter_to_striped::U"><span class="n"><span class="pre">U</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">output</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN14block_exchange18scatter_to_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6Offset" title="block_exchange::scatter_to_striped::Offset"><span class="n"><span class="pre">Offset</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ranks</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00EN14block_exchange18scatter_to_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6Offset" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Scatters items to a striped arrangement based on their ranks across the thread block. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>U</strong> – - [inferred] the output type. </p></li>
+<li><p><strong>Offset</strong> – - [inferred] the rank type.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>input</strong> – <strong>[in]</strong> - array that data is loaded from. </p></li>
+<li><p><strong>output</strong> – <strong>[out]</strong> - array that data is loaded to. </p></li>
+<li><p><strong>ranks</strong> – <strong>[out]</strong> - array that has rank of data. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN14block_exchange18scatter_to_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetR12storage_type">
+<span id="_CPPv3I00EN14block_exchange18scatter_to_stripedERA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetR12storage_type"></span><span id="_CPPv2I00EN14block_exchange18scatter_to_stripedERAItemsPerThread_K1TRAItemsPerThread_1URAItemsPerThread_K6OffsetR12storage_type"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">U</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Offset</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classblock__exchange_1a12e205a71f51e484275632fa19bac4f4"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">scatter_to_striped</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I00EN14block_exchange18scatter_to_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetR12storage_type" title="block_exchange::scatter_to_striped::U"><span class="n"><span class="pre">U</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">output</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN14block_exchange18scatter_to_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetR12storage_type" title="block_exchange::scatter_to_striped::Offset"><span class="n"><span class="pre">Offset</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ranks</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4N14block_exchange12storage_typeE" title="block_exchange::storage_type"><span class="n"><span class="pre">storage_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">storage</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00EN14block_exchange18scatter_to_stripedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetR12storage_type" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Scatters items to a striped arrangement based on their ranks across the thread block, using temporary storage. </p>
+<p><dl class="simple">
+<dt><strong>Storage reusage</strong></dt><dd><p>Synchronization barrier should be placed before <code class="docutils literal notranslate"><span class="pre">storage</span></code> is reused or repurposed: <code class="docutils literal notranslate"><span class="pre">__syncthreads()</span></code> or <code class="docutils literal notranslate"><span class="pre">rocprim::syncthreads()</span></code>.</p>
+</dd>
+<dt><strong>Example.</strong></dt><dd><p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">example_kernel</span><span class="p">(...)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// specialize block_exchange for int, block of 128 threads and 8 items per thread</span>
+<span class="w">    </span><span class="n">using</span><span class="w"> </span><span class="n">block_exchange_int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rocprim</span><span class="o">::</span><span class="n">block_exchange</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// allocate storage in shared memory</span>
+<span class="w">    </span><span class="n">__shared__</span><span class="w"> </span><span class="n">block_exchange_int</span><span class="o">::</span><span class="n">storage_type</span><span class="w"> </span><span class="n">storage</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">items</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">ranks</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="w">    </span><span class="n">block_exchange_int</span><span class="w"> </span><span class="n">b_exchange</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">b_exchange</span><span class="p">.</span><span class="n">scatter_to_striped</span><span class="p">(</span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="n">ranks</span><span class="p">,</span><span class="w"> </span><span class="n">storage</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+ </p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>U</strong> – - [inferred] the output type. </p></li>
+<li><p><strong>Offset</strong> – - [inferred] the rank type.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>input</strong> – <strong>[in]</strong> - array that data is loaded from. </p></li>
+<li><p><strong>output</strong> – <strong>[out]</strong> - array that data is loaded to. </p></li>
+<li><p><strong>ranks</strong> – <strong>[out]</strong> - array that has rank of data. </p></li>
+<li><p><strong>storage</strong> – <strong>[in]</strong> - reference to a temporary storage object of type storage_type.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN14block_exchange26scatter_to_striped_guardedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6Offset">
+<span id="_CPPv3I00EN14block_exchange26scatter_to_striped_guardedERA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6Offset"></span><span id="_CPPv2I00EN14block_exchange26scatter_to_striped_guardedERAItemsPerThread_K1TRAItemsPerThread_1URAItemsPerThread_K6Offset"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">U</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Offset</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classblock__exchange_1a9950de583afd4acff14f5d1239bd1ad3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">scatter_to_striped_guarded</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I00EN14block_exchange26scatter_to_striped_guardedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6Offset" title="block_exchange::scatter_to_striped_guarded::U"><span class="n"><span class="pre">U</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">output</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN14block_exchange26scatter_to_striped_guardedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6Offset" title="block_exchange::scatter_to_striped_guarded::Offset"><span class="n"><span class="pre">Offset</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ranks</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00EN14block_exchange26scatter_to_striped_guardedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6Offset" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Scatters items to a striped arrangement based on their ranks across the thread block, guarded by rank. </p>
+<p><dl class="simple">
+<dt><strong>Overview</strong></dt><dd><p><ul class="simple">
+<li><p>Items with rank -1 are not scattered.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>U</strong> – - [inferred] the output type. </p></li>
+<li><p><strong>Offset</strong> – - [inferred] the rank type.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>input</strong> – <strong>[in]</strong> - array that data is loaded from. </p></li>
+<li><p><strong>output</strong> – <strong>[out]</strong> - array that data is loaded to. </p></li>
+<li><p><strong>ranks</strong> – <strong>[in]</strong> - array that has rank of data. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN14block_exchange26scatter_to_striped_guardedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetR12storage_type">
+<span id="_CPPv3I00EN14block_exchange26scatter_to_striped_guardedERA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetR12storage_type"></span><span id="_CPPv2I00EN14block_exchange26scatter_to_striped_guardedERAItemsPerThread_K1TRAItemsPerThread_1URAItemsPerThread_K6OffsetR12storage_type"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">U</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Offset</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classblock__exchange_1a740330a02d46191f1c609c554e70ed0e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">scatter_to_striped_guarded</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I00EN14block_exchange26scatter_to_striped_guardedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetR12storage_type" title="block_exchange::scatter_to_striped_guarded::U"><span class="n"><span class="pre">U</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">output</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN14block_exchange26scatter_to_striped_guardedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetR12storage_type" title="block_exchange::scatter_to_striped_guarded::Offset"><span class="n"><span class="pre">Offset</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ranks</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4N14block_exchange12storage_typeE" title="block_exchange::storage_type"><span class="n"><span class="pre">storage_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">storage</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00EN14block_exchange26scatter_to_striped_guardedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetR12storage_type" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Scatters items to a striped arrangement based on their ranks across the thread block, guarded by rank, using temporary storage. </p>
+<p><dl class="simple">
+<dt><strong>Overview</strong></dt><dd><p><ul class="simple">
+<li><p>Items with rank -1 are not scattered.</p></li>
+</ul>
+</p>
+</dd>
+<dt><strong>Storage reusage</strong></dt><dd><p>Synchronization barrier should be placed before <code class="docutils literal notranslate"><span class="pre">storage</span></code> is reused or repurposed: <code class="docutils literal notranslate"><span class="pre">__syncthreads()</span></code> or <code class="docutils literal notranslate"><span class="pre">rocprim::syncthreads()</span></code>.</p>
+</dd>
+<dt><strong>Example.</strong></dt><dd><p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">example_kernel</span><span class="p">(...)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// specialize block_exchange for int, block of 128 threads and 8 items per thread</span>
+<span class="w">    </span><span class="n">using</span><span class="w"> </span><span class="n">block_exchange_int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rocprim</span><span class="o">::</span><span class="n">block_exchange</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// allocate storage in shared memory</span>
+<span class="w">    </span><span class="n">__shared__</span><span class="w"> </span><span class="n">block_exchange_int</span><span class="o">::</span><span class="n">storage_type</span><span class="w"> </span><span class="n">storage</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">items</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">ranks</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="w">    </span><span class="n">block_exchange_int</span><span class="w"> </span><span class="n">b_exchange</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">b_exchange</span><span class="p">.</span><span class="n">scatter_to_striped_guarded</span><span class="p">(</span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="n">ranks</span><span class="p">,</span><span class="w"> </span><span class="n">storage</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+ </p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>U</strong> – - [inferred] the output type. </p></li>
+<li><p><strong>Offset</strong> – - [inferred] the rank type.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>input</strong> – <strong>[in]</strong> - array that data is loaded from. </p></li>
+<li><p><strong>output</strong> – <strong>[out]</strong> - array that data is loaded to. </p></li>
+<li><p><strong>ranks</strong> – <strong>[in]</strong> - array that has rank of data. </p></li>
+<li><p><strong>storage</strong> – <strong>[in]</strong> - reference to a temporary storage object of type storage_type.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I000EN14block_exchange26scatter_to_striped_flaggedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetRA14ItemsPerThread_K9ValidFlag">
+<span id="_CPPv3I000EN14block_exchange26scatter_to_striped_flaggedERA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetRA14ItemsPerThread_K9ValidFlag"></span><span id="_CPPv2I000EN14block_exchange26scatter_to_striped_flaggedERAItemsPerThread_K1TRAItemsPerThread_1URAItemsPerThread_K6OffsetRAItemsPerThread_K9ValidFlag"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">U</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Offset</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ValidFlag</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classblock__exchange_1a890ddde291a4d590fd69d58926e856ec"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">scatter_to_striped_flagged</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I000EN14block_exchange26scatter_to_striped_flaggedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetRA14ItemsPerThread_K9ValidFlag" title="block_exchange::scatter_to_striped_flagged::U"><span class="n"><span class="pre">U</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">output</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I000EN14block_exchange26scatter_to_striped_flaggedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetRA14ItemsPerThread_K9ValidFlag" title="block_exchange::scatter_to_striped_flagged::Offset"><span class="n"><span class="pre">Offset</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ranks</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I000EN14block_exchange26scatter_to_striped_flaggedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetRA14ItemsPerThread_K9ValidFlag" title="block_exchange::scatter_to_striped_flagged::ValidFlag"><span class="n"><span class="pre">ValidFlag</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">is_valid</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I000EN14block_exchange26scatter_to_striped_flaggedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetRA14ItemsPerThread_K9ValidFlag" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Scatters items to a striped arrangement based on their ranks across the thread block, with a flag to denote validity. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>U</strong> – - [inferred] the output type. </p></li>
+<li><p><strong>Offset</strong> – - [inferred] the rank type. </p></li>
+<li><p><strong>ValidFlag</strong> – - [inferred] the validity flag type.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>input</strong> – <strong>[in]</strong> - array that data is loaded from. </p></li>
+<li><p><strong>output</strong> – <strong>[out]</strong> - array that data is loaded to. </p></li>
+<li><p><strong>ranks</strong> – <strong>[in]</strong> - array that has rank of data. </p></li>
+<li><p><strong>is_valid</strong> – <strong>[in]</strong> - array that has flags to denote validity. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I000EN14block_exchange26scatter_to_striped_flaggedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetRA14ItemsPerThread_K9ValidFlagR12storage_type">
+<span id="_CPPv3I000EN14block_exchange26scatter_to_striped_flaggedERA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetRA14ItemsPerThread_K9ValidFlagR12storage_type"></span><span id="_CPPv2I000EN14block_exchange26scatter_to_striped_flaggedERAItemsPerThread_K1TRAItemsPerThread_1URAItemsPerThread_K6OffsetRAItemsPerThread_K9ValidFlagR12storage_type"></span><span class="template-params"><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">U</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Offset</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ValidFlag</span></span></span><span class="p"><span class="pre">&gt;</span></span></span><br /><span class="declarator"><span class="target" id="classblock__exchange_1a402cd4708de795b82105c670519d0c16"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">scatter_to_striped_flagged</span></span></span><span class="sig-paren">(</span><ld class="desc-parameterlist"><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4I000EN14block_exchange26scatter_to_striped_flaggedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetRA14ItemsPerThread_K9ValidFlagR12storage_type" title="block_exchange::scatter_to_striped_flagged::U"><span class="n"><span class="pre">U</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">output</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I000EN14block_exchange26scatter_to_striped_flaggedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetRA14ItemsPerThread_K9ValidFlagR12storage_type" title="block_exchange::scatter_to_striped_flagged::Offset"><span class="n"><span class="pre">Offset</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ranks</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I000EN14block_exchange26scatter_to_striped_flaggedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetRA14ItemsPerThread_K9ValidFlagR12storage_type" title="block_exchange::scatter_to_striped_flagged::ValidFlag"><span class="n"><span class="pre">ValidFlag</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">is_valid</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_j_j_j_jE14block_exchange" title="block_exchange::ItemsPerThread"><span class="n"><span class="pre">ItemsPerThread</span></span></a><span class="p"><span class="pre">]</span></span>, </li><li class="desc-parameter"><a class="reference internal" href="#_CPPv4N14block_exchange12storage_typeE" title="block_exchange::storage_type"><span class="n"><span class="pre">storage_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">storage</span></span></li></ld><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I000EN14block_exchange26scatter_to_striped_flaggedEvRA14ItemsPerThread_K1TRA14ItemsPerThread_1URA14ItemsPerThread_K6OffsetRA14ItemsPerThread_K9ValidFlagR12storage_type" title="Permalink to this definition">#</a></span><br /></dt>
+<dd><p>Scatters items to a striped arrangement based on their ranks across the thread block, with a flag to denote validity, using temporary storage. </p>
+<p><dl class="simple">
+<dt><strong>Storage reusage</strong></dt><dd><p>Synchronization barrier should be placed before <code class="docutils literal notranslate"><span class="pre">storage</span></code> is reused or repurposed: <code class="docutils literal notranslate"><span class="pre">__syncthreads()</span></code> or <code class="docutils literal notranslate"><span class="pre">rocprim::syncthreads()</span></code>.</p>
+</dd>
+<dt><strong>Example.</strong></dt><dd><p><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">example_kernel</span><span class="p">(...)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// specialize block_exchange for int, block of 128 threads and 8 items per thread</span>
+<span class="w">    </span><span class="n">using</span><span class="w"> </span><span class="n">block_exchange_int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rocprim</span><span class="o">::</span><span class="n">block_exchange</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// allocate storage in shared memory</span>
+<span class="w">    </span><span class="n">__shared__</span><span class="w"> </span><span class="n">block_exchange_int</span><span class="o">::</span><span class="n">storage_type</span><span class="w"> </span><span class="n">storage</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">items</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">ranks</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">flags</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="w">    </span><span class="n">block_exchange_int</span><span class="w"> </span><span class="n">b_exchange</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">b_exchange</span><span class="p">.</span><span class="n">scatter_to_striped_flagged</span><span class="p">(</span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="n">ranks</span><span class="p">,</span><span class="w"> </span><span class="n">flags</span><span class="p">,</span><span class="w"> </span><span class="n">storage</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+ </p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>U</strong> – - [inferred] the output type. </p></li>
+<li><p><strong>Offset</strong> – - [inferred] the rank type. </p></li>
+<li><p><strong>ValidFlag</strong> – - [inferred] the validity flag type.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>input</strong> – <strong>[in]</strong> - array that data is loaded from. </p></li>
+<li><p><strong>output</strong> – <strong>[out]</strong> - array that data is loaded to. </p></li>
+<li><p><strong>ranks</strong> – <strong>[in]</strong> - array that has rank of data. </p></li>
+<li><p><strong>is_valid</strong> – <strong>[in]</strong> - array that has flags to denote validity. </p></li>
+<li><p><strong>storage</strong> – <strong>[in]</strong> - reference to a temporary storage object of type storage_type.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="shuffle.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Shuffle</div>
+              </div>
+              <svg><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="histogram.html">
+              <svg><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Histogram</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../" id="documentation_options" src="../../static/documentation_options.js"></script>
+    <script src="../../static/jquery.js"></script>
+    <script src="../../static/underscore.js"></script>
+    <script src="../../static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../static/doctools.js"></script>
+    <script src="../../static/scripts/furo.js"></script>
+    </body>
+</html>
